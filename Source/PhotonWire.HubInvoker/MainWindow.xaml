@@ -1,0 +1,147 @@
+﻿<Controls:MetroWindow x:Class="PhotonWire.HubInvoker.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:local="clr-namespace:PhotonWire.HubInvoker"
+        mc:Ignorable="d"
+        BorderBrush="{DynamicResource AccentColorBrush}"
+        BorderThickness="1,0,1,0"
+        WindowTransitionsEnabled="False"
+        WindowStartupLocation="CenterScreen"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+        Title="PhotonWire.HubInvoker" Height="1000" Width="700" ResizeMode="CanResizeWithGrip">
+    <Controls:MetroWindow.RightWindowCommands>
+        <Controls:WindowCommands>
+            <Button Name="ConfigurationButton" ContextMenuService.IsEnabled="False" Click="ConfigurationButton_Click">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Configuration"/>
+                        <Path x:Name="BtnArrow" Margin="4" VerticalAlignment="Center" Width="6" Fill="#FF527DB5" Stretch="Uniform" HorizontalAlignment="Right" Data="F1 M 301.14,-189.041L 311.57,-189.041L 306.355,-182.942L 301.14,-189.041 Z "/>
+                    </StackPanel>
+                </Button.Content>
+                <Button.ContextMenu>
+                    <ContextMenu x:Name="ConfigurationContextMenu" />
+                </Button.ContextMenu>
+            </Button>
+            <Button Content="Align Window" Click="AlignWindow_Click" />
+            <Button Content="Duplicate Window" Click="DuplicateWindow_Click" />
+        </Controls:WindowCommands>
+    </Controls:MetroWindow.RightWindowCommands>
+
+    <Grid ShowGridLines="False">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="150" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <!-- Top -->
+        <wpf:ColorZone Mode="Inverted" Padding="0" Grid.Row="0" Grid.ColumnSpan="2">
+            <Grid  Margin="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBox Grid.Row="0" Grid.Column="0" Name="ProcessPath" Text="{Binding ProcessPath.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,1,5,1" VerticalContentAlignment="Center"
+                     wpf:TextFieldAssist.Hint="ProcessPath" />
+
+                <TextBox Grid.Row="0" Grid.Column="1" Name="ProcessArgument" Text="{Binding ProcessArgument.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,1,5,1" VerticalContentAlignment="Center"
+                     wpf:TextFieldAssist.Hint="Argument" />
+
+                <TextBox  Grid.Row="0" Grid.Column="2" Name="WorkingDir" Text="{Binding WorkingDir.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5,1,0,1" VerticalContentAlignment="Center"
+                      wpf:TextFieldAssist.Hint="Working Directory" />
+                <StackPanel Grid.Row="0" Grid.Column="3" Orientation="Horizontal"  HorizontalAlignment="Left">
+                    <Button Name="StartPhotonButton" Content="StartServer" Command="{Binding StartPhotonProcess}" Height="20" Margin="5,0,5,0" />
+                    <Button Name="KillPhotonButton" Content="Stop" Command="{Binding KillPhotonProcess}"  Height="20" Margin="5,0,5,0" />
+                </StackPanel>
+
+                <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding DllPath.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Margin="0,1,0,1" VerticalContentAlignment="Center" 
+                     wpf:TextFieldAssist.Hint="PhotonWireApp's DllPath" />
+                <StackPanel Grid.Row="1" Grid.Column="3" Orientation="Horizontal"  HorizontalAlignment="Left">
+                    <Button Name="ReloadButton" Content="Reload" Command="{Binding ReloadDll}"   Height="20" Margin="5,0,5,0" />
+                </StackPanel>
+
+                <TextBox Grid.Row="2" Grid.Column="0" Margin="0,1,5,1"  Name="Address" Text="{Binding Address.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  VerticalContentAlignment="Center"
+                     wpf:TextFieldAssist.Hint="Connection Address" />
+                <TextBox Grid.Row="2" Grid.Column="1" Margin="0,1,5,1"  Name="AppName" Text="{Binding AppName.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  VerticalContentAlignment="Center"
+                     wpf:TextFieldAssist.Hint="Application Name" />
+                <ComboBox Grid.Row="2" Grid.Column="2" Margin="5,1,0,1" ItemsSource="{Binding UseConnectionType}" SelectedIndex="{Binding UseConnectionTypeSelectedIndex.Value}" Width="130" HorizontalAlignment="Left">
+                    <ComboBox.ItemContainerStyle>
+                        <Style TargetType="ComboBoxItem">
+                            <Setter Property="Foreground" Value="Gray" />
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
+                </ComboBox>
+                
+                <StackPanel Grid.Row="2" Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Button Name="ConnectButton" Content="Connect" Command="{Binding Connect}"  Height="20" Margin="5,0,5,0"  />
+                    <Button Name="DisconnectButton" Content="Disconnect" Command="{Binding Disconnect}"  Height="20" Margin="5,0,5,0"  />
+                </StackPanel>
+            </Grid>
+        </wpf:ColorZone>
+
+        <!-- Center Left -->
+        <ListBox Grid.Row="1" Grid.RowSpan="3" Grid.Column="0" Name="HubList" ItemsSource="{Binding HubInfoList}" SelectedIndex="{Binding HubInfoListSelectedIndex.Value}" 
+                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto" />
+        <GridSplitter Grid.Row="1" Grid.RowSpan="3" Grid.Column="0" ResizeDirection="Columns" VerticalAlignment="Stretch" HorizontalAlignment="Right" Width="5" Background="Transparent" IsTabStop="False" />
+
+        <!-- Center Right | Operations -->
+        <ScrollViewer Grid.Row="1" Grid.Column="1" PreviewMouseWheel="EnableScrollViewerMouseWheel">
+            <ListBox Name="Operations" ItemsSource="{Binding OperationInfoList}" Margin="5,0,5,5" HorizontalContentAlignment="Stretch" IsTabStop="False" KeyboardNavigation.TabNavigation="Local">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <wpf:ColorZone Mode="Standard" Padding="5" CornerRadius="3" Effect="{DynamicResource MaterialDesignShadowDepth1}" Margin="2">
+                                <local:OperationItem IsTabStop="False" />
+                            </wpf:ColorZone>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignListBoxItem}">
+                        <Setter Property="KeyboardNavigation.IsTabStop" Value="False" />
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+        </ScrollViewer>
+
+        <!-- Center Right | Logs -->
+        <GridSplitter Grid.Row="2" Grid.Column="1" ResizeDirection="Rows" VerticalAlignment="Top" Background="Transparent" HorizontalAlignment="Stretch" Height="5" IsTabStop="False" />
+        <TextBox Grid.Row="2" Grid.Column="1" Margin="0,5,0,0" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto" 
+                 Name="LogText" Text="{Binding Log.Value}"
+                 VerticalAlignment="Stretch"
+                 Height="Auto"
+                 BorderThickness="0,1,0,1"
+                 
+                 VerticalContentAlignment="Stretch"
+                 IsReadOnly="True" />
+        <Button Grid.Row="3" Grid.Column="1" Content="LogClear" Name="LogClearButton" Command="{Binding LogClear}" Width="200" Margin="5"  />
+
+        <!-- Bottom -->
+        <StatusBar Grid.Row="4" Grid.ColumnSpan="2" Name="BottomStatusBar" Height="Auto">
+            <Grid HorizontalAlignment="Stretch" Width="{Binding ActualWidth, ElementName=BottomStatusBar, Mode=OneWay}">
+                <StatusBarItem Grid.Column="0" Content="{Binding CurrentConnectionStatus.Value}" />
+            </Grid>
+        </StatusBar>
+    </Grid>
+</Controls:MetroWindow>

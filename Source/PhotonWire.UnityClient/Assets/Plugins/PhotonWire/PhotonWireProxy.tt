@@ -1,0 +1,620 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="Microsoft.CSharp" #>
+<#@ assembly name="EnvDTE" #>
+<#@ import namespace="EnvDTE" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+<#@ import namespace="System.Reflection" #>
+<#@ import namespace="System.Threading" #>
+<#@ import namespace="System.Threading.Tasks" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="MsgPack.Serialization" #>
+<#@ output extension="Generated.cs" encoding="utf-8" #>
+<#@ assembly name="$(SolutionDir)\Source\PhotonWire.Server\bin\Debug\MsgPack.dll" #>
+<#@ assembly name="$(SolutionDir)\Sample\PhotonWire.Sample.ServerApp\bin\Debug\PhotonWire.Sample.ServerApp.dll" #>
+<#
+    // 1. ↑Change path to Photon Server Project's DLL and Server MsgPack(not client) DLL
+
+    // 2. Make Configuration -----------------------
+
+    var namespaceName = "PhotonWire.Client"; // namespace of generated code
+    var assemblyName = "PhotonWire.Sample.ServerApp"; // Photon Server Project's assembly name
+    var baseHubName = "Hub`1";  // <T> is `1, If you use base hub, change to like FooHub`1.
+    var useAsyncSuffix = true; // If true FooAsync
+
+    // If WPF, use "DispatcherScheduler.Current"
+    // If ConsoleApp, use "CurrentThreadScheduler.Instance"
+    // If Unity, use "Scheduler.MainThread"
+    var mainthreadSchedulerInstance = "Scheduler.MainThread";
+    
+    // End of Configuration-----------------
+
+    var ignoreMethods = new HashSet<string> { "Equals", "GetHashCode", "GetType", "ToString" };
+
+    Func<Type, Type> SearchBaseHub = x =>
+    {
+        while (x != typeof(object) && x != null)
+        {
+            if (x.Name == baseHubName) return x;
+            x = x.BaseType;
+        }
+        return null;
+    };
+
+    Func<Type, string> BeautifyType = null;
+    BeautifyType = (Type t) =>
+    {
+        if (t == typeof(void)) return "Unit"; // void to Unit
+        if (!t.IsGenericType) return t.FullName;
+
+        var innerFormat = string.Join(", ", t.GetGenericArguments().Select(x => BeautifyType(x)));
+        return Regex.Replace(t.GetGenericTypeDefinition().FullName, @"`.+$", "") + "<" + innerFormat + ">";
+    };
+
+    Func<string, string> WithIObservable = x => string.Format("IObservable<{0}>", x);
+    
+    // CodeGeneration
+    var serializationContext = new SerializationContext
+    {
+        EnumSerializationMethod = EnumSerializationMethod.ByUnderlyingValue,
+        GeneratorOption = SerializationMethodGeneratorOption.Fast,
+        SerializationMethod = SerializationMethod.Array
+    };
+    
+    var settings = new SerializerCodeGenerationConfiguration
+    {
+        OutputDirectory = Path.GetTempPath(),
+        SerializationMethod = SerializationMethod.Array,
+        Namespace = namespaceName + ".GeneratedSerializers",
+        IsRecursive = true,
+        PreferReflectionBasedSerializer = false,
+        WithNullableSerializers = true,
+        EnumSerializationMethod = EnumSerializationMethod.ByUnderlyingValue
+    };
+    
+    var alreadyGenerated = new HashSet<Type>();
+    var specializedSerializers = new HashSet<SerializerCodeGenerationResult>(new TargetTypeComparer());
+    Action<Type> RegisterSerializer = null;
+    RegisterSerializer = type =>
+    {
+        if (!alreadyGenerated.Add(type)) return;
+
+        var outputSerializers = SerializerGenerator.GenerateSerializerSourceCodes(settings, type).ToArray();
+        if (outputSerializers.Length == 0) return;
+        foreach (var item in outputSerializers)
+        {
+            specializedSerializers.Add(item);
+        }
+    };
+
+    var typeFromAssemblies = System.AppDomain.CurrentDomain
+        .GetAssemblies()
+        .Where(x => x.GetName().Name == assemblyName)
+        .SelectMany(x =>
+        {
+            try
+            {
+                return x.GetTypes();
+            }
+            catch (ReflectionTypeLoadException ex)
+            {
+                return ex.Types.Where(t => t != null);
+            }
+            catch
+            {
+                return Type.EmptyTypes;
+            }
+        })
+        .Where(x => x != null);
+
+    var hubs = typeFromAssemblies
+        .Where(x => SearchBaseHub(x) != null)
+        .Where(x => !x.IsAbstract)
+        .Where(x => x.GetCustomAttributes(true).All(y => y.GetType().FullName != "PhotonWire.Server.IgnoreOperationAttribute"));
+
+    var contracts = hubs
+        .Select(serverType =>
+        {
+            var clientType = SearchBaseHub(serverType).GetGenericArguments()[0];
+
+            var serverMethods = serverType
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                .Where(x => !x.IsSpecialName)
+                .Where(methodInfo => !ignoreMethods.Contains(methodInfo.Name))
+                .Where(x => x.GetCustomAttributes(true).All(y => y.GetType().FullName != "PhotonWire.Server.IgnoreOperationAttribute"))
+                .Where(x => x.GetCustomAttributes(true).All(y => y.GetType().FullName != "PhotonWire.Server.IgnoreClientGenerateAttribute"))
+                .Select(methodInfo =>
+                {
+                    var retType = methodInfo.ReturnType;
+                    var returnType =
+                          (retType == typeof(void)) ? typeof(void)
+                        : (retType == typeof(Task)) ? typeof(void)
+                        : (retType.IsGenericType && retType.GetGenericTypeDefinition() == typeof(Task<>)) ? retType.GetGenericArguments()[0]
+                        : retType;
+
+                    if (returnType != typeof(void)) RegisterSerializer(returnType);
+
+                    var parameter = methodInfo.GetParameters()
+                        .Select(paramInfo =>
+                        {
+                            RegisterSerializer(paramInfo.ParameterType);
+                            
+                            return new
+                            {
+                                paramInfo.Name,
+                                TypeName = BeautifyType(paramInfo.ParameterType)
+                            };
+                        })
+                        .ToArray();
+
+                    var opAttr = methodInfo.GetCustomAttributes().FirstOrDefault(x => x.GetType().FullName == "PhotonWire.Server.OperationAttribute");
+                    if (opAttr == null) throw new Exception("Server Method must needs PhotonWire.Server.OperationAttribute Path:" + serverType.Name + "/" + methodInfo.Name);
+                    
+                    return new
+                    {
+                        MethodName = methodInfo.Name,
+                        OperationCode = (byte)((dynamic)opAttr).OperationCode,
+                        ReturnTypeName = BeautifyType(returnType),
+                        Parameter = parameter
+                    };
+                })
+                .ToArray();
+
+            var clientMethods = clientType
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                .Select(methodInfo =>
+                {
+                    // generate type
+                    string returnTypeName;
+                    var externalTypeParameters = new[] { new { Name = "", TypeName = "" } }.Skip(1).ToArray();
+
+                    var parameter = methodInfo.GetParameters();
+                    if (parameter.Length == 0)
+                    {
+                        returnTypeName = "Unit";
+                    }
+                    else if (parameter.Length == 1)
+                    {
+                        RegisterSerializer(parameter[0].ParameterType);
+                        returnTypeName = BeautifyType(parameter[0].ParameterType);
+                    }
+                    else
+                    {
+                        externalTypeParameters = parameter
+                            .Select(x =>
+                            {
+                                RegisterSerializer(x.ParameterType);
+                                return new { x.Name, TypeName = BeautifyType(x.ParameterType) };
+                            })
+                            .ToArray();
+                        var prefix = (clientType.IsInterface && clientType.Name.StartsWith("I"))
+                            ? clientType.Name.Substring(1)
+                            : clientType.Name;
+                        returnTypeName = prefix + methodInfo.Name + "Response";
+                    }
+
+                    var opAttr = methodInfo.GetCustomAttributes().FirstOrDefault(x => x.GetType().FullName == "PhotonWire.Server.OperationAttribute");
+                    if (opAttr == null) throw new Exception("Client Method must needs PhotonWire.Server.OperationAttribute Path:" + clientType.Name + "/" + methodInfo.Name);
+
+                    return new
+                    {
+                        MethodName = methodInfo.Name,
+                        OperationCode = (byte)((dynamic)opAttr).OperationCode,
+                        ReturnTypeName = returnTypeName,
+                        OriginalParameters = parameter.Select(x => new { x.Name, TypeName = BeautifyType(x.ParameterType) }).ToArray(),
+                        ExternalTypeParameters = externalTypeParameters
+                    };
+                })
+                .ToArray();
+
+            var hubAttr = serverType.GetCustomAttributes().First(x => x.GetType().FullName == "PhotonWire.Server.HubAttribute");
+            if (hubAttr == null) throw new Exception("Hub must needs PhotonWire.Server.HubAttribute");
+
+            return new
+            {
+                ContractName = serverType.Name + "Proxy",
+                HubName = serverType.Name,
+                HubId = (short)((dynamic)hubAttr).HubId,
+                Server = new
+                {
+                    ClassName = serverType.Name + "Server",
+                    Methods = serverMethods
+                },
+                Client = new
+                {
+                    ClassName = serverType.Name + "Client",
+                    OriginalType = clientType,
+                    Methods = clientMethods
+                }
+            };
+        })
+        .ToArray();
+
+    var serializerFileSeq = specializedSerializers.Select(x => File.ReadLines(x.FilePath).SkipWhile(y => y.StartsWith("//")));
+#>
+#pragma warning disable 618
+#pragma warning disable 612
+#pragma warning disable 414
+#pragma warning disable 168
+
+using System;
+#if (UNITY || UNITY_10 || UNITY_9 || UNITY_8 || UNITY_7 || UNITY_6 || UNITY_5 || UNITY_5_0 || UNITY_4_6 || UNITY_4_5 || UNITY_4_4 || UNITY_4_3 || UNITY_4_2 || UNITY_4_1 || UNITY_4_0_1 || UNITY_4_0 || UNITY_3_5 || UNITY_3_4 || UNITY_3_3 || UNITY_3_2 || UNITY_3_1 || UNITY_3_0_0 || UNITY_3_0 || UNITY_2_6_1 || UNITY_2_6)
+using UniRx;
+#else
+using System.Reactive;
+using System.Reactive.Concurrency;
+using System.Reactive.Linq;
+#endif
+using MsgPack.Serialization;
+using System.IO;
+using PhotonWire.Client;
+using ExitGames.Client.Photon;
+using <#= namespaceName #>.GeneratedSerializers;
+
+namespace <#= namespaceName #>
+{
+    public static class PhotonSerializer
+    {
+        static readonly PhotonSerializerBase serializer = new PhotonMsgPackSerializer();
+
+        public static object Serialize<T>(T obj)
+        {
+            return serializer.Serialize(typeof(T), obj);
+        }
+
+        public static T Deserialize<T>(object value)
+        {
+            if (typeof(T) == typeof(Unit)) return default(T);
+            return (T)serializer.Deserialize(typeof(T), value);
+        }
+    }
+
+    public abstract class PhotonSerializerBase
+    {
+        static bool IsPhotonSupportedType(Type type)
+        {
+            if (type == typeof(int[])) return true;
+            if (type == typeof(byte[])) return true;
+            if (type.IsEnum) return false;
+
+            var code = Type.GetTypeCode(type);
+            switch (code)
+            {
+                case TypeCode.Byte:
+                case TypeCode.Boolean:
+                case TypeCode.Int16:
+                case TypeCode.Int32:
+                case TypeCode.Int64:
+                case TypeCode.Single:
+                case TypeCode.Double:
+                case TypeCode.String:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        public object Serialize(Type type, object obj)
+        {
+            if (obj == null) return null;
+            if (IsPhotonSupportedType(type)) return obj;
+
+            return SerializeCore(obj);
+        }
+
+        public abstract byte[] SerializeCore(object obj);
+
+        public object Deserialize(Type type, object value)
+        {
+            if (value == null) return null;
+            if (value.GetType() != typeof(byte[])) return value;
+
+            if (type == typeof(byte[])) return value;
+
+            return DeserializeCore(type, (byte[])value);
+        }
+
+        public abstract object DeserializeCore(Type type, byte[] value);
+    }
+
+    public class PhotonMsgPackSerializer : PhotonSerializerBase
+    {
+        internal readonly MsgPack.Serialization.SerializationContext serializationContext = new MsgPack.Serialization.SerializationContext
+        {
+            EnumSerializationMethod = MsgPack.Serialization.EnumSerializationMethod.ByUnderlyingValue,
+            SerializationMethod = MsgPack.Serialization.SerializationMethod.Array
+        };
+
+        readonly System.Collections.Generic.Dictionary<Type, Action<MsgPack.Serialization.ResolveSerializerEventArgs>> setSerializers = new System.Collections.Generic.Dictionary<Type, Action<MsgPack.Serialization.ResolveSerializerEventArgs>>(<#= specializedSerializers.Count #>);
+
+        public PhotonMsgPackSerializer()
+        {
+            serializationContext.ResolveSerializer += SerializationContext_ResolveSerializer;
+
+<# foreach(var x in specializedSerializers) {  #>
+            setSerializers.Add(typeof(<#= IsNullable(x.TargetType) ? x.TargetType.GetGenericArguments()[0] + "?" : x.TargetType.FullName #>), e => e.SetSerializer(new <#= x.SerializerTypeFullName #>(e.Context)));
+<# } #>   
+
+<# foreach(var x in specializedSerializers.Where(x => x.TargetType.IsEnum)) {  #>
+            MsgPack.Serialization.MessagePackSerializer.PrepareType<<#= x.TargetType.FullName #>>();
+<# } #>
+        }
+
+        void SerializationContext_ResolveSerializer(object sender, MsgPack.Serialization.ResolveSerializerEventArgs e)
+        {
+            Action<MsgPack.Serialization.ResolveSerializerEventArgs> setSerializer;
+            if(setSerializers.TryGetValue(e.TargetType, out setSerializer))
+            {
+                setSerializer(e);
+            }
+        }
+
+        public override object DeserializeCore(Type type, byte[] value)
+        {
+            return serializationContext.GetSerializer(type).UnpackSingleObject(value);
+        }
+
+        public override byte[] SerializeCore(object obj)
+        {
+            return serializationContext.GetSerializer(obj.GetType()).PackSingleObject(obj);
+        }
+    }
+    
+    public static class ObservablePhotonPeerExtensions
+    {
+        public static T CreateTypedHub<T>(this ObservablePhotonPeer peer)
+            where T : IPhotonWireProxy, new()
+        {
+            var contract = new T();
+            contract.Initialize(peer);
+
+            return contract;
+        }
+    }
+
+    public interface IPhotonWireProxy
+    {
+        ObservablePhotonPeer Peer { get; }
+        void Initialize(ObservablePhotonPeer peer);
+    }
+
+    public abstract class PhotonWireProxy<TServer, TClient, TClientListener> : IPhotonWireProxy
+    {
+        public ObservablePhotonPeer Peer { get; private set; }
+
+        public void Initialize(ObservablePhotonPeer peer)
+        {
+            this.Peer = peer;
+        }
+
+        public abstract short HubId { get; }
+        public abstract string HubName { get; }
+        public abstract TServer Invoke { get; }
+        public abstract TClient Receive { get; }
+        public abstract IDisposable RegisterListener(TClientListener clientListener, bool runOnMainThread = true);
+    }
+
+    // Auto generated proxy code
+<# foreach(var contract in contracts) { #>
+    public class <#= contract.ContractName #> : PhotonWireProxy<<#= contract.ContractName #>.<#= contract.Server.ClassName #>, <#= contract.ContractName #>.<#= contract.Client.ClassName #>, <#= contract.ContractName #>.<#= contract.Client.OriginalType.Name #>>
+    {
+        public override short HubId
+        {
+            get
+            {
+                return <#= contract.HubId #>;
+            }
+        }
+
+        public override string HubName
+        {
+            get
+            {
+                return "<#= contract.HubName #>";
+            }
+        }
+
+        <#= contract.Server.ClassName #> invoke;
+        public override <#= contract.Server.ClassName #> Invoke
+        {
+            get
+            {
+                return invoke ?? (invoke = new <#= contract.Server.ClassName #>(Peer, HubId));
+            }
+        }
+
+        <#= contract.Client.ClassName #> receive;
+        public override <#= contract.Client.ClassName #> Receive
+        {
+            get
+            {
+                return receive ?? (receive = new <#= contract.Client.ClassName #>(Peer, HubId));
+            }
+        }
+        
+        public override IDisposable RegisterListener(<#= contract.Client.OriginalType.Name #> clientListener, bool runOnMainThread = true)
+        {
+            return Peer.ObserveReceiveEventData().Subscribe(__args =>
+            {
+                {
+                    object hubIdObj;
+                    if (!__args.Parameters.TryGetValue(ReservedParameterNo.RequestHubId, out hubIdObj) || Convert.GetTypeCode(hubIdObj) != TypeCode.Int16)
+                    {
+                        return;
+                    }
+                    if ((short)hubIdObj != HubId) return;
+                }
+
+                var __parameters = __args.Parameters;
+                switch (__args.Code)
+                {
+<# foreach(var method in contract.Client.Methods) { #>
+                    case <#= method.OperationCode #>:
+                        {
+<# for(var i = 0; i < method.OriginalParameters.Length; i++) { #>
+                            var <#= method.OriginalParameters[i].Name #> = PhotonSerializer.Deserialize<<#= method.OriginalParameters[i].TypeName #>>(__parameters[<#= i #>]);
+<# } #>
+                            if(runOnMainThread)
+                            {
+                                <#= mainthreadSchedulerInstance #>.Schedule(() => clientListener.<#= method.MethodName #>(<#= string.Join(", ", method.OriginalParameters.Select(x => x.Name)) #>));
+                            }
+                            else
+                            {
+                                clientListener.<#= method.MethodName #>(<#= string.Join(", ", method.OriginalParameters.Select(x => x.Name)) #>);
+                            }
+                        }
+                        break;
+<# } #>
+                    default:
+                        break;
+                }
+            });                
+        }
+
+        public class <#= contract.Server.ClassName #>
+        {
+            readonly ObservablePhotonPeer peer;
+            readonly short hubId;
+
+            public <#= contract.Server.ClassName #>(ObservablePhotonPeer peer, short hubId)
+            {
+                this.peer = peer;
+                this.hubId = hubId;
+            }
+
+<# foreach(var method in contract.Server.Methods) { #>
+            public <#= WithIObservable(method.ReturnTypeName) #> <#= method.MethodName #><#= useAsyncSuffix ? "Async" : "" #>(<#= string.Join(", ", method.Parameter.Select(x => x.TypeName + " " + x.Name)) #><#= method.Parameter.Any() ? ", " : "" #>bool observeOnMainThread = true)
+            {
+                byte opCode = <#= method.OperationCode #>;
+                var parameter = new System.Collections.Generic.Dictionary<byte, object>();
+                parameter.Add(ReservedParameterNo.RequestHubId, hubId);
+<# for(var i = 0; i < method.Parameter.Length; i++) { #>
+                parameter.Add(<#= i #>, PhotonSerializer.Serialize(<#= method.Parameter[i].Name #>));
+<# } #>
+
+                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                    .Select(__operationResponse =>
+                    {
+                        var __result = __operationResponse[ReservedParameterNo.ResponseId];
+                        return PhotonSerializer.Deserialize<<#= method.ReturnTypeName #>>(__result);
+                    });
+
+                return (observeOnMainThread) ? __response.ObserveOn(<#= mainthreadSchedulerInstance #>) : __response;
+            }
+
+<# } #>
+        }
+
+        public class <#= contract.Client.ClassName #>
+        {
+            readonly ObservablePhotonPeer peer;
+            readonly short hubId;
+
+            public <#= contract.Client.ClassName #>(ObservablePhotonPeer peer, short hubId)
+            {
+                this.peer = peer;
+                this.hubId = hubId;
+            }
+
+            IObservable<EventData> ReceiveEventData(byte eventCode)
+            {
+                return peer.ObserveReceiveEventData()
+                    .Where(x =>
+                    {
+                        object hubIdObj;
+                        if (!x.Parameters.TryGetValue(ReservedParameterNo.RequestHubId, out hubIdObj) || Convert.GetTypeCode(hubIdObj) != TypeCode.Int16)
+                        {
+                            return false;
+                        }
+
+                        if (x.Code != eventCode) return false;
+                        if ((short)hubIdObj != hubId) return false;
+
+                        return true;
+                    });
+            }
+
+<# foreach(var method in contract.Client.Methods) { #>
+            public <#= WithIObservable(method.ReturnTypeName) #> <#= method.MethodName #>(bool observeOnMainThread = true)
+            {
+                var __result = ReceiveEventData(<#= method.OperationCode #>)
+                    .Select(__args =>
+                    {
+<# if(method.ReturnTypeName == "Unit" || method.ReturnTypeName == "UniRx.Unit" || method.ReturnTypeName == "System.Reactive.Unit") { #>
+                        return Unit.Default;
+<# } else if(method.ExternalTypeParameters.Length == 0) { #>
+                        return PhotonSerializer.Deserialize<<#= method.ReturnTypeName #>>(__args.Parameters[0]);
+<# } else { #>
+                        var ____result = new <#= method.ReturnTypeName #>
+                        {
+<# for(var i = 0; i < method.ExternalTypeParameters.Length; i++) { #>
+                            <#= method.ExternalTypeParameters[i].Name #> = PhotonSerializer.Deserialize<<#= method.ExternalTypeParameters[i].TypeName #>>(__args.Parameters[<#= i #>]),
+<# } #>
+                        };
+                        return ____result;
+<# } #>
+                    });
+
+                return (observeOnMainThread) ? __result.ObserveOn(<#= mainthreadSchedulerInstance #>) : __result;
+            }
+
+<# } #>
+        }
+
+        public interface <#= contract.Client.OriginalType.Name #>
+        {
+<# foreach(var method in contract.Client.Methods) { #>
+            void <#= method.MethodName #>(<#= string.Join(", ", method.OriginalParameters.Select(x => x.TypeName + " " + x.Name)) #>);
+<# } #>
+        }
+
+<# foreach (var externalType in contract.Client.Methods.Select(x => new { x.ReturnTypeName, x.ExternalTypeParameters }).Where(x => x.ExternalTypeParameters.Any())) { #>       
+        public class <#= externalType.ReturnTypeName #>
+        {
+<# foreach(var parameter in externalType.ExternalTypeParameters) { #>
+            public <#= parameter.TypeName #> <#= parameter.Name #> { get; set; }
+<# } #>
+        }
+
+<# } #>
+    }
+<# } #>
+}
+
+namespace <#= namespaceName #>.GeneratedSerializers
+{
+}
+
+<# foreach (var files in serializerFileSeq) { foreach(var line in files) { #>
+<#= line #>
+<# } } #>
+
+#pragma warning disable 168
+#pragma warning restore 414
+#pragma warning restore 618
+#pragma warning restore 612
+
+
+<#+  
+    bool IsNullable(Type type)
+    {
+        return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+    }
+
+    class TargetTypeComparer : EqualityComparer<SerializerCodeGenerationResult>
+    {
+
+        public override bool Equals(SerializerCodeGenerationResult x, SerializerCodeGenerationResult y)
+        {
+            return x.TargetType == y.TargetType;
+        }
+
+        public override int GetHashCode(SerializerCodeGenerationResult obj)
+        {
+            return obj.TargetType.GetHashCode();
+        }
+    }
+#>
