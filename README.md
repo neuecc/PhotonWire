@@ -11,6 +11,14 @@ PhotonWire provides client-server RPC with Photon Unity Native SDK and and serve
 * Fully integrated with Visual Studio
 * Tools, PhotonWire.HubInvoker can invoke API directly 
 
+Transparent debugger in Visual Studio, Unity -> Photon Server -> Unity.
+
+![bothdebug](https://cloud.githubusercontent.com/assets/46207/15651046/f0931f46-26b7-11e6-979c-b8a766511617.gif)
+
+PhotonWire.HubInvoker is powerful API debugging tool.
+
+![image](https://cloud.githubusercontent.com/assets/46207/15654696/527cbdf2-26d1-11e6-9213-063bf873fd81.png)
+
 Getting Started -  Server
 ---
 In Visual Studio(2015 or higher), create new .NET 4.6(or higher) `Class Library Project`. For example sample project name - `GettingStarted.Server`.
