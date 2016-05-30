@@ -63,7 +63,7 @@ namespace PhotonWire.Server
             where TServerHub : ServerHub
         {
             var hubContext = PeerManager.GetServerHubContext<TServerHub>();
-            return hubContext.Peers;
+            return hubContext.Clients;
         }
     }
 

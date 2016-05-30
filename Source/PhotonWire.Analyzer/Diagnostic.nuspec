@@ -2,14 +2,14 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>PhotonWire.Analyzer</id>
-        <version>1.1.2.3</version>
+        <version>1.0.0</version>
         <title>PhotonWire.Analyzer</title>
         <authors>neuecc</authors>
         <owners>neuecc</owners>
         <projectUrl>https://github.com/neuecc/PhotonWire</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Analyzers for PhotonWire, verify rule for create hubs.</description>
-        <releaseNotes>Check DataMemberAttribute without IgnoreDataMemberAttribute.</releaseNotes>
+        <releaseNotes>Initial release.</releaseNotes>
         <tags>Photon, PhotonServer, PhotonWire, analyzers</tags>
     </metadata>
     <files>

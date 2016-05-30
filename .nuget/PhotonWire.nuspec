@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>PhotonWire</id>
+        <version>1.0.2</version>
+        <title>PhotonWire</title>
+        <authors>neuecc</authors>
+        <owners>neuecc</owners>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Typed Asynchronous RPC Layer for Photon Server. This package includes Server libs + Analyzer + HubInvoker</description>
+        <releaseNotes>
+            <![CDATA[
+Initial Release.
+            ]]>
+        </releaseNotes>
+        <language>en-US</language>
+        <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+        <projectUrl>https://github.com/neuecc/PhotonWire</projectUrl>
+        <tags>Photon MultiPlayer Distributed websockets streaming realtime unity</tags>
+        <dependencies>
+            <dependency id="PhotonWire.Server" version="1.0.2" />
+            <dependency id="PhotonWire.Analyzer" version="1.0.2" />
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="..\Source\PhotonWire.HubInvoker\bin\Release\" target="tools\PhotonWire.HubInvoker" />
+    </files>
+</package>

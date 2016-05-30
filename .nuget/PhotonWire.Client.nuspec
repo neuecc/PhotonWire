@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>PhotonWire.Client</id>
+        <version>1.0.2</version>
+        <title>PhotonWire.Client</title>
+        <authors>neuecc</authors>
+        <owners>neuecc</owners>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Typed Asynchronous RPC Layer for Photon Server. This package is for .NET client implementation.</description>
+        <releaseNotes>
+            <![CDATA[
+Initial Release.
+            ]]>
+        </releaseNotes>
+        <language>en-US</language>
+        <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+        <projectUrl>https://github.com/neuecc/PhotonWire</projectUrl>
+        <tags>Photon MultiPlayer Distributed websockets streaming realtime unity</tags>
+        <dependencies>
+            <dependency id="MsgPack.Cli" version="0.6.5" />
+            <dependency id="Newtonsoft.Json" version="7.0.1" />
+            <dependency id="Rx-Main" version="2.2.5" />
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="..\Source\PhotonWire.Client\bin\Release\PhotonWire.Client.dll" target="lib" />
+        <file src="..\Source\PhotonWire.Client\bin\Release\PhotonWire.Client.xml" target="lib" />
+        <file src="Client_ReadMe.txt" target="readme.txt" />
+        <file src="..\Source\PhotonWire.UnityClient\Assets\Plugins\PhotonWire\PhotonWireProxy.tt" target="Content" />
+    </files>
+</package>

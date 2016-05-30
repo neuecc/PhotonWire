@@ -29,5 +29,10 @@ namespace PhotonWire.Sample.ServerApp
         {
             var _ = ConnectToOutboundServerAsync(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 4530), "MyMaster");
         }
+
+        protected override void TearDownCore()
+        {
+            base.TearDownCore();
+        }
     }
 }

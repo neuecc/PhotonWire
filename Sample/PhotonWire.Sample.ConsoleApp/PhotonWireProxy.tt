@@ -28,7 +28,7 @@
     // If WPF, use "DispatcherScheduler.Current"
     // If ConsoleApp, use "CurrentThreadScheduler.Instance"
     // If Unity, use "Scheduler.MainThread"
-    var mainthreadSchedulerInstance = "Scheduler.MainThread";
+    var mainthreadSchedulerInstance = "CurrentThreadScheduler.Instance";
     
     // End of Configuration-----------------
 

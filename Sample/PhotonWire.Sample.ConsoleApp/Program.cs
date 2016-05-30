@@ -21,63 +21,48 @@ namespace PhotonWire.Sample.ConsoleApp
         public int MyProperty { get; set; }
     }
 
-    class Program : TestHubProxy.IMyClient
+    class Program// : PhotonWire.Client.TutorialProxy.ITutorialClient
     {
         static void Main(string[] args)
         {
-            var observablePeer = new ObservablePhotonPeer(ConnectionProtocol.Tcp);
-            observablePeer.Timeout = TimeSpan.FromMinutes(15); // toooooo long
+            //var observablePeer = new ObservablePhotonPeer(ConnectionProtocol.Tcp);
+            //observablePeer.Timeout = TimeSpan.FromMinutes(15); // toooooo long
 
-            // observablePeer.DebugOut = DebugLevel.ALL;
-            observablePeer.Connect("127.0.0.1:4530", "ServerApp");
+            //// observablePeer.DebugOut = DebugLevel.ALL;
+            //observablePeer.Connect("127.0.0.1:4530", "ServerApp");
 
-            Observable.Interval(TimeSpan.FromMilliseconds(50)).Subscribe(_ => observablePeer.Service());
+            //Observable.Interval(TimeSpan.FromMilliseconds(50)).Subscribe(_ => observablePeer.Service());
 
-            StatusCode lastStatus = StatusCode.Disconnect;
-            observablePeer.ObserveStatusChanged().Subscribe(x =>
-            {
-                lastStatus = x;
-                Console.WriteLine(x);
-            });
+            //StatusCode lastStatus = StatusCode.Disconnect;
+            //observablePeer.ObserveStatusChanged().Subscribe(x =>
+            //{
+            //    lastStatus = x;
+            //    Console.WriteLine(x);
+            //});
 
-            Observable.Interval(TimeSpan.FromSeconds(1)).Subscribe(_ =>
-            {
-                if (lastStatus != StatusCode.Connect)
-                {
-                    observablePeer.Connect("127.0.0.1:4530", "ServerApp");
-                }
-            });
+            //Observable.Interval(TimeSpan.FromSeconds(1)).Subscribe(_ =>
+            //{
+            //    if (lastStatus != StatusCode.Connect)
+            //    {
+            //        observablePeer.Connect("127.0.0.1:4530", "ServerApp");
+            //    }
+            //});
 
 
-            // Create Typed Proxy
-            var hub = observablePeer.CreateTypedHub<TestHubProxy>();
-            // hub.RegisterListener(new Program()/* this */);
+            //// Create Typed Proxy
+            //var hub = observablePeer.CreateTypedHub<TestHubProxy>();
+            //// hub.RegisterListener(new Program()/* this */);
 
-            while (true)
-            {
-                var message = Console.ReadLine();
+            //while (true)
+            //{
+            //    var message = Console.ReadLine();
 
-                hub.Invoke.EchoAsync("hogehoge").Subscribe(x => Console.WriteLine("R:" + x), ex => Console.WriteLine(ex));
+            //    hub.Invoke.EchoAsync("hogehoge").Subscribe(x => Console.WriteLine("R:" + x), ex => Console.WriteLine(ex));
 
-                // switch
-                observablePeer.SwitchConnectionAsync("127.0.0.1:4530", "ServerApp").Subscribe();
+            //    // switch
+            //    observablePeer.SwitchConnectionAsync("127.0.0.1:4530", "ServerApp").Subscribe();
 
-            }
-        }
-
-        public void YoYo(Yo yo)
-        {
-            Console.WriteLine(yo);
-        }
-
-        void TestHubProxy.IMyClient.Chop(string xxx)
-        {
-            Console.WriteLine("Received Chop:" + new { xxx });
-        }
-
-        void TestHubProxy.IMyClient.Kick(int x, int y, string z, Yappy xyz)
-        {
-            Console.WriteLine("Received Kick:" + new { x, y, z, xyz });
+            //}
         }
     }
 }

@@ -29,7 +29,7 @@ namespace PhotonWire.Server.ServerToServer
     {
         public HubDescriptor Hub { get; }
         public SendParameters SendParameters { get; }
-        public ServerHubClientProxy<T> Peers { get; }
+        public ServerHubClientProxy<T> Clients { get; }
 
         readonly IPhotonSerializer serializer;
 
@@ -42,7 +42,7 @@ namespace PhotonWire.Server.ServerToServer
         {
             this.Hub = hub;
             this.SendParameters = sendParameters;
-            this.Peers = new ServerHubClientProxy<T>(this);
+            this.Clients = new ServerHubClientProxy<T>(this);
             this.serializer = ((PhotonWireApplicationBase)PhotonWireApplicationBase.Instance).Serializer;
         }
 

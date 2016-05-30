@@ -63,18 +63,15 @@ namespace PhotonWire.Sample.ServerApp.GameServer.Hubs
             this.Clients.Group(groupName).GroupBroadcastMessage(message);
         }
 
-        // 6. 
+        // 6. Call Sever to Server
 
         [Operation(5)]
         public async Task<int> ServerToServer(int x, int y)
         {
-            var mul = await PeerManager.GetServerHubContext<MasterTutorial>()
-                .Peers.Single.Multiply(x, y);
-
+            var mul = await GetServerHubProxy<MasterTutorial>().Single.Multiply(x, y);
 
             return mul;
         }
-
     }
 
 

@@ -70,6 +70,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PhotonWireProxy.Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PhotonWireProxy.tt</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -82,6 +87,19 @@
       <Project>{d08fa876-5c52-4a74-87bd-1537bdc6a075}</Project>
       <Name>PhotonWire.Client</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PhotonWire.Sample.Share\PhotonWire.Sample.Share.csproj">
+      <Project>{80a1868d-49ea-4f8f-9153-91072565b6da}</Project>
+      <Name>PhotonWire.Sample.Share</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="PhotonWireProxy.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>PhotonWireProxy.Generated.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

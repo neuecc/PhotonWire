@@ -252,7 +252,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<System.Int32>(__result);
                     });
 
-                return (observeOnMainThread) ? __response.ObserveOn(Scheduler.MainThread) : __response;
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
             public IObservable<System.Byte> EchoAsync(System.Byte x, bool observeOnMainThread = true)
@@ -269,7 +269,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<System.Byte>(__result);
                     });
 
-                return (observeOnMainThread) ? __response.ObserveOn(Scheduler.MainThread) : __response;
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
             public IObservable<System.Boolean> EchoAsync(System.Boolean x, bool observeOnMainThread = true)
@@ -286,7 +286,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<System.Boolean>(__result);
                     });
 
-                return (observeOnMainThread) ? __response.ObserveOn(Scheduler.MainThread) : __response;
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
             public IObservable<System.Int16> EchoAsync(System.Int16 x, bool observeOnMainThread = true)
@@ -303,7 +303,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<System.Int16>(__result);
                     });
 
-                return (observeOnMainThread) ? __response.ObserveOn(Scheduler.MainThread) : __response;
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
             public IObservable<System.Int64> EchoAsync(System.Int64 x, bool observeOnMainThread = true)
@@ -320,7 +320,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<System.Int64>(__result);
                     });
 
-                return (observeOnMainThread) ? __response.ObserveOn(Scheduler.MainThread) : __response;
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
             public IObservable<System.Single> EchoAsync(System.Single x, bool observeOnMainThread = true)
@@ -337,7 +337,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<System.Single>(__result);
                     });
 
-                return (observeOnMainThread) ? __response.ObserveOn(Scheduler.MainThread) : __response;
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
             public IObservable<System.Double> EchoAsync(System.Double x, bool observeOnMainThread = true)
@@ -354,7 +354,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<System.Double>(__result);
                     });
 
-                return (observeOnMainThread) ? __response.ObserveOn(Scheduler.MainThread) : __response;
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
             public IObservable<System.Int32[]> EchoAsync(System.Int32[] x, bool observeOnMainThread = true)
@@ -371,7 +371,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<System.Int32[]>(__result);
                     });
 
-                return (observeOnMainThread) ? __response.ObserveOn(Scheduler.MainThread) : __response;
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
             public IObservable<System.String> EchoAsync(System.String x, bool observeOnMainThread = true)
@@ -388,7 +388,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<System.String>(__result);
                     });
 
-                return (observeOnMainThread) ? __response.ObserveOn(Scheduler.MainThread) : __response;
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
             public IObservable<System.Byte[]> EchoAsync(System.Byte[] x, bool observeOnMainThread = true)
@@ -405,7 +405,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<System.Byte[]>(__result);
                     });
 
-                return (observeOnMainThread) ? __response.ObserveOn(Scheduler.MainThread) : __response;
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
             public IObservable<System.DateTime> EchoAsync(System.DateTime x, bool observeOnMainThread = true)
@@ -422,7 +422,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<System.DateTime>(__result);
                     });
 
-                return (observeOnMainThread) ? __response.ObserveOn(Scheduler.MainThread) : __response;
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
             public IObservable<System.Uri> EchoAsync(System.Uri x, bool observeOnMainThread = true)
@@ -439,7 +439,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<System.Uri>(__result);
                     });
 
-                return (observeOnMainThread) ? __response.ObserveOn(Scheduler.MainThread) : __response;
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
             public IObservable<System.Nullable<System.Int32>> EchoAsync(System.Nullable<System.Int32> x, bool observeOnMainThread = true)
@@ -456,7 +456,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<System.Nullable<System.Int32>>(__result);
                     });
 
-                return (observeOnMainThread) ? __response.ObserveOn(Scheduler.MainThread) : __response;
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
             public IObservable<System.Nullable<System.Double>> EchoAsync(System.Nullable<System.Double> x, bool observeOnMainThread = true)
@@ -473,7 +473,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<System.Nullable<System.Double>>(__result);
                     });
 
-                return (observeOnMainThread) ? __response.ObserveOn(Scheduler.MainThread) : __response;
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
             public IObservable<System.Double[]> EchoAsync(System.Double[] x, bool observeOnMainThread = true)
@@ -490,7 +490,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<System.Double[]>(__result);
                     });
 
-                return (observeOnMainThread) ? __response.ObserveOn(Scheduler.MainThread) : __response;
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
             public IObservable<System.Collections.Generic.List<System.Double>> EchoAsync(System.Collections.Generic.List<System.Double> x, bool observeOnMainThread = true)
@@ -507,7 +507,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<System.Collections.Generic.List<System.Double>>(__result);
                     });
 
-                return (observeOnMainThread) ? __response.ObserveOn(Scheduler.MainThread) : __response;
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
             public IObservable<System.Collections.Generic.Dictionary<System.String, System.Int32>> EchoAsync(System.Collections.Generic.Dictionary<System.String, System.Int32> x, bool observeOnMainThread = true)
@@ -524,7 +524,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<System.Collections.Generic.Dictionary<System.String, System.Int32>>(__result);
                     });
 
-                return (observeOnMainThread) ? __response.ObserveOn(Scheduler.MainThread) : __response;
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
             public IObservable<PhotonWire.Sample.ServerApp.Hubs.MyClass> EchoAsync(PhotonWire.Sample.ServerApp.Hubs.MyClass x, bool observeOnMainThread = true)
@@ -541,7 +541,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<PhotonWire.Sample.ServerApp.Hubs.MyClass>(__result);
                     });
 
-                return (observeOnMainThread) ? __response.ObserveOn(Scheduler.MainThread) : __response;
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
             public IObservable<System.String> EchoAsync(PhotonWire.Sample.ServerApp.Hubs.Yo yo, bool observeOnMainThread = true)
@@ -558,7 +558,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<System.String>(__result);
                     });
 
-                return (observeOnMainThread) ? __response.ObserveOn(Scheduler.MainThread) : __response;
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
             public IObservable<System.String> EchoAsync(System.Nullable<PhotonWire.Sample.ServerApp.Hubs.Yo> yo, bool observeOnMainThread = true)
@@ -575,7 +575,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<System.String>(__result);
                     });
 
-                return (observeOnMainThread) ? __response.ObserveOn(Scheduler.MainThread) : __response;
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
         }
@@ -674,7 +674,7 @@ namespace PhotonWire.Client
                             var message = PhotonSerializer.Deserialize<System.String>(__parameters[1]);
                             if(runOnMainThread)
                             {
-                                Scheduler.MainThread.Schedule(() => clientListener.ReceiveMessage(userName, message));
+                                CurrentThreadScheduler.Instance.Schedule(() => clientListener.ReceiveMessage(userName, message));
                             }
                             else
                             {
@@ -687,7 +687,7 @@ namespace PhotonWire.Client
                             var userName = PhotonSerializer.Deserialize<System.String>(__parameters[0]);
                             if(runOnMainThread)
                             {
-                                Scheduler.MainThread.Schedule(() => clientListener.JoinUser(userName));
+                                CurrentThreadScheduler.Instance.Schedule(() => clientListener.JoinUser(userName));
                             }
                             else
                             {
@@ -700,7 +700,7 @@ namespace PhotonWire.Client
                             var userName = PhotonSerializer.Deserialize<System.String>(__parameters[0]);
                             if(runOnMainThread)
                             {
-                                Scheduler.MainThread.Schedule(() => clientListener.LeaveUser(userName));
+                                CurrentThreadScheduler.Instance.Schedule(() => clientListener.LeaveUser(userName));
                             }
                             else
                             {
@@ -740,7 +740,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<System.String>(__result);
                     });
 
-                return (observeOnMainThread) ? __response.ObserveOn(Scheduler.MainThread) : __response;
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
             public IObservable<System.String[]> GetRoomsAsync(bool observeOnMainThread = true)
@@ -756,7 +756,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<System.String[]>(__result);
                     });
 
-                return (observeOnMainThread) ? __response.ObserveOn(Scheduler.MainThread) : __response;
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
             public IObservable<System.String[]> GetRoomMembersAsync(System.String roomId, bool observeOnMainThread = true)
@@ -773,7 +773,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<System.String[]>(__result);
                     });
 
-                return (observeOnMainThread) ? __response.ObserveOn(Scheduler.MainThread) : __response;
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
             public IObservable<Unit> PublishMessageAsync(System.String roomId, System.String message, bool observeOnMainThread = true)
@@ -791,7 +791,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<Unit>(__result);
                     });
 
-                return (observeOnMainThread) ? __response.ObserveOn(Scheduler.MainThread) : __response;
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
             public IObservable<Unit> JoinRoomAsync(System.String roomId, System.String userName, bool observeOnMainThread = true)
@@ -809,7 +809,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<Unit>(__result);
                     });
 
-                return (observeOnMainThread) ? __response.ObserveOn(Scheduler.MainThread) : __response;
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
             public IObservable<Unit> LeaveRoomAsync(System.String roomId, bool observeOnMainThread = true)
@@ -826,7 +826,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<Unit>(__result);
                     });
 
-                return (observeOnMainThread) ? __response.ObserveOn(Scheduler.MainThread) : __response;
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
         }
@@ -873,7 +873,7 @@ namespace PhotonWire.Client
                         return ____result;
                     });
 
-                return (observeOnMainThread) ? __result.ObserveOn(Scheduler.MainThread) : __result;
+                return (observeOnMainThread) ? __result.ObserveOn(CurrentThreadScheduler.Instance) : __result;
             }
 
             public IObservable<System.String> JoinUser(bool observeOnMainThread = true)
@@ -884,7 +884,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<System.String>(__args.Parameters[0]);
                     });
 
-                return (observeOnMainThread) ? __result.ObserveOn(Scheduler.MainThread) : __result;
+                return (observeOnMainThread) ? __result.ObserveOn(CurrentThreadScheduler.Instance) : __result;
             }
 
             public IObservable<System.String> LeaveUser(bool observeOnMainThread = true)
@@ -895,7 +895,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<System.String>(__args.Parameters[0]);
                     });
 
-                return (observeOnMainThread) ? __result.ObserveOn(Scheduler.MainThread) : __result;
+                return (observeOnMainThread) ? __result.ObserveOn(CurrentThreadScheduler.Instance) : __result;
             }
 
         }
@@ -972,7 +972,7 @@ namespace PhotonWire.Client
                             var message = PhotonSerializer.Deserialize<System.String>(__parameters[0]);
                             if(runOnMainThread)
                             {
-                                Scheduler.MainThread.Schedule(() => clientListener.GroupBroadcastMessage(message));
+                                CurrentThreadScheduler.Instance.Schedule(() => clientListener.GroupBroadcastMessage(message));
                             }
                             else
                             {
@@ -1012,7 +1012,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<System.Int32>(__result);
                     });
 
-                return (observeOnMainThread) ? __response.ObserveOn(Scheduler.MainThread) : __response;
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
             public IObservable<System.String> GetHtmlAsync(System.String url, bool observeOnMainThread = true)
@@ -1029,7 +1029,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<System.String>(__result);
                     });
 
-                return (observeOnMainThread) ? __response.ObserveOn(Scheduler.MainThread) : __response;
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
             public IObservable<Unit> BroadcastAllAsync(System.String message, bool observeOnMainThread = true)
@@ -1046,7 +1046,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<Unit>(__result);
                     });
 
-                return (observeOnMainThread) ? __response.ObserveOn(Scheduler.MainThread) : __response;
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
             public IObservable<Unit> RegisterGroupAsync(System.String groupName, bool observeOnMainThread = true)
@@ -1063,7 +1063,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<Unit>(__result);
                     });
 
-                return (observeOnMainThread) ? __response.ObserveOn(Scheduler.MainThread) : __response;
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
             public IObservable<Unit> BroadcastToAsync(System.String groupName, System.String message, bool observeOnMainThread = true)
@@ -1081,7 +1081,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<Unit>(__result);
                     });
 
-                return (observeOnMainThread) ? __response.ObserveOn(Scheduler.MainThread) : __response;
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
             public IObservable<System.Int32> ServerToServerAsync(System.Int32 x, System.Int32 y, bool observeOnMainThread = true)
@@ -1099,7 +1099,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<System.Int32>(__result);
                     });
 
-                return (observeOnMainThread) ? __response.ObserveOn(Scheduler.MainThread) : __response;
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
         }
@@ -1141,7 +1141,7 @@ namespace PhotonWire.Client
                         return PhotonSerializer.Deserialize<System.String>(__args.Parameters[0]);
                     });
 
-                return (observeOnMainThread) ? __result.ObserveOn(Scheduler.MainThread) : __result;
+                return (observeOnMainThread) ? __result.ObserveOn(CurrentThreadScheduler.Instance) : __result;
             }
 
         }

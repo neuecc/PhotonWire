@@ -4,9 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{7341F80B-AC69-42CA-BBDC-3BD667C7C640}"
-	ProjectSection(SolutionItems) = preProject
-		VSDocToMarkdown.csx = VSDocToMarkdown.csx
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample", "Sample", "{8C25F347-E802-4BFF-BBA7-5EFA3E8CB03A}"
 EndProject
@@ -36,8 +33,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotonWire.UnityClient.CSha
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F69EC9CD-AD54-4725-BF65-40C2D488E465}"
 	ProjectSection(SolutionItems) = preProject
+		.nuget\Client_ReadMe.txt = .nuget\Client_ReadMe.txt
+		.nuget\pack.bat = .nuget\pack.bat
+		.nuget\PhotonWire.Client.nuspec = .nuget\PhotonWire.Client.nuspec
+		.nuget\PhotonWire.nuspec = .nuget\PhotonWire.nuspec
+		.nuget\PhotonWire.Server.nuspec = .nuget\PhotonWire.Server.nuspec
+		.nuget\push.bat = .nuget\push.bat
 		README.md = README.md
-		VSDocToMarkdown.csx = VSDocToMarkdown.csx
+		.nuget\Server_ReadMe.txt = .nuget\Server_ReadMe.txt
 	EndProjectSection
 EndProject
 Global
