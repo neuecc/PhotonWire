@@ -736,6 +736,27 @@ public class MasterTest : ServerHub
 }
 ```
 
+CustomError
+---
+If you want to returns custom error, you can throw `CustomErrorException` on server. It can receive client.
+
+``csharp
+// Server
+[Operation(0)]
+public void ServerError()
+{
+    throw new CustomErrorException { ErrorMessage = "Custom Error" }; 
+}
+
+// Client
+proxy.Invoke.ServerError()
+    .Catch((CustomErrorException ex) =>
+    {
+        UnityEngine.Debug.Log(ex.ErrorMessage);
+    })
+    .Subscribe();
+```
+
 PeerManager
 ---
 [PeerManager](https://github.com/neuecc/PhotonWire/wiki/PhotonWire.Server#peermanager) is global storage of peer and peer groups.
