@@ -4,7 +4,7 @@ Typed Asynchronous RPC Layer for Photon Server + Unity
 
 What is PhotonWire?
 ---
-PhotonWire is built on Exit Games's [Photon Server](https://www.photonengine.com/en/onpremise). PhotonWire provides client-server RPC with Photon Unity Native SDK and and server-server RPC with Photon Server SDK. PhotonWire mainly aims to fully controll server side logic.
+PhotonWire is built on Exit Games's [Photon Server](https://www.photonengine.com/en/onpremise). PhotonWire provides client-server RPC with Photon Unity Native SDK and server-server RPC with Photon Server SDK. PhotonWire mainly aims to fully controll server side logic.
 
 * TypeSafe, Server-Server uses dynamic proxy, Client-Server uses T4 pre-generate
 * HighPerformance, Fully Asynchronous(Server is async/await, Client is UniRx) and pre-generated serializer by [MsgPack](http://msgpack.org/)
@@ -491,7 +491,7 @@ public class Tutorial : PhotonWire.Server.Hub<ITutorialClient>
 }
 ```
 
-Hub have two instance property, [OperationContext](https://github.com/neuecc/PhotonWire/wiki/PhotonWire.Server#operationcontext) and [Clients](https://github.com/neuecc/PhotonWire/wiki/PhotonWire.Server#hubcallerclientproxyt). OperationContext is information per operation. It has `Items` - per operation storage(`IDictionary<object, object>`), `Peer` - client connection of this operation, and more.
+Hub have two instance property, [OperationContext](https://github.com/neuecc/PhotonWire/wiki/PhotonWire.Server#operationcontext) and [Clients](https://github.com/neuecc/PhotonWire/wiki/PhotonWire.Server#hubcallerclientproxyt). OperationContext is information per operation. It has `Items` - per operation storage(`IDictionary<object, object>`), `Peer` - client connection of this operation, `Peer.Items`  - per peer lifetime storage(`ConcurrentDictionary<object, object>`) and more.
 
 Peer.RegisterDisconnectAction is sometimes important.
 
