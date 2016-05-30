@@ -4,7 +4,7 @@ Typed Asynchronous RPC Layer for Photon Server + Unity
 
 What is PhotonWire?
 ---
-PhotonWire provides client-server RPC with Photon Unity Native SDK and and server-server RPC with Photon Server SDK. PhotonWire mainly aims to fully controll server side logic.
+PhotonWire is built on Exit Games's [Photon Server](https://www.photonengine.com/en/onpremise). PhotonWire provides client-server RPC with Photon Unity Native SDK and and server-server RPC with Photon Server SDK. PhotonWire mainly aims to fully controll server side logic.
 
 * TypeSafe, Server-Server uses dynamic proxy, Client-Server uses T4 pre-generate
 * HighPerformance, Fully Asynchronous(Server is async/await, Client is UniRx) and pre-generated serializer by [MsgPack](http://msgpack.org/)
