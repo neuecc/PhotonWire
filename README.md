@@ -623,7 +623,7 @@ proxy.Receive.GroupBroadcastMessage.Subscribe();
 proxy.RegisterListener(/* TutorialProxy.ITutorialClient */);
 ```
 
-![image](https://cloud.githubusercontent.com/assets/46207/15655348/4e5657e6-26d7-11e6-9698-02eb20c5b9d0.png)
+![image](https://cloud.githubusercontent.com/assets/46207/15655365/7e9aa98e-26d7-11e6-8bfb-97eeea1330f5.png)
 
 
 Server Cluster
