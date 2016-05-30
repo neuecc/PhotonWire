@@ -740,7 +740,7 @@ CustomError
 ---
 If you want to returns custom error, you can throw `CustomErrorException` on server. It can receive client.
 
-``csharp
+```csharp
 // Server
 [Operation(0)]
 public void ServerError()
