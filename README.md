@@ -25,9 +25,9 @@ In Visual Studio(2015 or higher), create new .NET 4.6(or higher) `Class Library 
 
 In Package Manager Console, add PhotonWire NuGet package.
 
-* PM> Install-Package PhotonWire
+* PM> Install-Package [PhotonWire](https://www.nuget.org/packages/PhotonWire/)
 
-It includes `PhotonWire.Server` and `PhotonWire.Analyzer`.
+It includes [PhotonWire.Server](https://www.nuget.org/packages/PhotonWire.Server/) and [PhotonWire.Analyzer](https://www.nuget.org/packages/PhotonWire.Analyzer/).
 
 Package does not includes Photon SDK, please download from [Photon Server SDK](https://www.photonengine.com/en-US/OnPremise/Download). Server Project needs `lib/ExitGamesLibs.dll`, `lib/Photon.SocketServer.dll` and `lib/PhotonHostRuntimeInterfaces.dll`.
 
@@ -299,7 +299,7 @@ Getting Started - .NET Client
 ---
 .NET Client can use ASP.NET, ConsoleApplication, WPF, etc.
 
-* PM> Install-Package PhotonWire
+* PM> Install-Package [PhotonWire.Client](https://www.nuget.org/packages/PhotonWire.Client/)
 * Download [Photon Server SDK](https://www.photonengine.com/en-US/OnPremise/Download) and pick `lib/ExitGamesLibs.dll` and `lib/Photon3DotNet.dll`.
 
 Getting Started - Sharing Classes
