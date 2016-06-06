@@ -25,9 +25,9 @@ In Visual Studio(2015 or higher), create new .NET 4.6(or higher) `Class Library 
 
 In Package Manager Console, add PhotonWire NuGet package.
 
-* PM> Install-Package PhotonWire
+* PM> Install-Package [PhotonWire](https://www.nuget.org/packages/PhotonWire/)
 
-It includes `PhotonWire.Server` and `PhotonWire.Analyzer`.
+It includes [PhotonWire.Server](https://www.nuget.org/packages/PhotonWire.Server/) and [PhotonWire.Analyzer](https://www.nuget.org/packages/PhotonWire.Analyzer/).
 
 Package does not includes Photon SDK, please download from [Photon Server SDK](https://www.photonengine.com/en-US/OnPremise/Download). Server Project needs `lib/ExitGamesLibs.dll`, `lib/Photon.SocketServer.dll` and `lib/PhotonHostRuntimeInterfaces.dll`.
 
@@ -299,7 +299,7 @@ Getting Started - .NET Client
 ---
 .NET Client can use ASP.NET, ConsoleApplication, WPF, etc.
 
-* PM> Install-Package PhotonWire
+* PM> Install-Package [PhotonWire.Client](https://www.nuget.org/packages/PhotonWire.Client/)
 * Download [Photon Server SDK](https://www.photonengine.com/en-US/OnPremise/Download) and pick `lib/ExitGamesLibs.dll` and `lib/Photon3DotNet.dll`.
 
 Getting Started - Sharing Classes
@@ -623,7 +623,7 @@ proxy.Receive.GroupBroadcastMessage.Subscribe();
 proxy.RegisterListener(/* TutorialProxy.ITutorialClient */);
 ```
 
-![image](https://cloud.githubusercontent.com/assets/46207/15654009/a1f6ac54-26cb-11e6-8dec-893b7624d476.png)
+![image](https://cloud.githubusercontent.com/assets/46207/15655365/7e9aa98e-26d7-11e6-8bfb-97eeea1330f5.png)
 
 
 Server Cluster
@@ -734,6 +734,27 @@ public class MasterTest : ServerHub
         return msg;
     }
 }
+```
+
+CustomError
+---
+If you want to returns custom error, you can throw `CustomErrorException` on server. It can receive client.
+
+```csharp
+// Server
+[Operation(0)]
+public void ServerError()
+{
+    throw new CustomErrorException { ErrorMessage = "Custom Error" }; 
+}
+
+// Client
+proxy.Invoke.ServerError()
+    .Catch((CustomErrorException ex) =>
+    {
+        UnityEngine.Debug.Log(ex.ErrorMessage);
+    })
+    .Subscribe();
 ```
 
 PeerManager
