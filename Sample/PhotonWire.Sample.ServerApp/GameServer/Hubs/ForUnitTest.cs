@@ -1,4 +1,5 @@
-﻿using PhotonWire.Server;
+﻿using PhotonWire.Sample.ServerApp.MasterServer.ServerHubs;
+using PhotonWire.Server;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -62,15 +63,55 @@ namespace PhotonWire.Sample.ServerApp.Hubs
         [Operation(19)]
         public string Echo(Yo? yo) => yo?.ToString() ?? "null";
 
-
         [Operation(20)]
-        public async Task<int?> ServerToServerEnum(int? yo)
-        {
-            var yo2 = await GetServerHubProxy<MasterServer.ServerHubs.MasterTest2>()
-                .Single
-                .EchoEnumAsync(yo);
+        public Task<int> Echo2(int x) => GetServerHubProxy<MasterForUnitTest>().Single.Echo(x);
 
-            return yo2;
-        }
+        [Operation(21)]
+        public Task<byte> Echo2(byte x) => GetServerHubProxy<MasterForUnitTest>().Single.Echo(x);
+        [Operation(22)]
+        public Task<bool> Echo2(bool x) => GetServerHubProxy<MasterForUnitTest>().Single.Echo(x);
+        [Operation(23)]
+        public Task<short> Echo2(short x) => GetServerHubProxy<MasterForUnitTest>().Single.Echo(x);
+        [Operation(24)]
+        public Task<long> Echo2(long x) => GetServerHubProxy<MasterForUnitTest>().Single.Echo(x);
+        [Operation(25)]
+        public Task<float> Echo2(float x) => GetServerHubProxy<MasterForUnitTest>().Single.Echo(x);
+        [Operation(26)]
+        public Task<double> Echo2(double x) => GetServerHubProxy<MasterForUnitTest>().Single.Echo(x);
+        [Operation(27)]
+        public Task<int[]> Echo2(int[] x) => GetServerHubProxy<MasterForUnitTest>().Single.Echo(x);
+        [Operation(28)]
+        public Task<string> Echo2(string x) => GetServerHubProxy<MasterForUnitTest>().Single.Echo(x);
+        [Operation(29)]
+        public Task<byte[]> Echo2(byte[] x) => GetServerHubProxy<MasterForUnitTest>().Single.Echo(x);
+
+        // Extra
+
+        [Operation(30)]
+        public Task<DateTime> Echo2(DateTime x) => GetServerHubProxy<MasterForUnitTest>().Single.Echo(x);
+        [Operation(31)]
+        public Task<Uri> Echo2(Uri x) => GetServerHubProxy<MasterForUnitTest>().Single.Echo(x);
+        [Operation(32)]
+        public Task<int?> Echo2(int? x) => GetServerHubProxy<MasterForUnitTest>().Single.Echo(x);
+        [Operation(33)]
+        public Task<double?> Echo2(double? x) => GetServerHubProxy<MasterForUnitTest>().Single.Echo(x);
+
+        // Collection, Array, ComplexType, etc...
+
+        [Operation(34)]
+        public Task<double[]> Echo2(double[] x) => GetServerHubProxy<MasterForUnitTest>().Single.Echo(x);
+        [Operation(35)]
+        public Task<List<double>> Echo2(List<double> x) => GetServerHubProxy<MasterForUnitTest>().Single.Echo(x);
+        [Operation(36)]
+        public Task<Dictionary<string, int>> Echo2(Dictionary<string, int> x) => GetServerHubProxy<MasterForUnitTest>().Single.Echo(x);
+        [Operation(37)]
+        public Task<MyClass> Echo2(MyClass x) => GetServerHubProxy<MasterForUnitTest>().Single.Echo(x);
+
+        // Enum...
+
+        [Operation(38)]
+        public Task<string> Echo2(Yo yo) => GetServerHubProxy<MasterForUnitTest>().Single.Echo(yo);
+        [Operation(39)]
+        public Task<string> Echo2(Yo? yo) => GetServerHubProxy<MasterForUnitTest>().Single.Echo(yo);
     }
 }

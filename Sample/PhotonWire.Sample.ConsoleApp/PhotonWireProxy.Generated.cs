@@ -578,9 +578,315 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.Nullable<System.Int32>> ServerToServerEnumAsync(System.Nullable<System.Int32> yo, bool observeOnMainThread = true)
+            public IObservable<System.Int32> Echo2Async(System.Int32 x, bool observeOnMainThread = true)
             {
                 byte opCode = 20;
+                var parameter = new System.Collections.Generic.Dictionary<byte, object>();
+                parameter.Add(ReservedParameterNo.RequestHubId, hubId);
+                parameter.Add(0, PhotonSerializer.Serialize(x));
+
+                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                    .Select(__operationResponse =>
+                    {
+                        var __result = __operationResponse[ReservedParameterNo.ResponseId];
+                        return PhotonSerializer.Deserialize<System.Int32>(__result);
+                    });
+
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
+            }
+
+            public IObservable<System.Byte> Echo2Async(System.Byte x, bool observeOnMainThread = true)
+            {
+                byte opCode = 21;
+                var parameter = new System.Collections.Generic.Dictionary<byte, object>();
+                parameter.Add(ReservedParameterNo.RequestHubId, hubId);
+                parameter.Add(0, PhotonSerializer.Serialize(x));
+
+                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                    .Select(__operationResponse =>
+                    {
+                        var __result = __operationResponse[ReservedParameterNo.ResponseId];
+                        return PhotonSerializer.Deserialize<System.Byte>(__result);
+                    });
+
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
+            }
+
+            public IObservable<System.Boolean> Echo2Async(System.Boolean x, bool observeOnMainThread = true)
+            {
+                byte opCode = 22;
+                var parameter = new System.Collections.Generic.Dictionary<byte, object>();
+                parameter.Add(ReservedParameterNo.RequestHubId, hubId);
+                parameter.Add(0, PhotonSerializer.Serialize(x));
+
+                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                    .Select(__operationResponse =>
+                    {
+                        var __result = __operationResponse[ReservedParameterNo.ResponseId];
+                        return PhotonSerializer.Deserialize<System.Boolean>(__result);
+                    });
+
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
+            }
+
+            public IObservable<System.Int16> Echo2Async(System.Int16 x, bool observeOnMainThread = true)
+            {
+                byte opCode = 23;
+                var parameter = new System.Collections.Generic.Dictionary<byte, object>();
+                parameter.Add(ReservedParameterNo.RequestHubId, hubId);
+                parameter.Add(0, PhotonSerializer.Serialize(x));
+
+                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                    .Select(__operationResponse =>
+                    {
+                        var __result = __operationResponse[ReservedParameterNo.ResponseId];
+                        return PhotonSerializer.Deserialize<System.Int16>(__result);
+                    });
+
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
+            }
+
+            public IObservable<System.Int64> Echo2Async(System.Int64 x, bool observeOnMainThread = true)
+            {
+                byte opCode = 24;
+                var parameter = new System.Collections.Generic.Dictionary<byte, object>();
+                parameter.Add(ReservedParameterNo.RequestHubId, hubId);
+                parameter.Add(0, PhotonSerializer.Serialize(x));
+
+                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                    .Select(__operationResponse =>
+                    {
+                        var __result = __operationResponse[ReservedParameterNo.ResponseId];
+                        return PhotonSerializer.Deserialize<System.Int64>(__result);
+                    });
+
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
+            }
+
+            public IObservable<System.Single> Echo2Async(System.Single x, bool observeOnMainThread = true)
+            {
+                byte opCode = 25;
+                var parameter = new System.Collections.Generic.Dictionary<byte, object>();
+                parameter.Add(ReservedParameterNo.RequestHubId, hubId);
+                parameter.Add(0, PhotonSerializer.Serialize(x));
+
+                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                    .Select(__operationResponse =>
+                    {
+                        var __result = __operationResponse[ReservedParameterNo.ResponseId];
+                        return PhotonSerializer.Deserialize<System.Single>(__result);
+                    });
+
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
+            }
+
+            public IObservable<System.Double> Echo2Async(System.Double x, bool observeOnMainThread = true)
+            {
+                byte opCode = 26;
+                var parameter = new System.Collections.Generic.Dictionary<byte, object>();
+                parameter.Add(ReservedParameterNo.RequestHubId, hubId);
+                parameter.Add(0, PhotonSerializer.Serialize(x));
+
+                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                    .Select(__operationResponse =>
+                    {
+                        var __result = __operationResponse[ReservedParameterNo.ResponseId];
+                        return PhotonSerializer.Deserialize<System.Double>(__result);
+                    });
+
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
+            }
+
+            public IObservable<System.Int32[]> Echo2Async(System.Int32[] x, bool observeOnMainThread = true)
+            {
+                byte opCode = 27;
+                var parameter = new System.Collections.Generic.Dictionary<byte, object>();
+                parameter.Add(ReservedParameterNo.RequestHubId, hubId);
+                parameter.Add(0, PhotonSerializer.Serialize(x));
+
+                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                    .Select(__operationResponse =>
+                    {
+                        var __result = __operationResponse[ReservedParameterNo.ResponseId];
+                        return PhotonSerializer.Deserialize<System.Int32[]>(__result);
+                    });
+
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
+            }
+
+            public IObservable<System.String> Echo2Async(System.String x, bool observeOnMainThread = true)
+            {
+                byte opCode = 28;
+                var parameter = new System.Collections.Generic.Dictionary<byte, object>();
+                parameter.Add(ReservedParameterNo.RequestHubId, hubId);
+                parameter.Add(0, PhotonSerializer.Serialize(x));
+
+                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                    .Select(__operationResponse =>
+                    {
+                        var __result = __operationResponse[ReservedParameterNo.ResponseId];
+                        return PhotonSerializer.Deserialize<System.String>(__result);
+                    });
+
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
+            }
+
+            public IObservable<System.Byte[]> Echo2Async(System.Byte[] x, bool observeOnMainThread = true)
+            {
+                byte opCode = 29;
+                var parameter = new System.Collections.Generic.Dictionary<byte, object>();
+                parameter.Add(ReservedParameterNo.RequestHubId, hubId);
+                parameter.Add(0, PhotonSerializer.Serialize(x));
+
+                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                    .Select(__operationResponse =>
+                    {
+                        var __result = __operationResponse[ReservedParameterNo.ResponseId];
+                        return PhotonSerializer.Deserialize<System.Byte[]>(__result);
+                    });
+
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
+            }
+
+            public IObservable<System.DateTime> Echo2Async(System.DateTime x, bool observeOnMainThread = true)
+            {
+                byte opCode = 30;
+                var parameter = new System.Collections.Generic.Dictionary<byte, object>();
+                parameter.Add(ReservedParameterNo.RequestHubId, hubId);
+                parameter.Add(0, PhotonSerializer.Serialize(x));
+
+                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                    .Select(__operationResponse =>
+                    {
+                        var __result = __operationResponse[ReservedParameterNo.ResponseId];
+                        return PhotonSerializer.Deserialize<System.DateTime>(__result);
+                    });
+
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
+            }
+
+            public IObservable<System.Uri> Echo2Async(System.Uri x, bool observeOnMainThread = true)
+            {
+                byte opCode = 31;
+                var parameter = new System.Collections.Generic.Dictionary<byte, object>();
+                parameter.Add(ReservedParameterNo.RequestHubId, hubId);
+                parameter.Add(0, PhotonSerializer.Serialize(x));
+
+                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                    .Select(__operationResponse =>
+                    {
+                        var __result = __operationResponse[ReservedParameterNo.ResponseId];
+                        return PhotonSerializer.Deserialize<System.Uri>(__result);
+                    });
+
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
+            }
+
+            public IObservable<System.Nullable<System.Int32>> Echo2Async(System.Nullable<System.Int32> x, bool observeOnMainThread = true)
+            {
+                byte opCode = 32;
+                var parameter = new System.Collections.Generic.Dictionary<byte, object>();
+                parameter.Add(ReservedParameterNo.RequestHubId, hubId);
+                parameter.Add(0, PhotonSerializer.Serialize(x));
+
+                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                    .Select(__operationResponse =>
+                    {
+                        var __result = __operationResponse[ReservedParameterNo.ResponseId];
+                        return PhotonSerializer.Deserialize<System.Nullable<System.Int32>>(__result);
+                    });
+
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
+            }
+
+            public IObservable<System.Nullable<System.Double>> Echo2Async(System.Nullable<System.Double> x, bool observeOnMainThread = true)
+            {
+                byte opCode = 33;
+                var parameter = new System.Collections.Generic.Dictionary<byte, object>();
+                parameter.Add(ReservedParameterNo.RequestHubId, hubId);
+                parameter.Add(0, PhotonSerializer.Serialize(x));
+
+                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                    .Select(__operationResponse =>
+                    {
+                        var __result = __operationResponse[ReservedParameterNo.ResponseId];
+                        return PhotonSerializer.Deserialize<System.Nullable<System.Double>>(__result);
+                    });
+
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
+            }
+
+            public IObservable<System.Double[]> Echo2Async(System.Double[] x, bool observeOnMainThread = true)
+            {
+                byte opCode = 34;
+                var parameter = new System.Collections.Generic.Dictionary<byte, object>();
+                parameter.Add(ReservedParameterNo.RequestHubId, hubId);
+                parameter.Add(0, PhotonSerializer.Serialize(x));
+
+                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                    .Select(__operationResponse =>
+                    {
+                        var __result = __operationResponse[ReservedParameterNo.ResponseId];
+                        return PhotonSerializer.Deserialize<System.Double[]>(__result);
+                    });
+
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
+            }
+
+            public IObservable<System.Collections.Generic.List<System.Double>> Echo2Async(System.Collections.Generic.List<System.Double> x, bool observeOnMainThread = true)
+            {
+                byte opCode = 35;
+                var parameter = new System.Collections.Generic.Dictionary<byte, object>();
+                parameter.Add(ReservedParameterNo.RequestHubId, hubId);
+                parameter.Add(0, PhotonSerializer.Serialize(x));
+
+                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                    .Select(__operationResponse =>
+                    {
+                        var __result = __operationResponse[ReservedParameterNo.ResponseId];
+                        return PhotonSerializer.Deserialize<System.Collections.Generic.List<System.Double>>(__result);
+                    });
+
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
+            }
+
+            public IObservable<System.Collections.Generic.Dictionary<System.String, System.Int32>> Echo2Async(System.Collections.Generic.Dictionary<System.String, System.Int32> x, bool observeOnMainThread = true)
+            {
+                byte opCode = 36;
+                var parameter = new System.Collections.Generic.Dictionary<byte, object>();
+                parameter.Add(ReservedParameterNo.RequestHubId, hubId);
+                parameter.Add(0, PhotonSerializer.Serialize(x));
+
+                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                    .Select(__operationResponse =>
+                    {
+                        var __result = __operationResponse[ReservedParameterNo.ResponseId];
+                        return PhotonSerializer.Deserialize<System.Collections.Generic.Dictionary<System.String, System.Int32>>(__result);
+                    });
+
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
+            }
+
+            public IObservable<PhotonWire.Sample.ServerApp.Hubs.MyClass> Echo2Async(PhotonWire.Sample.ServerApp.Hubs.MyClass x, bool observeOnMainThread = true)
+            {
+                byte opCode = 37;
+                var parameter = new System.Collections.Generic.Dictionary<byte, object>();
+                parameter.Add(ReservedParameterNo.RequestHubId, hubId);
+                parameter.Add(0, PhotonSerializer.Serialize(x));
+
+                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                    .Select(__operationResponse =>
+                    {
+                        var __result = __operationResponse[ReservedParameterNo.ResponseId];
+                        return PhotonSerializer.Deserialize<PhotonWire.Sample.ServerApp.Hubs.MyClass>(__result);
+                    });
+
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
+            }
+
+            public IObservable<System.String> Echo2Async(PhotonWire.Sample.ServerApp.Hubs.Yo yo, bool observeOnMainThread = true)
+            {
+                byte opCode = 38;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(yo));
@@ -589,7 +895,24 @@ namespace PhotonWire.Client
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
-                        return PhotonSerializer.Deserialize<System.Nullable<System.Int32>>(__result);
+                        return PhotonSerializer.Deserialize<System.String>(__result);
+                    });
+
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
+            }
+
+            public IObservable<System.String> Echo2Async(System.Nullable<PhotonWire.Sample.ServerApp.Hubs.Yo> yo, bool observeOnMainThread = true)
+            {
+                byte opCode = 39;
+                var parameter = new System.Collections.Generic.Dictionary<byte, object>();
+                parameter.Add(ReservedParameterNo.RequestHubId, hubId);
+                parameter.Add(0, PhotonSerializer.Serialize(yo));
+
+                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                    .Select(__operationResponse =>
+                    {
+                        var __result = __operationResponse[ReservedParameterNo.ResponseId];
+                        return PhotonSerializer.Deserialize<System.String>(__result);
                     });
 
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;

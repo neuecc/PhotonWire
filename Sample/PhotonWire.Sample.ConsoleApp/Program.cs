@@ -57,7 +57,7 @@ namespace PhotonWire.Sample.ConsoleApp
             {
                 var message = Console.ReadLine();
 
-                hub.Invoke.ServerToServerEnumAsync(100)
+                hub.Invoke.Echo2Async(100)
                     .Subscribe();
 
             }

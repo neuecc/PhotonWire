@@ -89,4 +89,66 @@ namespace PhotonWire.Server.Test
             response.ReturnCode.Is((short)-1);
         }
     }
+
+
+    [TestClass]
+    public class EchoS2STest
+    {
+        [TestMethod]
+        public async Task BuiltinType()
+        {
+            var hub = Startup.Peer.CreateTypedHub<ForUnitTestProxy>();
+
+            (await hub.Invoke.Echo2Async("aaa")).Is("aaa");
+            (await hub.Invoke.Echo2Async(true)).Is(true);
+            (await hub.Invoke.Echo2Async(false)).Is(false);
+            (await hub.Invoke.Echo2Async((byte)10)).Is((byte)10);
+            (await hub.Invoke.Echo2Async((short)1000)).Is((short)1000);
+            (await hub.Invoke.Echo2Async(100000L)).Is(100000L);
+            (await hub.Invoke.Echo2Async(5.32f)).Is(5.32f);
+            (await hub.Invoke.Echo2Async(new[] { 1, 10, 100, 1000, 1000 })).Is(1, 10, 100, 1000, 1000);
+            (await hub.Invoke.Echo2Async(new byte[] { 5, 23, 41, 5, 6, 100 })).Is(new byte[] { 5, 23, 41, 5, 6, 100 });
+            var now = DateTime.Now;
+            (await hub.Invoke.Echo2Async(now)).Is(now);
+            (await hub.Invoke.Echo2Async(new Uri("http://hogemoge.com/"))).Is(new Uri("http://hogemoge.com/"));
+
+            (await hub.Invoke.Echo2Async(new Nullable<int>(1000))).Is(1000);
+            (await hub.Invoke.Echo2Async(new Nullable<double>(1000.5))).Is(1000.5);
+            (await hub.Invoke.Echo2Async((int?)null)).Is((int?)null);
+
+            (await hub.Invoke.Echo2Async(new Nullable<int>())).IsNull();
+
+            (await hub.Invoke.Echo2Async(Yo.C)).Is("C");
+            (await hub.Invoke.Echo2Async((Yo?)Yo.B)).Is("B");
+        }
+
+        [TestMethod]
+        public async Task CollectionType()
+        {
+            var hub = Startup.Peer.CreateTypedHub<ForUnitTestProxy>();
+
+            (await hub.Invoke.Echo2Async(new[] { 10.5, 20.3, 40.5 })).Is(10.5, 20.3, 40.5);
+            (await hub.Invoke.Echo2Async(new List<double> { 10.9, 20.3, 40.5 })).Is(10.9, 20.3, 40.5);
+            var dict = (await hub.Invoke.Echo2Async(new Dictionary<string, int> { { "a", 1 }, { "b", 2 } }));
+            dict["a"].Is(1);
+            dict["b"].Is(2);
+        }
+
+        [TestMethod]
+        public async Task ComplexType()
+        {
+            var hub = Startup.Peer.CreateTypedHub<ForUnitTestProxy>();
+
+            var r = await hub.Invoke.Echo2Async(new MyClass
+            {
+                MyPropertyA = 1000,
+                MyPropertyB = "hogehoge",
+                MyPropertyC = new MyClass2 { MyProperty = 5000 }
+            });
+
+            r.MyPropertyA.Is(1000);
+            r.MyPropertyB.Is("hogehoge");
+            r.MyPropertyC.MyProperty.Is(5000);
+        }
+    }
 }

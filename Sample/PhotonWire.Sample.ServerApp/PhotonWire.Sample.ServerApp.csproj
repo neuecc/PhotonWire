@@ -79,6 +79,7 @@
     <Compile Include="GameServer\Hubs\Tutorial.cs" />
     <Compile Include="GameServer\Hubs\ForUnitTest.cs" />
     <Compile Include="GameServer\ReceiveServerHubs\TestReceive.cs" />
+    <Compile Include="MasterServer\ServerHubs\MasterForUnitTest.cs" />
     <Compile Include="MasterServer\ServerHubs\MasterTest2.cs" />
     <Compile Include="MasterServer\ServerHubs\MasterTest.cs" />
     <Compile Include="MasterServer\ServerHubs\MasterTutorial.cs" />
