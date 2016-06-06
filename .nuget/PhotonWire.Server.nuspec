@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
         <id>PhotonWire.Server</id>
-        <version>1.0.2</version>
+        <version>1.0.3</version>
         <title>PhotonWire.Server</title>
         <authors>neuecc</authors>
         <owners>neuecc</owners>
@@ -10,7 +10,7 @@
         <description>Typed Asynchronous RPC Layer for Photon Server. This package is for realtime server implementation.</description>
         <releaseNotes>
             <![CDATA[
-Initial Release.
+Fix:Server to Server allows nullable.
             ]]>
         </releaseNotes>
         <language>en-US</language>

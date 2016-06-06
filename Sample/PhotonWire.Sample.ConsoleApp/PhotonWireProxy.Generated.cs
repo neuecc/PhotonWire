@@ -578,6 +578,23 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
+            public IObservable<System.Nullable<System.Int32>> ServerToServerEnumAsync(System.Nullable<System.Int32> yo, bool observeOnMainThread = true)
+            {
+                byte opCode = 20;
+                var parameter = new System.Collections.Generic.Dictionary<byte, object>();
+                parameter.Add(ReservedParameterNo.RequestHubId, hubId);
+                parameter.Add(0, PhotonSerializer.Serialize(yo));
+
+                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                    .Select(__operationResponse =>
+                    {
+                        var __result = __operationResponse[ReservedParameterNo.ResponseId];
+                        return PhotonSerializer.Deserialize<System.Nullable<System.Int32>>(__result);
+                    });
+
+                return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
+            }
+
         }
 
         public class ForUnitTestClient

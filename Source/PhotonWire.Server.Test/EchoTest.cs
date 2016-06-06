@@ -33,6 +33,7 @@ namespace PhotonWire.Server.Test
 
             (await hub.Invoke.EchoAsync(new Nullable<int>(1000))).Is(1000);
             (await hub.Invoke.EchoAsync(new Nullable<double>(1000.5))).Is(1000.5);
+            (await hub.Invoke.EchoAsync((int?)null)).Is((int?)null);
 
             (await hub.Invoke.EchoAsync(new Nullable<int>())).IsNull();
 
@@ -86,13 +87,6 @@ namespace PhotonWire.Server.Test
             });
 
             response.ReturnCode.Is((short)-1);
-        }
-
-        [TestMethod]
-        public async Task CallTestHub()
-        {
-            await Startup.Peer.CreateTypedHub<TestHubProxy>().Invoke.EchoAsync("hogehoge");
-
         }
     }
 }

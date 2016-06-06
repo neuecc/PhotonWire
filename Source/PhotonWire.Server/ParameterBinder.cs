@@ -40,9 +40,15 @@ namespace PhotonWire.Server
                 else
                 {
                     if (rawValue.GetType() != typeof(byte[]))
-                    {
+                    {                                               
                         if (item.ParameterType != rawValue.GetType())
                         {
+                            if (item.ParameterTypeIsNullable)
+                            {
+                                methodParameters[i] = rawValue; // if nullable, use rawValue.
+                                continue;
+                            }
+
                             var parameters = string.Join(", ", arguments.Select(x =>
                             {
                                 return (x == item)

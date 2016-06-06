@@ -1,6 +1,7 @@
 ﻿using PhotonWire.Server;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PhotonWire.Sample.ServerApp.Hubs
 {
@@ -60,5 +61,16 @@ namespace PhotonWire.Sample.ServerApp.Hubs
         public string Echo(Yo yo) => yo.ToString();
         [Operation(19)]
         public string Echo(Yo? yo) => yo?.ToString() ?? "null";
+
+
+        [Operation(20)]
+        public async Task<int?> ServerToServerEnum(int? yo)
+        {
+            var yo2 = await GetServerHubProxy<MasterServer.ServerHubs.MasterTest2>()
+                .Single
+                .EchoEnumAsync(yo);
+
+            return yo2;
+        }
     }
 }

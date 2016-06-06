@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using PhotonWire.Server;
 using PhotonWire.Server.ServerToServer;
 using PhotonWire.Sample.ServerApp.GameServer.ReceiveServerHubs;
+using PhotonWire.Sample.ServerApp.Hubs;
 
 namespace PhotonWire.Sample.ServerApp.MasterServer.ServerHubs
 {
@@ -18,6 +19,14 @@ namespace PhotonWire.Sample.ServerApp.MasterServer.ServerHubs
             var ai = await GetReceiveServerHubProxy<TestReceive>().All.Invoke(h => h.TakoChop("nanone"));
 
             return x + y; // return result
+        }
+
+
+
+        [Operation(2)]
+        public virtual async Task<int?> EchoEnumAsync(int? yo)
+        {
+            return yo;
         }
     }
 }
