@@ -8,7 +8,7 @@ PhotonWire is built on Exit Games's [Photon Server](https://www.photonengine.com
 
 * TypeSafe, Server-Server uses dynamic proxy, Client-Server uses T4 pre-generate
 * HighPerformance, Fully Asynchronous(Server is async/await, Client is UniRx) and pre-generated serializer by [MsgPack](http://msgpack.org/)
-* Fully integrated with Visual Studio
+* Fully integrated with Visual Studio and Roslyn Analyzer
 * Tools, PhotonWire.HubInvoker can invoke API directly 
 
 Transparent debugger in Visual Studio, Unity -> Photon Server -> Unity.
