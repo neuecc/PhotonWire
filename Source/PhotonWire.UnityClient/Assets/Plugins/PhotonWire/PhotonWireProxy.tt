@@ -12,7 +12,7 @@
 <#@ import namespace="System.Threading.Tasks" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="MsgPack.Serialization" #>
-<#@ output extension="Generated.cs" encoding="utf-8" #>
+<#@ output extension=".cs" encoding="utf-8" #>
 <#@ assembly name="$(SolutionDir)\Source\PhotonWire.Server\bin\Debug\MsgPack.dll" #>
 <#@ assembly name="$(SolutionDir)\Sample\PhotonWire.Sample.ServerApp\bin\Debug\PhotonWire.Sample.ServerApp.dll" #>
 <#

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{7341F80B-AC69-42CA-BBDC-3BD667C7C640}"
 EndProject
@@ -28,8 +28,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotonWire.UnityClient.CSharp.Plugins", "Source\PhotonWire.UnityClient\PhotonWire.UnityClient.CSharp.Plugins.csproj", "{49C3C006-DEEC-1929-54D5-99AAF00D926A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotonWire.Sample.Share", "Sample\PhotonWire.Sample.Share\PhotonWire.Sample.Share.csproj", "{80A1868D-49EA-4F8F-9153-91072565B6DA}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotonWire.UnityClient.CSharp.Editor.Plugins", "Source\PhotonWire.UnityClient\PhotonWire.UnityClient.CSharp.Editor.Plugins.csproj", "{8F622DF3-C48B-03D2-5225-429D5B16A140}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F69EC9CD-AD54-4725-BF65-40C2D488E465}"
 	ProjectSection(SolutionItems) = preProject
@@ -93,10 +91,6 @@ Global
 		{80A1868D-49EA-4F8F-9153-91072565B6DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80A1868D-49EA-4F8F-9153-91072565B6DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80A1868D-49EA-4F8F-9153-91072565B6DA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8F622DF3-C48B-03D2-5225-429D5B16A140}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8F622DF3-C48B-03D2-5225-429D5B16A140}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8F622DF3-C48B-03D2-5225-429D5B16A140}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8F622DF3-C48B-03D2-5225-429D5B16A140}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -113,6 +107,5 @@ Global
 		{02D7010E-B649-41E7-8E8F-8E01E05F2C3E} = {7341F80B-AC69-42CA-BBDC-3BD667C7C640}
 		{49C3C006-DEEC-1929-54D5-99AAF00D926A} = {7341F80B-AC69-42CA-BBDC-3BD667C7C640}
 		{80A1868D-49EA-4F8F-9153-91072565B6DA} = {8C25F347-E802-4BFF-BBA7-5EFA3E8CB03A}
-		{8F622DF3-C48B-03D2-5225-429D5B16A140} = {7341F80B-AC69-42CA-BBDC-3BD667C7C640}
 	EndGlobalSection
 EndGlobal
