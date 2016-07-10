@@ -76,6 +76,7 @@
   <ItemGroup>
     <Compile Include="Filters\TestFilter.cs" />
     <Compile Include="GameServer\Hubs\ChatHub.cs" />
+    <Compile Include="GameServer\Hubs\SimpleHub.cs" />
     <Compile Include="GameServer\Hubs\Tutorial.cs" />
     <Compile Include="GameServer\Hubs\ForUnitTest.cs" />
     <Compile Include="GameServer\ReceiveServerHubs\TestReceive.cs" />
@@ -108,7 +109,14 @@
       <Name>PhotonWire.Sample.Share</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Analyzer Include="..\..\packages\PhotonWire.Analyzer.1.0.2\analyzers\dotnet\cs\Microsoft.Build.dll" />
+    <Analyzer Include="..\..\packages\PhotonWire.Analyzer.1.0.2\analyzers\dotnet\cs\Microsoft.Build.Engine.dll" />
+    <Analyzer Include="..\..\packages\PhotonWire.Analyzer.1.0.2\analyzers\dotnet\cs\Microsoft.Build.Framework.dll" />
+    <Analyzer Include="..\..\packages\PhotonWire.Analyzer.1.0.2\analyzers\dotnet\cs\Microsoft.Build.Tasks.Core.dll" />
+    <Analyzer Include="..\..\packages\PhotonWire.Analyzer.1.0.2\analyzers\dotnet\cs\Microsoft.Build.Utilities.Core.dll" />
+    <Analyzer Include="..\..\packages\PhotonWire.Analyzer.1.0.2\analyzers\dotnet\cs\PhotonWire.Analyzer.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(TargetDir)*.*" "$(SolutionDir)\PhotonLibs\$(ProjectName)\bin\" /Y /Q</PostBuildEvent>

@@ -9,6 +9,7 @@ using UniRx;
 #else
 using System.Reactive;
 using System.Reactive.Concurrency;
+using System.Reactive.Subjects;
 using System.Reactive.Linq;
 #endif
 using MsgPack.Serialization;
@@ -154,22 +155,50 @@ namespace PhotonWire.Client
 
     public abstract class PhotonWireProxy<TServer, TClient, TClientListener> : IPhotonWireProxy
     {
+        public abstract short HubId { get; }
+        public abstract string HubName { get; }
         public ObservablePhotonPeer Peer { get; private set; }
+        public TServer Invoke { get; private set; }
+        public TClient Receive { get; private set; }
+        public TClientListener Publish { get; private set; }
 
         public void Initialize(ObservablePhotonPeer peer)
         {
             this.Peer = peer;
+            Invoke = CreateDefaultInvoke();
+            TClient client;
+            TClientListener publish; 
+            CreateDefaultReceiveAndPublish(out client, out publish);
+            Receive = client;
+            Publish = publish;
         }
 
-        public abstract short HubId { get; }
-        public abstract string HubName { get; }
-        public abstract TServer Invoke { get; }
-        public abstract TClient Receive { get; }
         public abstract IDisposable RegisterListener(TClientListener clientListener, bool runOnMainThread = true);
+        protected abstract TServer CreateDefaultInvoke();
+        protected abstract void CreateDefaultReceiveAndPublish(out TClient client, out TClientListener publisher);
+
+        public PhotonWireProxy<TServer, TClient, TClientListener> AttachInvokeFilter(Func<TServer, TServer> serverFilterFactory)
+        {
+            Invoke = serverFilterFactory(Invoke);
+            return this;
+        }
+
+        public PhotonWireProxy<TServer, TClient, TClientListener> AttachReceiveFilter(Func<TClient, TClient> clientFilterFactory)
+        {
+            Receive = clientFilterFactory(Receive);
+            return this;
+        }
+
+        public PhotonWireProxy<TServer, TClient, TClientListener> AttachFilter(Func<TServer, TServer> serverFilterFactory, Func<TClient, TClient> clientFilterFactory)
+        {
+            Invoke = serverFilterFactory(Invoke);
+            Receive = clientFilterFactory(Receive);
+            return this;
+        }
     }
 
     // Auto generated proxy code
-    public class ForUnitTestProxy : PhotonWireProxy<ForUnitTestProxy.ForUnitTestServer, ForUnitTestProxy.ForUnitTestClient, ForUnitTestProxy.INoClient>
+    public class ForUnitTestProxy : PhotonWireProxy<ForUnitTestProxy.IForUnitTestServerInvoker, ForUnitTestProxy.IForUnitTestClientReceiver, ForUnitTestProxy.INoClient>
     {
         public override short HubId
         {
@@ -187,22 +216,16 @@ namespace PhotonWire.Client
             }
         }
 
-        ForUnitTestServer invoke;
-        public override ForUnitTestServer Invoke
+        protected override IForUnitTestServerInvoker CreateDefaultInvoke()
         {
-            get
-            {
-                return invoke ?? (invoke = new ForUnitTestServer(Peer, HubId));
-            }
+            return new ForUnitTestServerInvoker(Peer, HubId);
         }
 
-        ForUnitTestClient receive;
-        public override ForUnitTestClient Receive
+        protected override void CreateDefaultReceiveAndPublish(out IForUnitTestClientReceiver client, out INoClient publisher)
         {
-            get
-            {
-                return receive ?? (receive = new ForUnitTestClient(Peer, HubId));
-            }
+            var r = new ForUnitTestClientReceiver(Peer, HubId);
+            client = r;
+            publisher = r;
         }
         
         public override IDisposable RegisterListener(INoClient clientListener, bool runOnMainThread = true)
@@ -227,12 +250,267 @@ namespace PhotonWire.Client
             });                
         }
 
-        public class ForUnitTestServer
+        public interface IForUnitTestServerInvoker
+        {
+            IObservable<System.Int32> EchoAsync(System.Int32 x, bool observeOnMainThread = true);
+            IObservable<System.Byte> EchoAsync(System.Byte x, bool observeOnMainThread = true);
+            IObservable<System.Boolean> EchoAsync(System.Boolean x, bool observeOnMainThread = true);
+            IObservable<System.Int16> EchoAsync(System.Int16 x, bool observeOnMainThread = true);
+            IObservable<System.Int64> EchoAsync(System.Int64 x, bool observeOnMainThread = true);
+            IObservable<System.Single> EchoAsync(System.Single x, bool observeOnMainThread = true);
+            IObservable<System.Double> EchoAsync(System.Double x, bool observeOnMainThread = true);
+            IObservable<System.Int32[]> EchoAsync(System.Int32[] x, bool observeOnMainThread = true);
+            IObservable<System.String> EchoAsync(System.String x, bool observeOnMainThread = true);
+            IObservable<System.Byte[]> EchoAsync(System.Byte[] x, bool observeOnMainThread = true);
+            IObservable<System.DateTime> EchoAsync(System.DateTime x, bool observeOnMainThread = true);
+            IObservable<System.Uri> EchoAsync(System.Uri x, bool observeOnMainThread = true);
+            IObservable<System.Nullable<System.Int32>> EchoAsync(System.Nullable<System.Int32> x, bool observeOnMainThread = true);
+            IObservable<System.Nullable<System.Double>> EchoAsync(System.Nullable<System.Double> x, bool observeOnMainThread = true);
+            IObservable<System.Double[]> EchoAsync(System.Double[] x, bool observeOnMainThread = true);
+            IObservable<System.Collections.Generic.List<System.Double>> EchoAsync(System.Collections.Generic.List<System.Double> x, bool observeOnMainThread = true);
+            IObservable<System.Collections.Generic.Dictionary<System.String, System.Int32>> EchoAsync(System.Collections.Generic.Dictionary<System.String, System.Int32> x, bool observeOnMainThread = true);
+            IObservable<PhotonWire.Sample.ServerApp.Hubs.MyClass> EchoAsync(PhotonWire.Sample.ServerApp.Hubs.MyClass x, bool observeOnMainThread = true);
+            IObservable<System.String> EchoAsync(PhotonWire.Sample.ServerApp.Hubs.Yo yo, bool observeOnMainThread = true);
+            IObservable<System.String> EchoAsync(System.Nullable<PhotonWire.Sample.ServerApp.Hubs.Yo> yo, bool observeOnMainThread = true);
+            IObservable<System.Int32> Echo2Async(System.Int32 x, bool observeOnMainThread = true);
+            IObservable<System.Byte> Echo2Async(System.Byte x, bool observeOnMainThread = true);
+            IObservable<System.Boolean> Echo2Async(System.Boolean x, bool observeOnMainThread = true);
+            IObservable<System.Int16> Echo2Async(System.Int16 x, bool observeOnMainThread = true);
+            IObservable<System.Int64> Echo2Async(System.Int64 x, bool observeOnMainThread = true);
+            IObservable<System.Single> Echo2Async(System.Single x, bool observeOnMainThread = true);
+            IObservable<System.Double> Echo2Async(System.Double x, bool observeOnMainThread = true);
+            IObservable<System.Int32[]> Echo2Async(System.Int32[] x, bool observeOnMainThread = true);
+            IObservable<System.String> Echo2Async(System.String x, bool observeOnMainThread = true);
+            IObservable<System.Byte[]> Echo2Async(System.Byte[] x, bool observeOnMainThread = true);
+            IObservable<System.DateTime> Echo2Async(System.DateTime x, bool observeOnMainThread = true);
+            IObservable<System.Uri> Echo2Async(System.Uri x, bool observeOnMainThread = true);
+            IObservable<System.Nullable<System.Int32>> Echo2Async(System.Nullable<System.Int32> x, bool observeOnMainThread = true);
+            IObservable<System.Nullable<System.Double>> Echo2Async(System.Nullable<System.Double> x, bool observeOnMainThread = true);
+            IObservable<System.Double[]> Echo2Async(System.Double[] x, bool observeOnMainThread = true);
+            IObservable<System.Collections.Generic.List<System.Double>> Echo2Async(System.Collections.Generic.List<System.Double> x, bool observeOnMainThread = true);
+            IObservable<System.Collections.Generic.Dictionary<System.String, System.Int32>> Echo2Async(System.Collections.Generic.Dictionary<System.String, System.Int32> x, bool observeOnMainThread = true);
+            IObservable<PhotonWire.Sample.ServerApp.Hubs.MyClass> Echo2Async(PhotonWire.Sample.ServerApp.Hubs.MyClass x, bool observeOnMainThread = true);
+            IObservable<System.String> Echo2Async(PhotonWire.Sample.ServerApp.Hubs.Yo yo, bool observeOnMainThread = true);
+            IObservable<System.String> Echo2Async(System.Nullable<PhotonWire.Sample.ServerApp.Hubs.Yo> yo, bool observeOnMainThread = true);
+        }
+
+        public class DelegatingForUnitTestServerInvoker : IForUnitTestServerInvoker
+        {
+            readonly IForUnitTestServerInvoker parent;
+
+            public DelegatingForUnitTestServerInvoker(IForUnitTestServerInvoker parent)
+            {
+                this.parent = parent;
+            }
+
+            public virtual IObservable<System.Int32> EchoAsync(System.Int32 x, bool observeOnMainThread = true)
+            {
+                return this.parent.EchoAsync( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.Byte> EchoAsync(System.Byte x, bool observeOnMainThread = true)
+            {
+                return this.parent.EchoAsync( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.Boolean> EchoAsync(System.Boolean x, bool observeOnMainThread = true)
+            {
+                return this.parent.EchoAsync( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.Int16> EchoAsync(System.Int16 x, bool observeOnMainThread = true)
+            {
+                return this.parent.EchoAsync( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.Int64> EchoAsync(System.Int64 x, bool observeOnMainThread = true)
+            {
+                return this.parent.EchoAsync( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.Single> EchoAsync(System.Single x, bool observeOnMainThread = true)
+            {
+                return this.parent.EchoAsync( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.Double> EchoAsync(System.Double x, bool observeOnMainThread = true)
+            {
+                return this.parent.EchoAsync( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.Int32[]> EchoAsync(System.Int32[] x, bool observeOnMainThread = true)
+            {
+                return this.parent.EchoAsync( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.String> EchoAsync(System.String x, bool observeOnMainThread = true)
+            {
+                return this.parent.EchoAsync( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.Byte[]> EchoAsync(System.Byte[] x, bool observeOnMainThread = true)
+            {
+                return this.parent.EchoAsync( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.DateTime> EchoAsync(System.DateTime x, bool observeOnMainThread = true)
+            {
+                return this.parent.EchoAsync( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.Uri> EchoAsync(System.Uri x, bool observeOnMainThread = true)
+            {
+                return this.parent.EchoAsync( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.Nullable<System.Int32>> EchoAsync(System.Nullable<System.Int32> x, bool observeOnMainThread = true)
+            {
+                return this.parent.EchoAsync( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.Nullable<System.Double>> EchoAsync(System.Nullable<System.Double> x, bool observeOnMainThread = true)
+            {
+                return this.parent.EchoAsync( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.Double[]> EchoAsync(System.Double[] x, bool observeOnMainThread = true)
+            {
+                return this.parent.EchoAsync( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.Collections.Generic.List<System.Double>> EchoAsync(System.Collections.Generic.List<System.Double> x, bool observeOnMainThread = true)
+            {
+                return this.parent.EchoAsync( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.Collections.Generic.Dictionary<System.String, System.Int32>> EchoAsync(System.Collections.Generic.Dictionary<System.String, System.Int32> x, bool observeOnMainThread = true)
+            {
+                return this.parent.EchoAsync( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<PhotonWire.Sample.ServerApp.Hubs.MyClass> EchoAsync(PhotonWire.Sample.ServerApp.Hubs.MyClass x, bool observeOnMainThread = true)
+            {
+                return this.parent.EchoAsync( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.String> EchoAsync(PhotonWire.Sample.ServerApp.Hubs.Yo yo, bool observeOnMainThread = true)
+            {
+                return this.parent.EchoAsync( yo,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.String> EchoAsync(System.Nullable<PhotonWire.Sample.ServerApp.Hubs.Yo> yo, bool observeOnMainThread = true)
+            {
+                return this.parent.EchoAsync( yo,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.Int32> Echo2Async(System.Int32 x, bool observeOnMainThread = true)
+            {
+                return this.parent.Echo2Async( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.Byte> Echo2Async(System.Byte x, bool observeOnMainThread = true)
+            {
+                return this.parent.Echo2Async( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.Boolean> Echo2Async(System.Boolean x, bool observeOnMainThread = true)
+            {
+                return this.parent.Echo2Async( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.Int16> Echo2Async(System.Int16 x, bool observeOnMainThread = true)
+            {
+                return this.parent.Echo2Async( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.Int64> Echo2Async(System.Int64 x, bool observeOnMainThread = true)
+            {
+                return this.parent.Echo2Async( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.Single> Echo2Async(System.Single x, bool observeOnMainThread = true)
+            {
+                return this.parent.Echo2Async( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.Double> Echo2Async(System.Double x, bool observeOnMainThread = true)
+            {
+                return this.parent.Echo2Async( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.Int32[]> Echo2Async(System.Int32[] x, bool observeOnMainThread = true)
+            {
+                return this.parent.Echo2Async( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.String> Echo2Async(System.String x, bool observeOnMainThread = true)
+            {
+                return this.parent.Echo2Async( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.Byte[]> Echo2Async(System.Byte[] x, bool observeOnMainThread = true)
+            {
+                return this.parent.Echo2Async( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.DateTime> Echo2Async(System.DateTime x, bool observeOnMainThread = true)
+            {
+                return this.parent.Echo2Async( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.Uri> Echo2Async(System.Uri x, bool observeOnMainThread = true)
+            {
+                return this.parent.Echo2Async( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.Nullable<System.Int32>> Echo2Async(System.Nullable<System.Int32> x, bool observeOnMainThread = true)
+            {
+                return this.parent.Echo2Async( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.Nullable<System.Double>> Echo2Async(System.Nullable<System.Double> x, bool observeOnMainThread = true)
+            {
+                return this.parent.Echo2Async( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.Double[]> Echo2Async(System.Double[] x, bool observeOnMainThread = true)
+            {
+                return this.parent.Echo2Async( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.Collections.Generic.List<System.Double>> Echo2Async(System.Collections.Generic.List<System.Double> x, bool observeOnMainThread = true)
+            {
+                return this.parent.Echo2Async( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.Collections.Generic.Dictionary<System.String, System.Int32>> Echo2Async(System.Collections.Generic.Dictionary<System.String, System.Int32> x, bool observeOnMainThread = true)
+            {
+                return this.parent.Echo2Async( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<PhotonWire.Sample.ServerApp.Hubs.MyClass> Echo2Async(PhotonWire.Sample.ServerApp.Hubs.MyClass x, bool observeOnMainThread = true)
+            {
+                return this.parent.Echo2Async( x,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.String> Echo2Async(PhotonWire.Sample.ServerApp.Hubs.Yo yo, bool observeOnMainThread = true)
+            {
+                return this.parent.Echo2Async( yo,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.String> Echo2Async(System.Nullable<PhotonWire.Sample.ServerApp.Hubs.Yo> yo, bool observeOnMainThread = true)
+            {
+                return this.parent.Echo2Async( yo,  observeOnMainThread);
+            }
+
+        }
+
+        public class ForUnitTestServerInvoker : IForUnitTestServerInvoker
         {
             readonly ObservablePhotonPeer peer;
             readonly short hubId;
 
-            public ForUnitTestServer(ObservablePhotonPeer peer, short hubId)
+            public ForUnitTestServerInvoker(ObservablePhotonPeer peer, short hubId)
             {
                 this.peer = peer;
                 this.hubId = hubId;
@@ -920,15 +1198,33 @@ namespace PhotonWire.Client
 
         }
 
-        public class ForUnitTestClient
+        public interface IForUnitTestClientReceiver
+        {
+        }
+        
+        public class DelegatingForUnitTestClientReceiver : IForUnitTestClientReceiver
+        {
+            readonly IForUnitTestClientReceiver parent;
+
+            public DelegatingForUnitTestClientReceiver(IForUnitTestClientReceiver parent)
+            {
+                this.parent = parent;
+            }
+
+        }
+
+
+        public class ForUnitTestClientReceiver : IForUnitTestClientReceiver, INoClient
         {
             readonly ObservablePhotonPeer peer;
             readonly short hubId;
+            readonly Subject<Tuple<byte, object>> toClientPublisher;
 
-            public ForUnitTestClient(ObservablePhotonPeer peer, short hubId)
+            public ForUnitTestClientReceiver(ObservablePhotonPeer peer, short hubId)
             {
                 this.peer = peer;
                 this.hubId = hubId;
+                this.toClientPublisher = new Subject<Tuple<Byte, object>>();
             }
 
             IObservable<EventData> ReceiveEventData(byte eventCode)
@@ -956,7 +1252,7 @@ namespace PhotonWire.Client
         }
 
     }
-    public class ChatHubProxy : PhotonWireProxy<ChatHubProxy.ChatHubServer, ChatHubProxy.ChatHubClient, ChatHubProxy.IChatClient>
+    public class ChatHubProxy : PhotonWireProxy<ChatHubProxy.IChatHubServerInvoker, ChatHubProxy.IChatHubClientReceiver, ChatHubProxy.IChatClient>
     {
         public override short HubId
         {
@@ -974,22 +1270,16 @@ namespace PhotonWire.Client
             }
         }
 
-        ChatHubServer invoke;
-        public override ChatHubServer Invoke
+        protected override IChatHubServerInvoker CreateDefaultInvoke()
         {
-            get
-            {
-                return invoke ?? (invoke = new ChatHubServer(Peer, HubId));
-            }
+            return new ChatHubServerInvoker(Peer, HubId);
         }
 
-        ChatHubClient receive;
-        public override ChatHubClient Receive
+        protected override void CreateDefaultReceiveAndPublish(out IChatHubClientReceiver client, out IChatClient publisher)
         {
-            get
-            {
-                return receive ?? (receive = new ChatHubClient(Peer, HubId));
-            }
+            var r = new ChatHubClientReceiver(Peer, HubId);
+            client = r;
+            publisher = r;
         }
         
         public override IDisposable RegisterListener(IChatClient clientListener, bool runOnMainThread = true)
@@ -1054,12 +1344,63 @@ namespace PhotonWire.Client
             });                
         }
 
-        public class ChatHubServer
+        public interface IChatHubServerInvoker
+        {
+            IObservable<System.String> CreateRoomAsync(System.String roomName, System.String userName, bool observeOnMainThread = true);
+            IObservable<System.String[]> GetRoomsAsync(bool observeOnMainThread = true);
+            IObservable<System.String[]> GetRoomMembersAsync(System.String roomId, bool observeOnMainThread = true);
+            IObservable<Unit> PublishMessageAsync(System.String roomId, System.String message, bool observeOnMainThread = true);
+            IObservable<Unit> JoinRoomAsync(System.String roomId, System.String userName, bool observeOnMainThread = true);
+            IObservable<Unit> LeaveRoomAsync(System.String roomId, bool observeOnMainThread = true);
+        }
+
+        public class DelegatingChatHubServerInvoker : IChatHubServerInvoker
+        {
+            readonly IChatHubServerInvoker parent;
+
+            public DelegatingChatHubServerInvoker(IChatHubServerInvoker parent)
+            {
+                this.parent = parent;
+            }
+
+            public virtual IObservable<System.String> CreateRoomAsync(System.String roomName, System.String userName, bool observeOnMainThread = true)
+            {
+                return this.parent.CreateRoomAsync( roomName, userName,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.String[]> GetRoomsAsync(bool observeOnMainThread = true)
+            {
+                return this.parent.GetRoomsAsync(  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.String[]> GetRoomMembersAsync(System.String roomId, bool observeOnMainThread = true)
+            {
+                return this.parent.GetRoomMembersAsync( roomId,  observeOnMainThread);
+            }
+
+            public virtual IObservable<Unit> PublishMessageAsync(System.String roomId, System.String message, bool observeOnMainThread = true)
+            {
+                return this.parent.PublishMessageAsync( roomId, message,  observeOnMainThread);
+            }
+
+            public virtual IObservable<Unit> JoinRoomAsync(System.String roomId, System.String userName, bool observeOnMainThread = true)
+            {
+                return this.parent.JoinRoomAsync( roomId, userName,  observeOnMainThread);
+            }
+
+            public virtual IObservable<Unit> LeaveRoomAsync(System.String roomId, bool observeOnMainThread = true)
+            {
+                return this.parent.LeaveRoomAsync( roomId,  observeOnMainThread);
+            }
+
+        }
+
+        public class ChatHubServerInvoker : IChatHubServerInvoker
         {
             readonly ObservablePhotonPeer peer;
             readonly short hubId;
 
-            public ChatHubServer(ObservablePhotonPeer peer, short hubId)
+            public ChatHubServerInvoker(ObservablePhotonPeer peer, short hubId)
             {
                 this.peer = peer;
                 this.hubId = hubId;
@@ -1171,15 +1512,51 @@ namespace PhotonWire.Client
 
         }
 
-        public class ChatHubClient
+        public interface IChatHubClientReceiver
+        {
+            IObservable<ChatClientReceiveMessageResponse> ReceiveMessage(bool observeOnMainThread = true);
+            IObservable<System.String> JoinUser(bool observeOnMainThread = true);
+            IObservable<System.String> LeaveUser(bool observeOnMainThread = true);
+        }
+        
+        public class DelegatingChatHubClientReceiver : IChatHubClientReceiver
+        {
+            readonly IChatHubClientReceiver parent;
+
+            public DelegatingChatHubClientReceiver(IChatHubClientReceiver parent)
+            {
+                this.parent = parent;
+            }
+
+            public virtual IObservable<ChatClientReceiveMessageResponse> ReceiveMessage(bool observeOnMainThread = true)
+            {
+                return this.parent.ReceiveMessage(observeOnMainThread);
+            }
+
+            public virtual IObservable<System.String> JoinUser(bool observeOnMainThread = true)
+            {
+                return this.parent.JoinUser(observeOnMainThread);
+            }
+
+            public virtual IObservable<System.String> LeaveUser(bool observeOnMainThread = true)
+            {
+                return this.parent.LeaveUser(observeOnMainThread);
+            }
+
+        }
+
+
+        public class ChatHubClientReceiver : IChatHubClientReceiver, IChatClient
         {
             readonly ObservablePhotonPeer peer;
             readonly short hubId;
+            readonly Subject<Tuple<byte, object>> toClientPublisher;
 
-            public ChatHubClient(ObservablePhotonPeer peer, short hubId)
+            public ChatHubClientReceiver(ObservablePhotonPeer peer, short hubId)
             {
                 this.peer = peer;
                 this.hubId = hubId;
+                this.toClientPublisher = new Subject<Tuple<Byte, object>>();
             }
 
             IObservable<EventData> ReceiveEventData(byte eventCode)
@@ -1211,9 +1588,21 @@ namespace PhotonWire.Client
                             message = PhotonSerializer.Deserialize<System.String>(__args.Parameters[1]),
                         };
                         return ____result;
-                    });
+                    })
+                    .Merge(toClientPublisher.Where(__tuple => __tuple.Item1 == 0).Select(__tuple => (ChatClientReceiveMessageResponse)__tuple.Item2));
 
                 return (observeOnMainThread) ? __result.ObserveOn(Scheduler.MainThread) : __result;
+            }
+
+            void IChatClient.ReceiveMessage(System.String userName, System.String message)
+            {
+                toClientPublisher.OnNext(Tuple.Create((byte)0, 
+                (object)new ChatClientReceiveMessageResponse
+                {
+                    userName = userName,
+                    message = message,
+                }
+                ));
             }
 
             public IObservable<System.String> JoinUser(bool observeOnMainThread = true)
@@ -1222,9 +1611,17 @@ namespace PhotonWire.Client
                     .Select(__args =>
                     {
                         return PhotonSerializer.Deserialize<System.String>(__args.Parameters[0]);
-                    });
+                    })
+                    .Merge(toClientPublisher.Where(__tuple => __tuple.Item1 == 1).Select(__tuple => (System.String)__tuple.Item2));
 
                 return (observeOnMainThread) ? __result.ObserveOn(Scheduler.MainThread) : __result;
+            }
+
+            void IChatClient.JoinUser(System.String userName)
+            {
+                toClientPublisher.OnNext(Tuple.Create((byte)1, 
+                    (object)userName
+                ));
             }
 
             public IObservable<System.String> LeaveUser(bool observeOnMainThread = true)
@@ -1233,9 +1630,17 @@ namespace PhotonWire.Client
                     .Select(__args =>
                     {
                         return PhotonSerializer.Deserialize<System.String>(__args.Parameters[0]);
-                    });
+                    })
+                    .Merge(toClientPublisher.Where(__tuple => __tuple.Item1 == 2).Select(__tuple => (System.String)__tuple.Item2));
 
                 return (observeOnMainThread) ? __result.ObserveOn(Scheduler.MainThread) : __result;
+            }
+
+            void IChatClient.LeaveUser(System.String userName)
+            {
+                toClientPublisher.OnNext(Tuple.Create((byte)2, 
+                    (object)userName
+                ));
             }
 
         }
@@ -1255,7 +1660,297 @@ namespace PhotonWire.Client
         }
 
     }
-    public class TutorialProxy : PhotonWireProxy<TutorialProxy.TutorialServer, TutorialProxy.TutorialClient, TutorialProxy.ITutorialClient>
+    public class SimpleHubProxy : PhotonWireProxy<SimpleHubProxy.ISimpleHubServerInvoker, SimpleHubProxy.ISimpleHubClientReceiver, SimpleHubProxy.ISimpleHubClient>
+    {
+        public override short HubId
+        {
+            get
+            {
+                return 9932;
+            }
+        }
+
+        public override string HubName
+        {
+            get
+            {
+                return "SimpleHub";
+            }
+        }
+
+        protected override ISimpleHubServerInvoker CreateDefaultInvoke()
+        {
+            return new SimpleHubServerInvoker(Peer, HubId);
+        }
+
+        protected override void CreateDefaultReceiveAndPublish(out ISimpleHubClientReceiver client, out ISimpleHubClient publisher)
+        {
+            var r = new SimpleHubClientReceiver(Peer, HubId);
+            client = r;
+            publisher = r;
+        }
+        
+        public override IDisposable RegisterListener(ISimpleHubClient clientListener, bool runOnMainThread = true)
+        {
+            return Peer.ObserveReceiveEventData().Subscribe(__args =>
+            {
+                {
+                    object hubIdObj;
+                    if (!__args.Parameters.TryGetValue(ReservedParameterNo.RequestHubId, out hubIdObj) || Convert.GetTypeCode(hubIdObj) != TypeCode.Int16)
+                    {
+                        return;
+                    }
+                    if ((short)hubIdObj != HubId) return;
+                }
+
+                var __parameters = __args.Parameters;
+                switch (__args.Code)
+                {
+                    case 0:
+                        {
+                            var x = PhotonSerializer.Deserialize<System.Int32>(__parameters[0]);
+                            var y = PhotonSerializer.Deserialize<System.Int32>(__parameters[1]);
+                            if(runOnMainThread)
+                            {
+                                Scheduler.MainThread.Schedule(() => clientListener.ToClient(x, y));
+                            }
+                            else
+                            {
+                                clientListener.ToClient(x, y);
+                            }
+                        }
+                        break;
+                    case 1:
+                        {
+                            if(runOnMainThread)
+                            {
+                                Scheduler.MainThread.Schedule(() => clientListener.Blank());
+                            }
+                            else
+                            {
+                                clientListener.Blank();
+                            }
+                        }
+                        break;
+                    case 2:
+                        {
+                            var z = PhotonSerializer.Deserialize<System.Int32>(__parameters[0]);
+                            if(runOnMainThread)
+                            {
+                                Scheduler.MainThread.Schedule(() => clientListener.Single(z));
+                            }
+                            else
+                            {
+                                clientListener.Single(z);
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            });                
+        }
+
+        public interface ISimpleHubServerInvoker
+        {
+            IObservable<System.String> HogeAsync(System.Int32 x, bool observeOnMainThread = true);
+        }
+
+        public class DelegatingSimpleHubServerInvoker : ISimpleHubServerInvoker
+        {
+            readonly ISimpleHubServerInvoker parent;
+
+            public DelegatingSimpleHubServerInvoker(ISimpleHubServerInvoker parent)
+            {
+                this.parent = parent;
+            }
+
+            public virtual IObservable<System.String> HogeAsync(System.Int32 x, bool observeOnMainThread = true)
+            {
+                return this.parent.HogeAsync( x,  observeOnMainThread);
+            }
+
+        }
+
+        public class SimpleHubServerInvoker : ISimpleHubServerInvoker
+        {
+            readonly ObservablePhotonPeer peer;
+            readonly short hubId;
+
+            public SimpleHubServerInvoker(ObservablePhotonPeer peer, short hubId)
+            {
+                this.peer = peer;
+                this.hubId = hubId;
+            }
+
+            public IObservable<System.String> HogeAsync(System.Int32 x, bool observeOnMainThread = true)
+            {
+                byte opCode = 0;
+                var parameter = new System.Collections.Generic.Dictionary<byte, object>();
+                parameter.Add(ReservedParameterNo.RequestHubId, hubId);
+                parameter.Add(0, PhotonSerializer.Serialize(x));
+
+                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                    .Select(__operationResponse =>
+                    {
+                        var __result = __operationResponse[ReservedParameterNo.ResponseId];
+                        return PhotonSerializer.Deserialize<System.String>(__result);
+                    });
+
+                return (observeOnMainThread) ? __response.ObserveOn(Scheduler.MainThread) : __response;
+            }
+
+        }
+
+        public interface ISimpleHubClientReceiver
+        {
+            IObservable<SimpleHubClientToClientResponse> ToClient(bool observeOnMainThread = true);
+            IObservable<Unit> Blank(bool observeOnMainThread = true);
+            IObservable<System.Int32> Single(bool observeOnMainThread = true);
+        }
+        
+        public class DelegatingSimpleHubClientReceiver : ISimpleHubClientReceiver
+        {
+            readonly ISimpleHubClientReceiver parent;
+
+            public DelegatingSimpleHubClientReceiver(ISimpleHubClientReceiver parent)
+            {
+                this.parent = parent;
+            }
+
+            public virtual IObservable<SimpleHubClientToClientResponse> ToClient(bool observeOnMainThread = true)
+            {
+                return this.parent.ToClient(observeOnMainThread);
+            }
+
+            public virtual IObservable<Unit> Blank(bool observeOnMainThread = true)
+            {
+                return this.parent.Blank(observeOnMainThread);
+            }
+
+            public virtual IObservable<System.Int32> Single(bool observeOnMainThread = true)
+            {
+                return this.parent.Single(observeOnMainThread);
+            }
+
+        }
+
+
+        public class SimpleHubClientReceiver : ISimpleHubClientReceiver, ISimpleHubClient
+        {
+            readonly ObservablePhotonPeer peer;
+            readonly short hubId;
+            readonly Subject<Tuple<byte, object>> toClientPublisher;
+
+            public SimpleHubClientReceiver(ObservablePhotonPeer peer, short hubId)
+            {
+                this.peer = peer;
+                this.hubId = hubId;
+                this.toClientPublisher = new Subject<Tuple<Byte, object>>();
+            }
+
+            IObservable<EventData> ReceiveEventData(byte eventCode)
+            {
+                return peer.ObserveReceiveEventData()
+                    .Where(x =>
+                    {
+                        object hubIdObj;
+                        if (!x.Parameters.TryGetValue(ReservedParameterNo.RequestHubId, out hubIdObj) || Convert.GetTypeCode(hubIdObj) != TypeCode.Int16)
+                        {
+                            return false;
+                        }
+
+                        if (x.Code != eventCode) return false;
+                        if ((short)hubIdObj != hubId) return false;
+
+                        return true;
+                    });
+            }
+
+            public IObservable<SimpleHubClientToClientResponse> ToClient(bool observeOnMainThread = true)
+            {
+                var __result = ReceiveEventData(0)
+                    .Select(__args =>
+                    {
+                        var ____result = new SimpleHubClientToClientResponse
+                        {
+                            x = PhotonSerializer.Deserialize<System.Int32>(__args.Parameters[0]),
+                            y = PhotonSerializer.Deserialize<System.Int32>(__args.Parameters[1]),
+                        };
+                        return ____result;
+                    })
+                    .Merge(toClientPublisher.Where(__tuple => __tuple.Item1 == 0).Select(__tuple => (SimpleHubClientToClientResponse)__tuple.Item2));
+
+                return (observeOnMainThread) ? __result.ObserveOn(Scheduler.MainThread) : __result;
+            }
+
+            void ISimpleHubClient.ToClient(System.Int32 x, System.Int32 y)
+            {
+                toClientPublisher.OnNext(Tuple.Create((byte)0, 
+                (object)new SimpleHubClientToClientResponse
+                {
+                    x = x,
+                    y = y,
+                }
+                ));
+            }
+
+            public IObservable<Unit> Blank(bool observeOnMainThread = true)
+            {
+                var __result = ReceiveEventData(1)
+                    .Select(__args =>
+                    {
+                        return Unit.Default;
+                    })
+                    .Merge(toClientPublisher.Where(__tuple => __tuple.Item1 == 1).Select(__tuple => (Unit)__tuple.Item2));
+
+                return (observeOnMainThread) ? __result.ObserveOn(Scheduler.MainThread) : __result;
+            }
+
+            void ISimpleHubClient.Blank()
+            {
+                toClientPublisher.OnNext(Tuple.Create((byte)1, 
+                    (object)Unit.Default
+                ));
+            }
+
+            public IObservable<System.Int32> Single(bool observeOnMainThread = true)
+            {
+                var __result = ReceiveEventData(2)
+                    .Select(__args =>
+                    {
+                        return PhotonSerializer.Deserialize<System.Int32>(__args.Parameters[0]);
+                    })
+                    .Merge(toClientPublisher.Where(__tuple => __tuple.Item1 == 2).Select(__tuple => (System.Int32)__tuple.Item2));
+
+                return (observeOnMainThread) ? __result.ObserveOn(Scheduler.MainThread) : __result;
+            }
+
+            void ISimpleHubClient.Single(System.Int32 z)
+            {
+                toClientPublisher.OnNext(Tuple.Create((byte)2, 
+                    (object)z
+                ));
+            }
+
+        }
+
+        public interface ISimpleHubClient
+        {
+            void ToClient(System.Int32 x, System.Int32 y);
+            void Blank();
+            void Single(System.Int32 z);
+        }
+
+       
+        public class SimpleHubClientToClientResponse
+        {
+            public System.Int32 x { get; set; }
+            public System.Int32 y { get; set; }
+        }
+
+    }
+    public class TutorialProxy : PhotonWireProxy<TutorialProxy.ITutorialServerInvoker, TutorialProxy.ITutorialClientReceiver, TutorialProxy.ITutorialClient>
     {
         public override short HubId
         {
@@ -1273,22 +1968,16 @@ namespace PhotonWire.Client
             }
         }
 
-        TutorialServer invoke;
-        public override TutorialServer Invoke
+        protected override ITutorialServerInvoker CreateDefaultInvoke()
         {
-            get
-            {
-                return invoke ?? (invoke = new TutorialServer(Peer, HubId));
-            }
+            return new TutorialServerInvoker(Peer, HubId);
         }
 
-        TutorialClient receive;
-        public override TutorialClient Receive
+        protected override void CreateDefaultReceiveAndPublish(out ITutorialClientReceiver client, out ITutorialClient publisher)
         {
-            get
-            {
-                return receive ?? (receive = new TutorialClient(Peer, HubId));
-            }
+            var r = new TutorialClientReceiver(Peer, HubId);
+            client = r;
+            publisher = r;
         }
         
         public override IDisposable RegisterListener(ITutorialClient clientListener, bool runOnMainThread = true)
@@ -1326,12 +2015,63 @@ namespace PhotonWire.Client
             });                
         }
 
-        public class TutorialServer
+        public interface ITutorialServerInvoker
+        {
+            IObservable<System.Int32> SumAsync(System.Int32 x, System.Int32 y, bool observeOnMainThread = true);
+            IObservable<System.String> GetHtmlAsync(System.String url, bool observeOnMainThread = true);
+            IObservable<Unit> BroadcastAllAsync(System.String message, bool observeOnMainThread = true);
+            IObservable<Unit> RegisterGroupAsync(System.String groupName, bool observeOnMainThread = true);
+            IObservable<Unit> BroadcastToAsync(System.String groupName, System.String message, bool observeOnMainThread = true);
+            IObservable<System.Int32> ServerToServerAsync(System.Int32 x, System.Int32 y, bool observeOnMainThread = true);
+        }
+
+        public class DelegatingTutorialServerInvoker : ITutorialServerInvoker
+        {
+            readonly ITutorialServerInvoker parent;
+
+            public DelegatingTutorialServerInvoker(ITutorialServerInvoker parent)
+            {
+                this.parent = parent;
+            }
+
+            public virtual IObservable<System.Int32> SumAsync(System.Int32 x, System.Int32 y, bool observeOnMainThread = true)
+            {
+                return this.parent.SumAsync( x, y,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.String> GetHtmlAsync(System.String url, bool observeOnMainThread = true)
+            {
+                return this.parent.GetHtmlAsync( url,  observeOnMainThread);
+            }
+
+            public virtual IObservable<Unit> BroadcastAllAsync(System.String message, bool observeOnMainThread = true)
+            {
+                return this.parent.BroadcastAllAsync( message,  observeOnMainThread);
+            }
+
+            public virtual IObservable<Unit> RegisterGroupAsync(System.String groupName, bool observeOnMainThread = true)
+            {
+                return this.parent.RegisterGroupAsync( groupName,  observeOnMainThread);
+            }
+
+            public virtual IObservable<Unit> BroadcastToAsync(System.String groupName, System.String message, bool observeOnMainThread = true)
+            {
+                return this.parent.BroadcastToAsync( groupName, message,  observeOnMainThread);
+            }
+
+            public virtual IObservable<System.Int32> ServerToServerAsync(System.Int32 x, System.Int32 y, bool observeOnMainThread = true)
+            {
+                return this.parent.ServerToServerAsync( x, y,  observeOnMainThread);
+            }
+
+        }
+
+        public class TutorialServerInvoker : ITutorialServerInvoker
         {
             readonly ObservablePhotonPeer peer;
             readonly short hubId;
 
-            public TutorialServer(ObservablePhotonPeer peer, short hubId)
+            public TutorialServerInvoker(ObservablePhotonPeer peer, short hubId)
             {
                 this.peer = peer;
                 this.hubId = hubId;
@@ -1444,15 +2184,39 @@ namespace PhotonWire.Client
 
         }
 
-        public class TutorialClient
+        public interface ITutorialClientReceiver
+        {
+            IObservable<System.String> GroupBroadcastMessage(bool observeOnMainThread = true);
+        }
+        
+        public class DelegatingTutorialClientReceiver : ITutorialClientReceiver
+        {
+            readonly ITutorialClientReceiver parent;
+
+            public DelegatingTutorialClientReceiver(ITutorialClientReceiver parent)
+            {
+                this.parent = parent;
+            }
+
+            public virtual IObservable<System.String> GroupBroadcastMessage(bool observeOnMainThread = true)
+            {
+                return this.parent.GroupBroadcastMessage(observeOnMainThread);
+            }
+
+        }
+
+
+        public class TutorialClientReceiver : ITutorialClientReceiver, ITutorialClient
         {
             readonly ObservablePhotonPeer peer;
             readonly short hubId;
+            readonly Subject<Tuple<byte, object>> toClientPublisher;
 
-            public TutorialClient(ObservablePhotonPeer peer, short hubId)
+            public TutorialClientReceiver(ObservablePhotonPeer peer, short hubId)
             {
                 this.peer = peer;
                 this.hubId = hubId;
+                this.toClientPublisher = new Subject<Tuple<Byte, object>>();
             }
 
             IObservable<EventData> ReceiveEventData(byte eventCode)
@@ -1479,9 +2243,17 @@ namespace PhotonWire.Client
                     .Select(__args =>
                     {
                         return PhotonSerializer.Deserialize<System.String>(__args.Parameters[0]);
-                    });
+                    })
+                    .Merge(toClientPublisher.Where(__tuple => __tuple.Item1 == 0).Select(__tuple => (System.String)__tuple.Item2));
 
                 return (observeOnMainThread) ? __result.ObserveOn(Scheduler.MainThread) : __result;
+            }
+
+            void ITutorialClient.GroupBroadcastMessage(System.String message)
+            {
+                toClientPublisher.OnNext(Tuple.Create((byte)0, 
+                    (object)message
+                ));
             }
 
         }

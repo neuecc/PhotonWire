@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace PhotonWire.Sample.ServerApp.Hubs
 {
@@ -27,15 +28,21 @@ namespace PhotonWire.Sample.ServerApp.Hubs
         public int MyTakox { get; set; }
     }
 
+    [DataContract]
     public class MyClass
     {
+        [DataMember(Order = 0)]
         public int MyPropertyA { get; set; }
+        [DataMember(Order = 1)]
         public string MyPropertyB { get; set; }
+        [DataMember(Order = 2)]
         public MyClass2 MyPropertyC { get; set; }
     }
 
+    [DataContract]
     public class MyClass2
     {
+        [DataMember(Order = 0)]
         public int MyProperty { get; set; }
     }
 }

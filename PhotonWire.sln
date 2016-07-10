@@ -41,6 +41,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.nuget\Server_ReadMe.txt = .nuget\Server_ReadMe.txt
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotonWire.UnityClient.CSharp", "Source\PhotonWire.UnityClient\PhotonWire.UnityClient.CSharp.csproj", "{AFCB87E7-BCF9-5566-5161-8E53D636076B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +93,10 @@ Global
 		{80A1868D-49EA-4F8F-9153-91072565B6DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80A1868D-49EA-4F8F-9153-91072565B6DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80A1868D-49EA-4F8F-9153-91072565B6DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFCB87E7-BCF9-5566-5161-8E53D636076B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFCB87E7-BCF9-5566-5161-8E53D636076B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFCB87E7-BCF9-5566-5161-8E53D636076B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFCB87E7-BCF9-5566-5161-8E53D636076B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -107,5 +113,6 @@ Global
 		{02D7010E-B649-41E7-8E8F-8E01E05F2C3E} = {7341F80B-AC69-42CA-BBDC-3BD667C7C640}
 		{49C3C006-DEEC-1929-54D5-99AAF00D926A} = {7341F80B-AC69-42CA-BBDC-3BD667C7C640}
 		{80A1868D-49EA-4F8F-9153-91072565B6DA} = {8C25F347-E802-4BFF-BBA7-5EFA3E8CB03A}
+		{AFCB87E7-BCF9-5566-5161-8E53D636076B} = {7341F80B-AC69-42CA-BBDC-3BD667C7C640}
 	EndGlobalSection
 EndGlobal

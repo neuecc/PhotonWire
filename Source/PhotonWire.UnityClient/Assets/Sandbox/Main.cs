@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
+using PhotonWire.Client;
 using System.Collections;
 using System.Threading;
+using System;
+using UniRx;
 
 public class Main : MonoBehaviour
 {
@@ -25,6 +28,55 @@ public class Main : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        var peer = new ObservablePhotonPeer(ExitGames.Client.Photon.ConnectionProtocol.Tcp, "Test", 20);
 
+        var proxy = peer.CreateTypedHub<SimpleHubProxy>()
+            .AttachInvokeFilter(x => new MogeMoge1(x))
+            .AttachInvokeFilter(x => new MogeMoge2(x))
+            .AttachReceiveFilter(x => new NugaNuga1(x));
+
+        proxy.Publish.ToClient(100, 2000);
+
+        proxy.Receive.ToClient().Subscribe(_ => { });
+
+    }
+}
+
+public class NugaNuga1 : SimpleHubProxy.DelegatingSimpleHubClientReceiver
+{
+    public NugaNuga1(SimpleHubProxy.ISimpleHubClientReceiver parent) : base(parent)
+    {
+    }
+
+    public override IObservable<SimpleHubProxy.SimpleHubClientToClientResponse> ToClient(bool observeOnMainThread = true)
+    {
+        return base.ToClient(observeOnMainThread)
+            .Do(_ =>
+            {
+            });
+    }
+}
+
+public class MogeMoge1 : SimpleHubProxy.DelegatingSimpleHubServerInvoker
+{
+    public MogeMoge1(SimpleHubProxy.ISimpleHubServerInvoker parent) : base(parent)
+    {
+    }
+
+    public override IObservable<string> HogeAsync(int x, bool observeOnMainThread = true)
+    {
+        return base.HogeAsync(x, observeOnMainThread);
+    }
+}
+
+public class MogeMoge2 : SimpleHubProxy.DelegatingSimpleHubServerInvoker
+{
+    public MogeMoge2(SimpleHubProxy.ISimpleHubServerInvoker parent) : base(parent)
+    {
+    }
+
+    public override IObservable<string> HogeAsync(int x, bool observeOnMainThread = true)
+    {
+        return base.HogeAsync(x, observeOnMainThread);
     }
 }

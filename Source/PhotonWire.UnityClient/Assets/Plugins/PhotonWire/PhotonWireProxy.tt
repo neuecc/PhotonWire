@@ -150,7 +150,7 @@
                         MethodName = methodInfo.Name,
                         OperationCode = (byte)((dynamic)opAttr).OperationCode,
                         ReturnTypeName = BeautifyType(returnType),
-                        Parameter = parameter
+                        Parameter = parameter,
                     };
                 })
                 .ToArray();
@@ -212,12 +212,12 @@
                 HubId = (short)((dynamic)hubAttr).HubId,
                 Server = new
                 {
-                    ClassName = serverType.Name + "Server",
+                    ClassName = serverType.Name + "ServerInvoker",
                     Methods = serverMethods
                 },
                 Client = new
                 {
-                    ClassName = serverType.Name + "Client",
+                    ClassName = serverType.Name + "ClientReceiver",
                     OriginalType = clientType,
                     Methods = clientMethods
                 }
@@ -240,6 +240,7 @@ using UniRx;
 #else
 using System.Reactive;
 using System.Reactive.Concurrency;
+using System.Reactive.Subjects;
 using System.Reactive.Linq;
 #endif
 using MsgPack.Serialization;
@@ -377,23 +378,51 @@ namespace <#= namespaceName #>
 
     public abstract class PhotonWireProxy<TServer, TClient, TClientListener> : IPhotonWireProxy
     {
+        public abstract short HubId { get; }
+        public abstract string HubName { get; }
         public ObservablePhotonPeer Peer { get; private set; }
+        public TServer Invoke { get; private set; }
+        public TClient Receive { get; private set; }
+        public TClientListener Publish { get; private set; }
 
         public void Initialize(ObservablePhotonPeer peer)
         {
             this.Peer = peer;
+            Invoke = CreateDefaultInvoke();
+            TClient client;
+            TClientListener publish; 
+            CreateDefaultReceiveAndPublish(out client, out publish);
+            Receive = client;
+            Publish = publish;
         }
 
-        public abstract short HubId { get; }
-        public abstract string HubName { get; }
-        public abstract TServer Invoke { get; }
-        public abstract TClient Receive { get; }
         public abstract IDisposable RegisterListener(TClientListener clientListener, bool runOnMainThread = true);
+        protected abstract TServer CreateDefaultInvoke();
+        protected abstract void CreateDefaultReceiveAndPublish(out TClient client, out TClientListener publisher);
+
+        public PhotonWireProxy<TServer, TClient, TClientListener> AttachInvokeFilter(Func<TServer, TServer> serverFilterFactory)
+        {
+            Invoke = serverFilterFactory(Invoke);
+            return this;
+        }
+
+        public PhotonWireProxy<TServer, TClient, TClientListener> AttachReceiveFilter(Func<TClient, TClient> clientFilterFactory)
+        {
+            Receive = clientFilterFactory(Receive);
+            return this;
+        }
+
+        public PhotonWireProxy<TServer, TClient, TClientListener> AttachFilter(Func<TServer, TServer> serverFilterFactory, Func<TClient, TClient> clientFilterFactory)
+        {
+            Invoke = serverFilterFactory(Invoke);
+            Receive = clientFilterFactory(Receive);
+            return this;
+        }
     }
 
     // Auto generated proxy code
 <# foreach(var contract in contracts) { #>
-    public class <#= contract.ContractName #> : PhotonWireProxy<<#= contract.ContractName #>.<#= contract.Server.ClassName #>, <#= contract.ContractName #>.<#= contract.Client.ClassName #>, <#= contract.ContractName #>.<#= contract.Client.OriginalType.Name #>>
+    public class <#= contract.ContractName #> : PhotonWireProxy<<#= contract.ContractName #>.I<#= contract.Server.ClassName #>, <#= contract.ContractName #>.I<#= contract.Client.ClassName #>, <#= contract.ContractName #>.<#= contract.Client.OriginalType.Name #>>
     {
         public override short HubId
         {
@@ -411,22 +440,16 @@ namespace <#= namespaceName #>
             }
         }
 
-        <#= contract.Server.ClassName #> invoke;
-        public override <#= contract.Server.ClassName #> Invoke
+        protected override I<#= contract.Server.ClassName #> CreateDefaultInvoke()
         {
-            get
-            {
-                return invoke ?? (invoke = new <#= contract.Server.ClassName #>(Peer, HubId));
-            }
+            return new <#= contract.Server.ClassName #>(Peer, HubId);
         }
 
-        <#= contract.Client.ClassName #> receive;
-        public override <#= contract.Client.ClassName #> Receive
+        protected override void CreateDefaultReceiveAndPublish(out I<#= contract.Client.ClassName #> client, out <#= contract.Client.OriginalType.Name #> publisher)
         {
-            get
-            {
-                return receive ?? (receive = new <#= contract.Client.ClassName #>(Peer, HubId));
-            }
+            var r = new <#= contract.Client.ClassName #>(Peer, HubId);
+            client = r;
+            publisher = r;
         }
         
         public override IDisposable RegisterListener(<#= contract.Client.OriginalType.Name #> clientListener, bool runOnMainThread = true)
@@ -468,7 +491,32 @@ namespace <#= namespaceName #>
             });                
         }
 
-        public class <#= contract.Server.ClassName #>
+        public interface I<#= contract.Server.ClassName #>
+        {
+<# foreach(var method in contract.Server.Methods) { #>
+            <#= WithIObservable(method.ReturnTypeName) #> <#= method.MethodName #><#= useAsyncSuffix ? "Async" : "" #>(<#= string.Join(", ", method.Parameter.Select(x => x.TypeName + " " + x.Name)) #><#= method.Parameter.Any() ? ", " : "" #>bool observeOnMainThread = true);
+<# } #>
+        }
+
+        public class Delegating<#= contract.Server.ClassName #> : I<#= contract.Server.ClassName #>
+        {
+            readonly I<#= contract.Server.ClassName #> parent;
+
+            public Delegating<#= contract.Server.ClassName #>(I<#= contract.Server.ClassName #> parent)
+            {
+                this.parent = parent;
+            }
+
+<# foreach(var method in contract.Server.Methods) { #>
+            public virtual <#= WithIObservable(method.ReturnTypeName) #> <#= method.MethodName #><#= useAsyncSuffix ? "Async" : "" #>(<#= string.Join(", ", method.Parameter.Select(x => x.TypeName + " " + x.Name)) #><#= method.Parameter.Any() ? ", " : "" #>bool observeOnMainThread = true)
+            {
+                return this.parent.<#= method.MethodName #><#= useAsyncSuffix ? "Async" : "" #>( <#= string.Join(", ", method.Parameter.Select(x => x.Name)) #><#= method.Parameter.Any() ? ", " : "" #> observeOnMainThread);
+            }
+
+<# } #>
+        }
+
+        public class <#= contract.Server.ClassName #> : I<#= contract.Server.ClassName #>
         {
             readonly ObservablePhotonPeer peer;
             readonly short hubId;
@@ -502,15 +550,43 @@ namespace <#= namespaceName #>
 <# } #>
         }
 
-        public class <#= contract.Client.ClassName #>
+        public interface I<#= contract.Client.ClassName #>
+        {
+<# foreach(var method in contract.Client.Methods) { #>
+            <#= WithIObservable(method.ReturnTypeName) #> <#= method.MethodName #>(bool observeOnMainThread = true);
+<# } #>
+        }
+        
+        public class Delegating<#= contract.Client.ClassName #> : I<#= contract.Client.ClassName #>
+        {
+            readonly I<#= contract.Client.ClassName #> parent;
+
+            public Delegating<#= contract.Client.ClassName #>(I<#= contract.Client.ClassName #> parent)
+            {
+                this.parent = parent;
+            }
+
+<# foreach(var method in contract.Client.Methods) { #>
+            public virtual <#= WithIObservable(method.ReturnTypeName) #> <#= method.MethodName #>(bool observeOnMainThread = true)
+            {
+                return this.parent.<#= method.MethodName #>(observeOnMainThread);
+            }
+
+<# } #>
+        }
+
+
+        public class <#= contract.Client.ClassName #> : I<#= contract.Client.ClassName #>, <#= contract.Client.OriginalType.Name #>
         {
             readonly ObservablePhotonPeer peer;
             readonly short hubId;
+            readonly Subject<Tuple<byte, object>> toClientPublisher;
 
             public <#= contract.Client.ClassName #>(ObservablePhotonPeer peer, short hubId)
             {
                 this.peer = peer;
                 this.hubId = hubId;
+                this.toClientPublisher = new Subject<Tuple<Byte, object>>();
             }
 
             IObservable<EventData> ReceiveEventData(byte eventCode)
@@ -550,9 +626,30 @@ namespace <#= namespaceName #>
                         };
                         return ____result;
 <# } #>
-                    });
+                    })
+                    .Merge(toClientPublisher.Where(__tuple => __tuple.Item1 == <#= method.OperationCode #>).Select(__tuple => (<#= method.ReturnTypeName #>)__tuple.Item2));
 
                 return (observeOnMainThread) ? __result.ObserveOn(<#= mainthreadSchedulerInstance #>) : __result;
+            }
+
+            void <#= contract.Client.OriginalType.Name #>.<#= method.MethodName #>(<#= string.Join(", ", method.OriginalParameters.Select(x => x.TypeName + " " + x.Name)) #>)
+            {
+                toClientPublisher.OnNext(Tuple.Create((byte)<#= method.OperationCode #>, 
+<# if (method.ExternalTypeParameters.Length == 0 ) { #>
+<# if (method.OriginalParameters.Length == 0 ) { #>
+                    (object)Unit.Default
+<# } else {  #>
+                    (object)<#= method.OriginalParameters[0].Name #>
+<# } #>
+<# } else { #>
+                (object)new <#= method.ReturnTypeName #>
+                {
+<# for(var i = 0; i < method.ExternalTypeParameters.Length; i++) { #>
+                    <#= method.ExternalTypeParameters[i].Name #> = <#= method.ExternalTypeParameters[i].Name #>,
+<# } #>
+                }
+<# } #>
+                ));
             }
 
 <# } #>
