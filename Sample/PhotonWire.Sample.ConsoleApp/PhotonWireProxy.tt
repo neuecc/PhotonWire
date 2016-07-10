@@ -494,7 +494,7 @@ namespace <#= namespaceName #>
         public interface I<#= contract.Server.ClassName #>
         {
 <# foreach(var method in contract.Server.Methods) { #>
-            <#= WithIObservable(method.ReturnTypeName) #> <#= method.MethodName #><#= useAsyncSuffix ? "Async" : "" #>(<#= string.Join(", ", method.Parameter.Select(x => x.TypeName + " " + x.Name)) #><#= method.Parameter.Any() ? ", " : "" #>bool observeOnMainThread = true);
+            <#= WithIObservable(method.ReturnTypeName) #> <#= method.MethodName #><#= useAsyncSuffix ? "Async" : "" #>(<#= string.Join(", ", method.Parameter.Select(x => x.TypeName + " " + x.Name)) #><#= method.Parameter.Any() ? ", " : "" #>bool observeOnMainThread = true, bool encrypt = false);
 <# } #>
         }
 
@@ -508,9 +508,9 @@ namespace <#= namespaceName #>
             }
 
 <# foreach(var method in contract.Server.Methods) { #>
-            public virtual <#= WithIObservable(method.ReturnTypeName) #> <#= method.MethodName #><#= useAsyncSuffix ? "Async" : "" #>(<#= string.Join(", ", method.Parameter.Select(x => x.TypeName + " " + x.Name)) #><#= method.Parameter.Any() ? ", " : "" #>bool observeOnMainThread = true)
+            public virtual <#= WithIObservable(method.ReturnTypeName) #> <#= method.MethodName #><#= useAsyncSuffix ? "Async" : "" #>(<#= string.Join(", ", method.Parameter.Select(x => x.TypeName + " " + x.Name)) #><#= method.Parameter.Any() ? ", " : "" #>bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.<#= method.MethodName #><#= useAsyncSuffix ? "Async" : "" #>( <#= string.Join(", ", method.Parameter.Select(x => x.Name)) #><#= method.Parameter.Any() ? ", " : "" #> observeOnMainThread);
+                return this.parent.<#= method.MethodName #><#= useAsyncSuffix ? "Async" : "" #>( <#= string.Join(", ", method.Parameter.Select(x => x.Name)) #><#= method.Parameter.Any() ? ", " : "" #> observeOnMainThread, encrypt);
             }
 
 <# } #>
@@ -528,7 +528,7 @@ namespace <#= namespaceName #>
             }
 
 <# foreach(var method in contract.Server.Methods) { #>
-            public <#= WithIObservable(method.ReturnTypeName) #> <#= method.MethodName #><#= useAsyncSuffix ? "Async" : "" #>(<#= string.Join(", ", method.Parameter.Select(x => x.TypeName + " " + x.Name)) #><#= method.Parameter.Any() ? ", " : "" #>bool observeOnMainThread = true)
+            public <#= WithIObservable(method.ReturnTypeName) #> <#= method.MethodName #><#= useAsyncSuffix ? "Async" : "" #>(<#= string.Join(", ", method.Parameter.Select(x => x.TypeName + " " + x.Name)) #><#= method.Parameter.Any() ? ", " : "" #>bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = <#= method.OperationCode #>;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
@@ -537,7 +537,7 @@ namespace <#= namespaceName #>
                 parameter.Add(<#= i #>, PhotonSerializer.Serialize(<#= method.Parameter[i].Name #>));
 <# } #>
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -567,7 +567,7 @@ namespace <#= namespaceName #>
             }
 
 <# foreach(var method in contract.Client.Methods) { #>
-            public virtual <#= WithIObservable(method.ReturnTypeName) #> <#= method.MethodName #>(bool observeOnMainThread = true)
+            public virtual <#= WithIObservable(method.ReturnTypeName) #> <#= method.MethodName #>(bool observeOnMainThread)
             {
                 return this.parent.<#= method.MethodName #>(observeOnMainThread);
             }
@@ -608,7 +608,7 @@ namespace <#= namespaceName #>
             }
 
 <# foreach(var method in contract.Client.Methods) { #>
-            public <#= WithIObservable(method.ReturnTypeName) #> <#= method.MethodName #>(bool observeOnMainThread = true)
+            public <#= WithIObservable(method.ReturnTypeName) #> <#= method.MethodName #>(bool observeOnMainThread)
             {
                 var __result = ReceiveEventData(<#= method.OperationCode #>)
                     .Select(__args =>

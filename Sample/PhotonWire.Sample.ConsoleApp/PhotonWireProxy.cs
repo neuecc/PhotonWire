@@ -12,7 +12,11 @@ using System.Reactive.Concurrency;
 using System.Reactive.Subjects;
 using System.Reactive.Linq;
 #endif
+using MsgPack.Serialization;
+using System.IO;
+using PhotonWire.Client;
 using ExitGames.Client.Photon;
+using PhotonWire.Client.GeneratedSerializers;
 
 namespace PhotonWire.Client
 {
@@ -248,46 +252,46 @@ namespace PhotonWire.Client
 
         public interface IForUnitTestServerInvoker
         {
-            IObservable<System.Int32> EchoAsync(System.Int32 x, bool observeOnMainThread = true);
-            IObservable<System.Byte> EchoAsync(System.Byte x, bool observeOnMainThread = true);
-            IObservable<System.Boolean> EchoAsync(System.Boolean x, bool observeOnMainThread = true);
-            IObservable<System.Int16> EchoAsync(System.Int16 x, bool observeOnMainThread = true);
-            IObservable<System.Int64> EchoAsync(System.Int64 x, bool observeOnMainThread = true);
-            IObservable<System.Single> EchoAsync(System.Single x, bool observeOnMainThread = true);
-            IObservable<System.Double> EchoAsync(System.Double x, bool observeOnMainThread = true);
-            IObservable<System.Int32[]> EchoAsync(System.Int32[] x, bool observeOnMainThread = true);
-            IObservable<System.String> EchoAsync(System.String x, bool observeOnMainThread = true);
-            IObservable<System.Byte[]> EchoAsync(System.Byte[] x, bool observeOnMainThread = true);
-            IObservable<System.DateTime> EchoAsync(System.DateTime x, bool observeOnMainThread = true);
-            IObservable<System.Uri> EchoAsync(System.Uri x, bool observeOnMainThread = true);
-            IObservable<System.Nullable<System.Int32>> EchoAsync(System.Nullable<System.Int32> x, bool observeOnMainThread = true);
-            IObservable<System.Nullable<System.Double>> EchoAsync(System.Nullable<System.Double> x, bool observeOnMainThread = true);
-            IObservable<System.Double[]> EchoAsync(System.Double[] x, bool observeOnMainThread = true);
-            IObservable<System.Collections.Generic.List<System.Double>> EchoAsync(System.Collections.Generic.List<System.Double> x, bool observeOnMainThread = true);
-            IObservable<System.Collections.Generic.Dictionary<System.String, System.Int32>> EchoAsync(System.Collections.Generic.Dictionary<System.String, System.Int32> x, bool observeOnMainThread = true);
-            IObservable<PhotonWire.Sample.ServerApp.Hubs.MyClass> EchoAsync(PhotonWire.Sample.ServerApp.Hubs.MyClass x, bool observeOnMainThread = true);
-            IObservable<System.String> EchoAsync(PhotonWire.Sample.ServerApp.Hubs.Yo yo, bool observeOnMainThread = true);
-            IObservable<System.String> EchoAsync(System.Nullable<PhotonWire.Sample.ServerApp.Hubs.Yo> yo, bool observeOnMainThread = true);
-            IObservable<System.Int32> Echo2Async(System.Int32 x, bool observeOnMainThread = true);
-            IObservable<System.Byte> Echo2Async(System.Byte x, bool observeOnMainThread = true);
-            IObservable<System.Boolean> Echo2Async(System.Boolean x, bool observeOnMainThread = true);
-            IObservable<System.Int16> Echo2Async(System.Int16 x, bool observeOnMainThread = true);
-            IObservable<System.Int64> Echo2Async(System.Int64 x, bool observeOnMainThread = true);
-            IObservable<System.Single> Echo2Async(System.Single x, bool observeOnMainThread = true);
-            IObservable<System.Double> Echo2Async(System.Double x, bool observeOnMainThread = true);
-            IObservable<System.Int32[]> Echo2Async(System.Int32[] x, bool observeOnMainThread = true);
-            IObservable<System.String> Echo2Async(System.String x, bool observeOnMainThread = true);
-            IObservable<System.Byte[]> Echo2Async(System.Byte[] x, bool observeOnMainThread = true);
-            IObservable<System.DateTime> Echo2Async(System.DateTime x, bool observeOnMainThread = true);
-            IObservable<System.Uri> Echo2Async(System.Uri x, bool observeOnMainThread = true);
-            IObservable<System.Nullable<System.Int32>> Echo2Async(System.Nullable<System.Int32> x, bool observeOnMainThread = true);
-            IObservable<System.Nullable<System.Double>> Echo2Async(System.Nullable<System.Double> x, bool observeOnMainThread = true);
-            IObservable<System.Double[]> Echo2Async(System.Double[] x, bool observeOnMainThread = true);
-            IObservable<System.Collections.Generic.List<System.Double>> Echo2Async(System.Collections.Generic.List<System.Double> x, bool observeOnMainThread = true);
-            IObservable<System.Collections.Generic.Dictionary<System.String, System.Int32>> Echo2Async(System.Collections.Generic.Dictionary<System.String, System.Int32> x, bool observeOnMainThread = true);
-            IObservable<PhotonWire.Sample.ServerApp.Hubs.MyClass> Echo2Async(PhotonWire.Sample.ServerApp.Hubs.MyClass x, bool observeOnMainThread = true);
-            IObservable<System.String> Echo2Async(PhotonWire.Sample.ServerApp.Hubs.Yo yo, bool observeOnMainThread = true);
-            IObservable<System.String> Echo2Async(System.Nullable<PhotonWire.Sample.ServerApp.Hubs.Yo> yo, bool observeOnMainThread = true);
+            IObservable<System.Int32> EchoAsync(System.Int32 x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.Byte> EchoAsync(System.Byte x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.Boolean> EchoAsync(System.Boolean x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.Int16> EchoAsync(System.Int16 x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.Int64> EchoAsync(System.Int64 x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.Single> EchoAsync(System.Single x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.Double> EchoAsync(System.Double x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.Int32[]> EchoAsync(System.Int32[] x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.String> EchoAsync(System.String x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.Byte[]> EchoAsync(System.Byte[] x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.DateTime> EchoAsync(System.DateTime x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.Uri> EchoAsync(System.Uri x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.Nullable<System.Int32>> EchoAsync(System.Nullable<System.Int32> x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.Nullable<System.Double>> EchoAsync(System.Nullable<System.Double> x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.Double[]> EchoAsync(System.Double[] x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.Collections.Generic.List<System.Double>> EchoAsync(System.Collections.Generic.List<System.Double> x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.Collections.Generic.Dictionary<System.String, System.Int32>> EchoAsync(System.Collections.Generic.Dictionary<System.String, System.Int32> x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<PhotonWire.Sample.ServerApp.Hubs.MyClass> EchoAsync(PhotonWire.Sample.ServerApp.Hubs.MyClass x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.String> EchoAsync(PhotonWire.Sample.ServerApp.Hubs.Yo yo, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.String> EchoAsync(System.Nullable<PhotonWire.Sample.ServerApp.Hubs.Yo> yo, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.Int32> Echo2Async(System.Int32 x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.Byte> Echo2Async(System.Byte x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.Boolean> Echo2Async(System.Boolean x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.Int16> Echo2Async(System.Int16 x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.Int64> Echo2Async(System.Int64 x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.Single> Echo2Async(System.Single x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.Double> Echo2Async(System.Double x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.Int32[]> Echo2Async(System.Int32[] x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.String> Echo2Async(System.String x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.Byte[]> Echo2Async(System.Byte[] x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.DateTime> Echo2Async(System.DateTime x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.Uri> Echo2Async(System.Uri x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.Nullable<System.Int32>> Echo2Async(System.Nullable<System.Int32> x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.Nullable<System.Double>> Echo2Async(System.Nullable<System.Double> x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.Double[]> Echo2Async(System.Double[] x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.Collections.Generic.List<System.Double>> Echo2Async(System.Collections.Generic.List<System.Double> x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.Collections.Generic.Dictionary<System.String, System.Int32>> Echo2Async(System.Collections.Generic.Dictionary<System.String, System.Int32> x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<PhotonWire.Sample.ServerApp.Hubs.MyClass> Echo2Async(PhotonWire.Sample.ServerApp.Hubs.MyClass x, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.String> Echo2Async(PhotonWire.Sample.ServerApp.Hubs.Yo yo, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.String> Echo2Async(System.Nullable<PhotonWire.Sample.ServerApp.Hubs.Yo> yo, bool observeOnMainThread = true, bool encrypt = false);
         }
 
         public class DelegatingForUnitTestServerInvoker : IForUnitTestServerInvoker
@@ -299,204 +303,204 @@ namespace PhotonWire.Client
                 this.parent = parent;
             }
 
-            public virtual IObservable<System.Int32> EchoAsync(System.Int32 x, bool observeOnMainThread = true)
+            public virtual IObservable<System.Int32> EchoAsync(System.Int32 x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.EchoAsync( x,  observeOnMainThread);
+                return this.parent.EchoAsync( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.Byte> EchoAsync(System.Byte x, bool observeOnMainThread = true)
+            public virtual IObservable<System.Byte> EchoAsync(System.Byte x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.EchoAsync( x,  observeOnMainThread);
+                return this.parent.EchoAsync( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.Boolean> EchoAsync(System.Boolean x, bool observeOnMainThread = true)
+            public virtual IObservable<System.Boolean> EchoAsync(System.Boolean x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.EchoAsync( x,  observeOnMainThread);
+                return this.parent.EchoAsync( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.Int16> EchoAsync(System.Int16 x, bool observeOnMainThread = true)
+            public virtual IObservable<System.Int16> EchoAsync(System.Int16 x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.EchoAsync( x,  observeOnMainThread);
+                return this.parent.EchoAsync( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.Int64> EchoAsync(System.Int64 x, bool observeOnMainThread = true)
+            public virtual IObservable<System.Int64> EchoAsync(System.Int64 x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.EchoAsync( x,  observeOnMainThread);
+                return this.parent.EchoAsync( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.Single> EchoAsync(System.Single x, bool observeOnMainThread = true)
+            public virtual IObservable<System.Single> EchoAsync(System.Single x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.EchoAsync( x,  observeOnMainThread);
+                return this.parent.EchoAsync( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.Double> EchoAsync(System.Double x, bool observeOnMainThread = true)
+            public virtual IObservable<System.Double> EchoAsync(System.Double x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.EchoAsync( x,  observeOnMainThread);
+                return this.parent.EchoAsync( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.Int32[]> EchoAsync(System.Int32[] x, bool observeOnMainThread = true)
+            public virtual IObservable<System.Int32[]> EchoAsync(System.Int32[] x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.EchoAsync( x,  observeOnMainThread);
+                return this.parent.EchoAsync( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.String> EchoAsync(System.String x, bool observeOnMainThread = true)
+            public virtual IObservable<System.String> EchoAsync(System.String x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.EchoAsync( x,  observeOnMainThread);
+                return this.parent.EchoAsync( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.Byte[]> EchoAsync(System.Byte[] x, bool observeOnMainThread = true)
+            public virtual IObservable<System.Byte[]> EchoAsync(System.Byte[] x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.EchoAsync( x,  observeOnMainThread);
+                return this.parent.EchoAsync( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.DateTime> EchoAsync(System.DateTime x, bool observeOnMainThread = true)
+            public virtual IObservable<System.DateTime> EchoAsync(System.DateTime x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.EchoAsync( x,  observeOnMainThread);
+                return this.parent.EchoAsync( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.Uri> EchoAsync(System.Uri x, bool observeOnMainThread = true)
+            public virtual IObservable<System.Uri> EchoAsync(System.Uri x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.EchoAsync( x,  observeOnMainThread);
+                return this.parent.EchoAsync( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.Nullable<System.Int32>> EchoAsync(System.Nullable<System.Int32> x, bool observeOnMainThread = true)
+            public virtual IObservable<System.Nullable<System.Int32>> EchoAsync(System.Nullable<System.Int32> x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.EchoAsync( x,  observeOnMainThread);
+                return this.parent.EchoAsync( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.Nullable<System.Double>> EchoAsync(System.Nullable<System.Double> x, bool observeOnMainThread = true)
+            public virtual IObservable<System.Nullable<System.Double>> EchoAsync(System.Nullable<System.Double> x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.EchoAsync( x,  observeOnMainThread);
+                return this.parent.EchoAsync( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.Double[]> EchoAsync(System.Double[] x, bool observeOnMainThread = true)
+            public virtual IObservable<System.Double[]> EchoAsync(System.Double[] x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.EchoAsync( x,  observeOnMainThread);
+                return this.parent.EchoAsync( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.Collections.Generic.List<System.Double>> EchoAsync(System.Collections.Generic.List<System.Double> x, bool observeOnMainThread = true)
+            public virtual IObservable<System.Collections.Generic.List<System.Double>> EchoAsync(System.Collections.Generic.List<System.Double> x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.EchoAsync( x,  observeOnMainThread);
+                return this.parent.EchoAsync( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.Collections.Generic.Dictionary<System.String, System.Int32>> EchoAsync(System.Collections.Generic.Dictionary<System.String, System.Int32> x, bool observeOnMainThread = true)
+            public virtual IObservable<System.Collections.Generic.Dictionary<System.String, System.Int32>> EchoAsync(System.Collections.Generic.Dictionary<System.String, System.Int32> x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.EchoAsync( x,  observeOnMainThread);
+                return this.parent.EchoAsync( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<PhotonWire.Sample.ServerApp.Hubs.MyClass> EchoAsync(PhotonWire.Sample.ServerApp.Hubs.MyClass x, bool observeOnMainThread = true)
+            public virtual IObservable<PhotonWire.Sample.ServerApp.Hubs.MyClass> EchoAsync(PhotonWire.Sample.ServerApp.Hubs.MyClass x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.EchoAsync( x,  observeOnMainThread);
+                return this.parent.EchoAsync( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.String> EchoAsync(PhotonWire.Sample.ServerApp.Hubs.Yo yo, bool observeOnMainThread = true)
+            public virtual IObservable<System.String> EchoAsync(PhotonWire.Sample.ServerApp.Hubs.Yo yo, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.EchoAsync( yo,  observeOnMainThread);
+                return this.parent.EchoAsync( yo,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.String> EchoAsync(System.Nullable<PhotonWire.Sample.ServerApp.Hubs.Yo> yo, bool observeOnMainThread = true)
+            public virtual IObservable<System.String> EchoAsync(System.Nullable<PhotonWire.Sample.ServerApp.Hubs.Yo> yo, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.EchoAsync( yo,  observeOnMainThread);
+                return this.parent.EchoAsync( yo,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.Int32> Echo2Async(System.Int32 x, bool observeOnMainThread = true)
+            public virtual IObservable<System.Int32> Echo2Async(System.Int32 x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.Echo2Async( x,  observeOnMainThread);
+                return this.parent.Echo2Async( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.Byte> Echo2Async(System.Byte x, bool observeOnMainThread = true)
+            public virtual IObservable<System.Byte> Echo2Async(System.Byte x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.Echo2Async( x,  observeOnMainThread);
+                return this.parent.Echo2Async( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.Boolean> Echo2Async(System.Boolean x, bool observeOnMainThread = true)
+            public virtual IObservable<System.Boolean> Echo2Async(System.Boolean x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.Echo2Async( x,  observeOnMainThread);
+                return this.parent.Echo2Async( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.Int16> Echo2Async(System.Int16 x, bool observeOnMainThread = true)
+            public virtual IObservable<System.Int16> Echo2Async(System.Int16 x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.Echo2Async( x,  observeOnMainThread);
+                return this.parent.Echo2Async( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.Int64> Echo2Async(System.Int64 x, bool observeOnMainThread = true)
+            public virtual IObservable<System.Int64> Echo2Async(System.Int64 x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.Echo2Async( x,  observeOnMainThread);
+                return this.parent.Echo2Async( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.Single> Echo2Async(System.Single x, bool observeOnMainThread = true)
+            public virtual IObservable<System.Single> Echo2Async(System.Single x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.Echo2Async( x,  observeOnMainThread);
+                return this.parent.Echo2Async( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.Double> Echo2Async(System.Double x, bool observeOnMainThread = true)
+            public virtual IObservable<System.Double> Echo2Async(System.Double x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.Echo2Async( x,  observeOnMainThread);
+                return this.parent.Echo2Async( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.Int32[]> Echo2Async(System.Int32[] x, bool observeOnMainThread = true)
+            public virtual IObservable<System.Int32[]> Echo2Async(System.Int32[] x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.Echo2Async( x,  observeOnMainThread);
+                return this.parent.Echo2Async( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.String> Echo2Async(System.String x, bool observeOnMainThread = true)
+            public virtual IObservable<System.String> Echo2Async(System.String x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.Echo2Async( x,  observeOnMainThread);
+                return this.parent.Echo2Async( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.Byte[]> Echo2Async(System.Byte[] x, bool observeOnMainThread = true)
+            public virtual IObservable<System.Byte[]> Echo2Async(System.Byte[] x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.Echo2Async( x,  observeOnMainThread);
+                return this.parent.Echo2Async( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.DateTime> Echo2Async(System.DateTime x, bool observeOnMainThread = true)
+            public virtual IObservable<System.DateTime> Echo2Async(System.DateTime x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.Echo2Async( x,  observeOnMainThread);
+                return this.parent.Echo2Async( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.Uri> Echo2Async(System.Uri x, bool observeOnMainThread = true)
+            public virtual IObservable<System.Uri> Echo2Async(System.Uri x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.Echo2Async( x,  observeOnMainThread);
+                return this.parent.Echo2Async( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.Nullable<System.Int32>> Echo2Async(System.Nullable<System.Int32> x, bool observeOnMainThread = true)
+            public virtual IObservable<System.Nullable<System.Int32>> Echo2Async(System.Nullable<System.Int32> x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.Echo2Async( x,  observeOnMainThread);
+                return this.parent.Echo2Async( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.Nullable<System.Double>> Echo2Async(System.Nullable<System.Double> x, bool observeOnMainThread = true)
+            public virtual IObservable<System.Nullable<System.Double>> Echo2Async(System.Nullable<System.Double> x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.Echo2Async( x,  observeOnMainThread);
+                return this.parent.Echo2Async( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.Double[]> Echo2Async(System.Double[] x, bool observeOnMainThread = true)
+            public virtual IObservable<System.Double[]> Echo2Async(System.Double[] x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.Echo2Async( x,  observeOnMainThread);
+                return this.parent.Echo2Async( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.Collections.Generic.List<System.Double>> Echo2Async(System.Collections.Generic.List<System.Double> x, bool observeOnMainThread = true)
+            public virtual IObservable<System.Collections.Generic.List<System.Double>> Echo2Async(System.Collections.Generic.List<System.Double> x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.Echo2Async( x,  observeOnMainThread);
+                return this.parent.Echo2Async( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.Collections.Generic.Dictionary<System.String, System.Int32>> Echo2Async(System.Collections.Generic.Dictionary<System.String, System.Int32> x, bool observeOnMainThread = true)
+            public virtual IObservable<System.Collections.Generic.Dictionary<System.String, System.Int32>> Echo2Async(System.Collections.Generic.Dictionary<System.String, System.Int32> x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.Echo2Async( x,  observeOnMainThread);
+                return this.parent.Echo2Async( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<PhotonWire.Sample.ServerApp.Hubs.MyClass> Echo2Async(PhotonWire.Sample.ServerApp.Hubs.MyClass x, bool observeOnMainThread = true)
+            public virtual IObservable<PhotonWire.Sample.ServerApp.Hubs.MyClass> Echo2Async(PhotonWire.Sample.ServerApp.Hubs.MyClass x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.Echo2Async( x,  observeOnMainThread);
+                return this.parent.Echo2Async( x,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.String> Echo2Async(PhotonWire.Sample.ServerApp.Hubs.Yo yo, bool observeOnMainThread = true)
+            public virtual IObservable<System.String> Echo2Async(PhotonWire.Sample.ServerApp.Hubs.Yo yo, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.Echo2Async( yo,  observeOnMainThread);
+                return this.parent.Echo2Async( yo,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.String> Echo2Async(System.Nullable<PhotonWire.Sample.ServerApp.Hubs.Yo> yo, bool observeOnMainThread = true)
+            public virtual IObservable<System.String> Echo2Async(System.Nullable<PhotonWire.Sample.ServerApp.Hubs.Yo> yo, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.Echo2Async( yo,  observeOnMainThread);
+                return this.parent.Echo2Async( yo,  observeOnMainThread, encrypt);
             }
 
         }
@@ -512,14 +516,14 @@ namespace PhotonWire.Client
                 this.hubId = hubId;
             }
 
-            public IObservable<System.Int32> EchoAsync(System.Int32 x, bool observeOnMainThread = true)
+            public IObservable<System.Int32> EchoAsync(System.Int32 x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 0;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -529,14 +533,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.Byte> EchoAsync(System.Byte x, bool observeOnMainThread = true)
+            public IObservable<System.Byte> EchoAsync(System.Byte x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 1;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -546,14 +550,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.Boolean> EchoAsync(System.Boolean x, bool observeOnMainThread = true)
+            public IObservable<System.Boolean> EchoAsync(System.Boolean x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 2;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -563,14 +567,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.Int16> EchoAsync(System.Int16 x, bool observeOnMainThread = true)
+            public IObservable<System.Int16> EchoAsync(System.Int16 x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 3;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -580,14 +584,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.Int64> EchoAsync(System.Int64 x, bool observeOnMainThread = true)
+            public IObservable<System.Int64> EchoAsync(System.Int64 x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 4;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -597,14 +601,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.Single> EchoAsync(System.Single x, bool observeOnMainThread = true)
+            public IObservable<System.Single> EchoAsync(System.Single x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 5;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -614,14 +618,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.Double> EchoAsync(System.Double x, bool observeOnMainThread = true)
+            public IObservable<System.Double> EchoAsync(System.Double x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 6;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -631,14 +635,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.Int32[]> EchoAsync(System.Int32[] x, bool observeOnMainThread = true)
+            public IObservable<System.Int32[]> EchoAsync(System.Int32[] x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 7;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -648,14 +652,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.String> EchoAsync(System.String x, bool observeOnMainThread = true)
+            public IObservable<System.String> EchoAsync(System.String x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 8;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -665,14 +669,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.Byte[]> EchoAsync(System.Byte[] x, bool observeOnMainThread = true)
+            public IObservable<System.Byte[]> EchoAsync(System.Byte[] x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 9;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -682,14 +686,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.DateTime> EchoAsync(System.DateTime x, bool observeOnMainThread = true)
+            public IObservable<System.DateTime> EchoAsync(System.DateTime x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 10;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -699,14 +703,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.Uri> EchoAsync(System.Uri x, bool observeOnMainThread = true)
+            public IObservable<System.Uri> EchoAsync(System.Uri x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 11;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -716,14 +720,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.Nullable<System.Int32>> EchoAsync(System.Nullable<System.Int32> x, bool observeOnMainThread = true)
+            public IObservable<System.Nullable<System.Int32>> EchoAsync(System.Nullable<System.Int32> x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 12;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -733,14 +737,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.Nullable<System.Double>> EchoAsync(System.Nullable<System.Double> x, bool observeOnMainThread = true)
+            public IObservable<System.Nullable<System.Double>> EchoAsync(System.Nullable<System.Double> x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 13;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -750,14 +754,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.Double[]> EchoAsync(System.Double[] x, bool observeOnMainThread = true)
+            public IObservable<System.Double[]> EchoAsync(System.Double[] x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 14;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -767,14 +771,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.Collections.Generic.List<System.Double>> EchoAsync(System.Collections.Generic.List<System.Double> x, bool observeOnMainThread = true)
+            public IObservable<System.Collections.Generic.List<System.Double>> EchoAsync(System.Collections.Generic.List<System.Double> x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 15;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -784,14 +788,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.Collections.Generic.Dictionary<System.String, System.Int32>> EchoAsync(System.Collections.Generic.Dictionary<System.String, System.Int32> x, bool observeOnMainThread = true)
+            public IObservable<System.Collections.Generic.Dictionary<System.String, System.Int32>> EchoAsync(System.Collections.Generic.Dictionary<System.String, System.Int32> x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 16;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -801,14 +805,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<PhotonWire.Sample.ServerApp.Hubs.MyClass> EchoAsync(PhotonWire.Sample.ServerApp.Hubs.MyClass x, bool observeOnMainThread = true)
+            public IObservable<PhotonWire.Sample.ServerApp.Hubs.MyClass> EchoAsync(PhotonWire.Sample.ServerApp.Hubs.MyClass x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 17;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -818,14 +822,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.String> EchoAsync(PhotonWire.Sample.ServerApp.Hubs.Yo yo, bool observeOnMainThread = true)
+            public IObservable<System.String> EchoAsync(PhotonWire.Sample.ServerApp.Hubs.Yo yo, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 18;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(yo));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -835,14 +839,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.String> EchoAsync(System.Nullable<PhotonWire.Sample.ServerApp.Hubs.Yo> yo, bool observeOnMainThread = true)
+            public IObservable<System.String> EchoAsync(System.Nullable<PhotonWire.Sample.ServerApp.Hubs.Yo> yo, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 19;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(yo));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -852,14 +856,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.Int32> Echo2Async(System.Int32 x, bool observeOnMainThread = true)
+            public IObservable<System.Int32> Echo2Async(System.Int32 x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 20;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -869,14 +873,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.Byte> Echo2Async(System.Byte x, bool observeOnMainThread = true)
+            public IObservable<System.Byte> Echo2Async(System.Byte x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 21;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -886,14 +890,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.Boolean> Echo2Async(System.Boolean x, bool observeOnMainThread = true)
+            public IObservable<System.Boolean> Echo2Async(System.Boolean x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 22;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -903,14 +907,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.Int16> Echo2Async(System.Int16 x, bool observeOnMainThread = true)
+            public IObservable<System.Int16> Echo2Async(System.Int16 x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 23;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -920,14 +924,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.Int64> Echo2Async(System.Int64 x, bool observeOnMainThread = true)
+            public IObservable<System.Int64> Echo2Async(System.Int64 x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 24;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -937,14 +941,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.Single> Echo2Async(System.Single x, bool observeOnMainThread = true)
+            public IObservable<System.Single> Echo2Async(System.Single x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 25;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -954,14 +958,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.Double> Echo2Async(System.Double x, bool observeOnMainThread = true)
+            public IObservable<System.Double> Echo2Async(System.Double x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 26;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -971,14 +975,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.Int32[]> Echo2Async(System.Int32[] x, bool observeOnMainThread = true)
+            public IObservable<System.Int32[]> Echo2Async(System.Int32[] x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 27;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -988,14 +992,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.String> Echo2Async(System.String x, bool observeOnMainThread = true)
+            public IObservable<System.String> Echo2Async(System.String x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 28;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -1005,14 +1009,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.Byte[]> Echo2Async(System.Byte[] x, bool observeOnMainThread = true)
+            public IObservable<System.Byte[]> Echo2Async(System.Byte[] x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 29;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -1022,14 +1026,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.DateTime> Echo2Async(System.DateTime x, bool observeOnMainThread = true)
+            public IObservable<System.DateTime> Echo2Async(System.DateTime x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 30;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -1039,14 +1043,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.Uri> Echo2Async(System.Uri x, bool observeOnMainThread = true)
+            public IObservable<System.Uri> Echo2Async(System.Uri x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 31;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -1056,14 +1060,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.Nullable<System.Int32>> Echo2Async(System.Nullable<System.Int32> x, bool observeOnMainThread = true)
+            public IObservable<System.Nullable<System.Int32>> Echo2Async(System.Nullable<System.Int32> x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 32;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -1073,14 +1077,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.Nullable<System.Double>> Echo2Async(System.Nullable<System.Double> x, bool observeOnMainThread = true)
+            public IObservable<System.Nullable<System.Double>> Echo2Async(System.Nullable<System.Double> x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 33;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -1090,14 +1094,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.Double[]> Echo2Async(System.Double[] x, bool observeOnMainThread = true)
+            public IObservable<System.Double[]> Echo2Async(System.Double[] x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 34;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -1107,14 +1111,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.Collections.Generic.List<System.Double>> Echo2Async(System.Collections.Generic.List<System.Double> x, bool observeOnMainThread = true)
+            public IObservable<System.Collections.Generic.List<System.Double>> Echo2Async(System.Collections.Generic.List<System.Double> x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 35;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -1124,14 +1128,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.Collections.Generic.Dictionary<System.String, System.Int32>> Echo2Async(System.Collections.Generic.Dictionary<System.String, System.Int32> x, bool observeOnMainThread = true)
+            public IObservable<System.Collections.Generic.Dictionary<System.String, System.Int32>> Echo2Async(System.Collections.Generic.Dictionary<System.String, System.Int32> x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 36;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -1141,14 +1145,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<PhotonWire.Sample.ServerApp.Hubs.MyClass> Echo2Async(PhotonWire.Sample.ServerApp.Hubs.MyClass x, bool observeOnMainThread = true)
+            public IObservable<PhotonWire.Sample.ServerApp.Hubs.MyClass> Echo2Async(PhotonWire.Sample.ServerApp.Hubs.MyClass x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 37;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -1158,14 +1162,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.String> Echo2Async(PhotonWire.Sample.ServerApp.Hubs.Yo yo, bool observeOnMainThread = true)
+            public IObservable<System.String> Echo2Async(PhotonWire.Sample.ServerApp.Hubs.Yo yo, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 38;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(yo));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -1175,14 +1179,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.String> Echo2Async(System.Nullable<PhotonWire.Sample.ServerApp.Hubs.Yo> yo, bool observeOnMainThread = true)
+            public IObservable<System.String> Echo2Async(System.Nullable<PhotonWire.Sample.ServerApp.Hubs.Yo> yo, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 39;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(yo));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -1342,12 +1346,12 @@ namespace PhotonWire.Client
 
         public interface IChatHubServerInvoker
         {
-            IObservable<System.String> CreateRoomAsync(System.String roomName, System.String userName, bool observeOnMainThread = true);
-            IObservable<System.String[]> GetRoomsAsync(bool observeOnMainThread = true);
-            IObservable<System.String[]> GetRoomMembersAsync(System.String roomId, bool observeOnMainThread = true);
-            IObservable<Unit> PublishMessageAsync(System.String roomId, System.String message, bool observeOnMainThread = true);
-            IObservable<Unit> JoinRoomAsync(System.String roomId, System.String userName, bool observeOnMainThread = true);
-            IObservable<Unit> LeaveRoomAsync(System.String roomId, bool observeOnMainThread = true);
+            IObservable<System.String> CreateRoomAsync(System.String roomName, System.String userName, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.String[]> GetRoomsAsync(bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.String[]> GetRoomMembersAsync(System.String roomId, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<Unit> PublishMessageAsync(System.String roomId, System.String message, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<Unit> JoinRoomAsync(System.String roomId, System.String userName, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<Unit> LeaveRoomAsync(System.String roomId, bool observeOnMainThread = true, bool encrypt = false);
         }
 
         public class DelegatingChatHubServerInvoker : IChatHubServerInvoker
@@ -1359,34 +1363,34 @@ namespace PhotonWire.Client
                 this.parent = parent;
             }
 
-            public virtual IObservable<System.String> CreateRoomAsync(System.String roomName, System.String userName, bool observeOnMainThread = true)
+            public virtual IObservable<System.String> CreateRoomAsync(System.String roomName, System.String userName, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.CreateRoomAsync( roomName, userName,  observeOnMainThread);
+                return this.parent.CreateRoomAsync( roomName, userName,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.String[]> GetRoomsAsync(bool observeOnMainThread = true)
+            public virtual IObservable<System.String[]> GetRoomsAsync(bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.GetRoomsAsync(  observeOnMainThread);
+                return this.parent.GetRoomsAsync(  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.String[]> GetRoomMembersAsync(System.String roomId, bool observeOnMainThread = true)
+            public virtual IObservable<System.String[]> GetRoomMembersAsync(System.String roomId, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.GetRoomMembersAsync( roomId,  observeOnMainThread);
+                return this.parent.GetRoomMembersAsync( roomId,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<Unit> PublishMessageAsync(System.String roomId, System.String message, bool observeOnMainThread = true)
+            public virtual IObservable<Unit> PublishMessageAsync(System.String roomId, System.String message, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.PublishMessageAsync( roomId, message,  observeOnMainThread);
+                return this.parent.PublishMessageAsync( roomId, message,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<Unit> JoinRoomAsync(System.String roomId, System.String userName, bool observeOnMainThread = true)
+            public virtual IObservable<Unit> JoinRoomAsync(System.String roomId, System.String userName, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.JoinRoomAsync( roomId, userName,  observeOnMainThread);
+                return this.parent.JoinRoomAsync( roomId, userName,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<Unit> LeaveRoomAsync(System.String roomId, bool observeOnMainThread = true)
+            public virtual IObservable<Unit> LeaveRoomAsync(System.String roomId, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.LeaveRoomAsync( roomId,  observeOnMainThread);
+                return this.parent.LeaveRoomAsync( roomId,  observeOnMainThread, encrypt);
             }
 
         }
@@ -1402,7 +1406,7 @@ namespace PhotonWire.Client
                 this.hubId = hubId;
             }
 
-            public IObservable<System.String> CreateRoomAsync(System.String roomName, System.String userName, bool observeOnMainThread = true)
+            public IObservable<System.String> CreateRoomAsync(System.String roomName, System.String userName, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 0;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
@@ -1410,7 +1414,7 @@ namespace PhotonWire.Client
                 parameter.Add(0, PhotonSerializer.Serialize(roomName));
                 parameter.Add(1, PhotonSerializer.Serialize(userName));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -1420,13 +1424,13 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.String[]> GetRoomsAsync(bool observeOnMainThread = true)
+            public IObservable<System.String[]> GetRoomsAsync(bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 1;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -1436,14 +1440,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.String[]> GetRoomMembersAsync(System.String roomId, bool observeOnMainThread = true)
+            public IObservable<System.String[]> GetRoomMembersAsync(System.String roomId, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 2;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(roomId));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -1453,7 +1457,7 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<Unit> PublishMessageAsync(System.String roomId, System.String message, bool observeOnMainThread = true)
+            public IObservable<Unit> PublishMessageAsync(System.String roomId, System.String message, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 3;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
@@ -1461,7 +1465,7 @@ namespace PhotonWire.Client
                 parameter.Add(0, PhotonSerializer.Serialize(roomId));
                 parameter.Add(1, PhotonSerializer.Serialize(message));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -1471,7 +1475,7 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<Unit> JoinRoomAsync(System.String roomId, System.String userName, bool observeOnMainThread = true)
+            public IObservable<Unit> JoinRoomAsync(System.String roomId, System.String userName, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 4;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
@@ -1479,7 +1483,7 @@ namespace PhotonWire.Client
                 parameter.Add(0, PhotonSerializer.Serialize(roomId));
                 parameter.Add(1, PhotonSerializer.Serialize(userName));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -1489,14 +1493,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<Unit> LeaveRoomAsync(System.String roomId, bool observeOnMainThread = true)
+            public IObservable<Unit> LeaveRoomAsync(System.String roomId, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 5;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(roomId));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -1524,17 +1528,17 @@ namespace PhotonWire.Client
                 this.parent = parent;
             }
 
-            public virtual IObservable<ChatClientReceiveMessageResponse> ReceiveMessage(bool observeOnMainThread = true)
+            public virtual IObservable<ChatClientReceiveMessageResponse> ReceiveMessage(bool observeOnMainThread)
             {
                 return this.parent.ReceiveMessage(observeOnMainThread);
             }
 
-            public virtual IObservable<System.String> JoinUser(bool observeOnMainThread = true)
+            public virtual IObservable<System.String> JoinUser(bool observeOnMainThread)
             {
                 return this.parent.JoinUser(observeOnMainThread);
             }
 
-            public virtual IObservable<System.String> LeaveUser(bool observeOnMainThread = true)
+            public virtual IObservable<System.String> LeaveUser(bool observeOnMainThread)
             {
                 return this.parent.LeaveUser(observeOnMainThread);
             }
@@ -1573,7 +1577,7 @@ namespace PhotonWire.Client
                     });
             }
 
-            public IObservable<ChatClientReceiveMessageResponse> ReceiveMessage(bool observeOnMainThread = true)
+            public IObservable<ChatClientReceiveMessageResponse> ReceiveMessage(bool observeOnMainThread)
             {
                 var __result = ReceiveEventData(0)
                     .Select(__args =>
@@ -1601,7 +1605,7 @@ namespace PhotonWire.Client
                 ));
             }
 
-            public IObservable<System.String> JoinUser(bool observeOnMainThread = true)
+            public IObservable<System.String> JoinUser(bool observeOnMainThread)
             {
                 var __result = ReceiveEventData(1)
                     .Select(__args =>
@@ -1620,7 +1624,7 @@ namespace PhotonWire.Client
                 ));
             }
 
-            public IObservable<System.String> LeaveUser(bool observeOnMainThread = true)
+            public IObservable<System.String> LeaveUser(bool observeOnMainThread)
             {
                 var __result = ReceiveEventData(2)
                     .Select(__args =>
@@ -1749,7 +1753,7 @@ namespace PhotonWire.Client
 
         public interface ISimpleHubServerInvoker
         {
-            IObservable<System.String> HogeAsync(System.Int32 x, bool observeOnMainThread = true);
+            IObservable<System.String> HogeAsync(System.Int32 x, bool observeOnMainThread = true, bool encrypt = false);
         }
 
         public class DelegatingSimpleHubServerInvoker : ISimpleHubServerInvoker
@@ -1761,9 +1765,9 @@ namespace PhotonWire.Client
                 this.parent = parent;
             }
 
-            public virtual IObservable<System.String> HogeAsync(System.Int32 x, bool observeOnMainThread = true)
+            public virtual IObservable<System.String> HogeAsync(System.Int32 x, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.HogeAsync( x,  observeOnMainThread);
+                return this.parent.HogeAsync( x,  observeOnMainThread, encrypt);
             }
 
         }
@@ -1779,14 +1783,14 @@ namespace PhotonWire.Client
                 this.hubId = hubId;
             }
 
-            public IObservable<System.String> HogeAsync(System.Int32 x, bool observeOnMainThread = true)
+            public IObservable<System.String> HogeAsync(System.Int32 x, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 0;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(x));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -1814,17 +1818,17 @@ namespace PhotonWire.Client
                 this.parent = parent;
             }
 
-            public virtual IObservable<SimpleHubClientToClientResponse> ToClient(bool observeOnMainThread = true)
+            public virtual IObservable<SimpleHubClientToClientResponse> ToClient(bool observeOnMainThread)
             {
                 return this.parent.ToClient(observeOnMainThread);
             }
 
-            public virtual IObservable<Unit> Blank(bool observeOnMainThread = true)
+            public virtual IObservable<Unit> Blank(bool observeOnMainThread)
             {
                 return this.parent.Blank(observeOnMainThread);
             }
 
-            public virtual IObservable<System.Int32> Single(bool observeOnMainThread = true)
+            public virtual IObservable<System.Int32> Single(bool observeOnMainThread)
             {
                 return this.parent.Single(observeOnMainThread);
             }
@@ -1863,7 +1867,7 @@ namespace PhotonWire.Client
                     });
             }
 
-            public IObservable<SimpleHubClientToClientResponse> ToClient(bool observeOnMainThread = true)
+            public IObservable<SimpleHubClientToClientResponse> ToClient(bool observeOnMainThread)
             {
                 var __result = ReceiveEventData(0)
                     .Select(__args =>
@@ -1891,7 +1895,7 @@ namespace PhotonWire.Client
                 ));
             }
 
-            public IObservable<Unit> Blank(bool observeOnMainThread = true)
+            public IObservable<Unit> Blank(bool observeOnMainThread)
             {
                 var __result = ReceiveEventData(1)
                     .Select(__args =>
@@ -1910,7 +1914,7 @@ namespace PhotonWire.Client
                 ));
             }
 
-            public IObservable<System.Int32> Single(bool observeOnMainThread = true)
+            public IObservable<System.Int32> Single(bool observeOnMainThread)
             {
                 var __result = ReceiveEventData(2)
                     .Select(__args =>
@@ -2013,12 +2017,12 @@ namespace PhotonWire.Client
 
         public interface ITutorialServerInvoker
         {
-            IObservable<System.Int32> SumAsync(System.Int32 x, System.Int32 y, bool observeOnMainThread = true);
-            IObservable<System.String> GetHtmlAsync(System.String url, bool observeOnMainThread = true);
-            IObservable<Unit> BroadcastAllAsync(System.String message, bool observeOnMainThread = true);
-            IObservable<Unit> RegisterGroupAsync(System.String groupName, bool observeOnMainThread = true);
-            IObservable<Unit> BroadcastToAsync(System.String groupName, System.String message, bool observeOnMainThread = true);
-            IObservable<System.Int32> ServerToServerAsync(System.Int32 x, System.Int32 y, bool observeOnMainThread = true);
+            IObservable<System.Int32> SumAsync(System.Int32 x, System.Int32 y, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.String> GetHtmlAsync(System.String url, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<Unit> BroadcastAllAsync(System.String message, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<Unit> RegisterGroupAsync(System.String groupName, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<Unit> BroadcastToAsync(System.String groupName, System.String message, bool observeOnMainThread = true, bool encrypt = false);
+            IObservable<System.Int32> ServerToServerAsync(System.Int32 x, System.Int32 y, bool observeOnMainThread = true, bool encrypt = false);
         }
 
         public class DelegatingTutorialServerInvoker : ITutorialServerInvoker
@@ -2030,34 +2034,34 @@ namespace PhotonWire.Client
                 this.parent = parent;
             }
 
-            public virtual IObservable<System.Int32> SumAsync(System.Int32 x, System.Int32 y, bool observeOnMainThread = true)
+            public virtual IObservable<System.Int32> SumAsync(System.Int32 x, System.Int32 y, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.SumAsync( x, y,  observeOnMainThread);
+                return this.parent.SumAsync( x, y,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.String> GetHtmlAsync(System.String url, bool observeOnMainThread = true)
+            public virtual IObservable<System.String> GetHtmlAsync(System.String url, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.GetHtmlAsync( url,  observeOnMainThread);
+                return this.parent.GetHtmlAsync( url,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<Unit> BroadcastAllAsync(System.String message, bool observeOnMainThread = true)
+            public virtual IObservable<Unit> BroadcastAllAsync(System.String message, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.BroadcastAllAsync( message,  observeOnMainThread);
+                return this.parent.BroadcastAllAsync( message,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<Unit> RegisterGroupAsync(System.String groupName, bool observeOnMainThread = true)
+            public virtual IObservable<Unit> RegisterGroupAsync(System.String groupName, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.RegisterGroupAsync( groupName,  observeOnMainThread);
+                return this.parent.RegisterGroupAsync( groupName,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<Unit> BroadcastToAsync(System.String groupName, System.String message, bool observeOnMainThread = true)
+            public virtual IObservable<Unit> BroadcastToAsync(System.String groupName, System.String message, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.BroadcastToAsync( groupName, message,  observeOnMainThread);
+                return this.parent.BroadcastToAsync( groupName, message,  observeOnMainThread, encrypt);
             }
 
-            public virtual IObservable<System.Int32> ServerToServerAsync(System.Int32 x, System.Int32 y, bool observeOnMainThread = true)
+            public virtual IObservable<System.Int32> ServerToServerAsync(System.Int32 x, System.Int32 y, bool observeOnMainThread, bool encrypt)
             {
-                return this.parent.ServerToServerAsync( x, y,  observeOnMainThread);
+                return this.parent.ServerToServerAsync( x, y,  observeOnMainThread, encrypt);
             }
 
         }
@@ -2073,7 +2077,7 @@ namespace PhotonWire.Client
                 this.hubId = hubId;
             }
 
-            public IObservable<System.Int32> SumAsync(System.Int32 x, System.Int32 y, bool observeOnMainThread = true)
+            public IObservable<System.Int32> SumAsync(System.Int32 x, System.Int32 y, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 0;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
@@ -2081,7 +2085,7 @@ namespace PhotonWire.Client
                 parameter.Add(0, PhotonSerializer.Serialize(x));
                 parameter.Add(1, PhotonSerializer.Serialize(y));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -2091,14 +2095,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.String> GetHtmlAsync(System.String url, bool observeOnMainThread = true)
+            public IObservable<System.String> GetHtmlAsync(System.String url, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 1;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(url));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -2108,14 +2112,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<Unit> BroadcastAllAsync(System.String message, bool observeOnMainThread = true)
+            public IObservable<Unit> BroadcastAllAsync(System.String message, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 2;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(message));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -2125,14 +2129,14 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<Unit> RegisterGroupAsync(System.String groupName, bool observeOnMainThread = true)
+            public IObservable<Unit> RegisterGroupAsync(System.String groupName, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 3;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
                 parameter.Add(ReservedParameterNo.RequestHubId, hubId);
                 parameter.Add(0, PhotonSerializer.Serialize(groupName));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -2142,7 +2146,7 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<Unit> BroadcastToAsync(System.String groupName, System.String message, bool observeOnMainThread = true)
+            public IObservable<Unit> BroadcastToAsync(System.String groupName, System.String message, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 4;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
@@ -2150,7 +2154,7 @@ namespace PhotonWire.Client
                 parameter.Add(0, PhotonSerializer.Serialize(groupName));
                 parameter.Add(1, PhotonSerializer.Serialize(message));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -2160,7 +2164,7 @@ namespace PhotonWire.Client
                 return (observeOnMainThread) ? __response.ObserveOn(CurrentThreadScheduler.Instance) : __response;
             }
 
-            public IObservable<System.Int32> ServerToServerAsync(System.Int32 x, System.Int32 y, bool observeOnMainThread = true)
+            public IObservable<System.Int32> ServerToServerAsync(System.Int32 x, System.Int32 y, bool observeOnMainThread, bool encrypt)
             {
                 byte opCode = 5;
                 var parameter = new System.Collections.Generic.Dictionary<byte, object>();
@@ -2168,7 +2172,7 @@ namespace PhotonWire.Client
                 parameter.Add(0, PhotonSerializer.Serialize(x));
                 parameter.Add(1, PhotonSerializer.Serialize(y));
 
-                var __response = peer.OpCustomAsync(opCode, parameter, true)
+                var __response = peer.OpCustomAsync(opCode, parameter, true, 0, encrypt)
                     .Select(__operationResponse =>
                     {
                         var __result = __operationResponse[ReservedParameterNo.ResponseId];
@@ -2194,7 +2198,7 @@ namespace PhotonWire.Client
                 this.parent = parent;
             }
 
-            public virtual IObservable<System.String> GroupBroadcastMessage(bool observeOnMainThread = true)
+            public virtual IObservable<System.String> GroupBroadcastMessage(bool observeOnMainThread)
             {
                 return this.parent.GroupBroadcastMessage(observeOnMainThread);
             }
@@ -2233,7 +2237,7 @@ namespace PhotonWire.Client
                     });
             }
 
-            public IObservable<System.String> GroupBroadcastMessage(bool observeOnMainThread = true)
+            public IObservable<System.String> GroupBroadcastMessage(bool observeOnMainThread)
             {
                 var __result = ReceiveEventData(0)
                     .Select(__args =>
@@ -2267,10 +2271,9 @@ namespace PhotonWire.Client.GeneratedSerializers
 }
 
 
-namespace PhotonWire.Client.GeneratedSerializers
-{
-
-
+namespace PhotonWire.Client.GeneratedSerializers {
+    
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.6.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     public class System_Nullable_1_System_Int32_Serializer : MsgPack.Serialization.MessagePackSerializer<System.Nullable<int>> {
@@ -2304,10 +2307,9 @@ namespace PhotonWire.Client.GeneratedSerializers
     }
 }
 
-namespace PhotonWire.Client.GeneratedSerializers
-{
-
-
+namespace PhotonWire.Client.GeneratedSerializers {
+    
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.6.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     public class System_Nullable_1_System_Byte_Serializer : MsgPack.Serialization.MessagePackSerializer<System.Nullable<byte>> {
@@ -2341,10 +2343,9 @@ namespace PhotonWire.Client.GeneratedSerializers
     }
 }
 
-namespace PhotonWire.Client.GeneratedSerializers
-{
-
-
+namespace PhotonWire.Client.GeneratedSerializers {
+    
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.6.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     public class System_Nullable_1_System_Boolean_Serializer : MsgPack.Serialization.MessagePackSerializer<System.Nullable<bool>> {
@@ -2378,10 +2379,9 @@ namespace PhotonWire.Client.GeneratedSerializers
     }
 }
 
-namespace PhotonWire.Client.GeneratedSerializers
-{
-
-
+namespace PhotonWire.Client.GeneratedSerializers {
+    
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.6.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     public class System_Nullable_1_System_Int16_Serializer : MsgPack.Serialization.MessagePackSerializer<System.Nullable<short>> {
@@ -2415,10 +2415,9 @@ namespace PhotonWire.Client.GeneratedSerializers
     }
 }
 
-namespace PhotonWire.Client.GeneratedSerializers
-{
-
-
+namespace PhotonWire.Client.GeneratedSerializers {
+    
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.6.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     public class System_Nullable_1_System_Int64_Serializer : MsgPack.Serialization.MessagePackSerializer<System.Nullable<long>> {
@@ -2452,10 +2451,9 @@ namespace PhotonWire.Client.GeneratedSerializers
     }
 }
 
-namespace PhotonWire.Client.GeneratedSerializers
-{
-
-
+namespace PhotonWire.Client.GeneratedSerializers {
+    
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.6.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     public class System_Nullable_1_System_Single_Serializer : MsgPack.Serialization.MessagePackSerializer<System.Nullable<float>> {
@@ -2489,10 +2487,9 @@ namespace PhotonWire.Client.GeneratedSerializers
     }
 }
 
-namespace PhotonWire.Client.GeneratedSerializers
-{
-
-
+namespace PhotonWire.Client.GeneratedSerializers {
+    
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.6.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     public class System_Nullable_1_System_Double_Serializer : MsgPack.Serialization.MessagePackSerializer<System.Nullable<double>> {
@@ -2526,10 +2523,9 @@ namespace PhotonWire.Client.GeneratedSerializers
     }
 }
 
-namespace PhotonWire.Client.GeneratedSerializers
-{
-
-
+namespace PhotonWire.Client.GeneratedSerializers {
+    
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.6.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     public class System_Nullable_1_System_DateTime_Serializer : MsgPack.Serialization.MessagePackSerializer<System.Nullable<System.DateTime>> {
@@ -2561,10 +2557,9 @@ namespace PhotonWire.Client.GeneratedSerializers
     }
 }
 
-namespace PhotonWire.Client.GeneratedSerializers
-{
-
-
+namespace PhotonWire.Client.GeneratedSerializers {
+    
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.6.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     public class PhotonWire_Sample_ServerApp_Hubs_MyClassSerializer : MsgPack.Serialization.MessagePackSerializer<PhotonWire.Sample.ServerApp.Hubs.MyClass> {
@@ -2728,10 +2723,9 @@ namespace PhotonWire.Client.GeneratedSerializers
     }
 }
 
-namespace PhotonWire.Client.GeneratedSerializers
-{
-
-
+namespace PhotonWire.Client.GeneratedSerializers {
+    
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.6.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     public class PhotonWire_Sample_ServerApp_Hubs_MyClass2Serializer : MsgPack.Serialization.MessagePackSerializer<PhotonWire.Sample.ServerApp.Hubs.MyClass2> {
@@ -2807,10 +2801,9 @@ namespace PhotonWire.Client.GeneratedSerializers
     }
 }
 
-namespace PhotonWire.Client.GeneratedSerializers
-{
-
-
+namespace PhotonWire.Client.GeneratedSerializers {
+    
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.6.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     public class PhotonWire_Sample_ServerApp_Hubs_YoSerializer : MsgPack.Serialization.EnumMessagePackSerializer<PhotonWire.Sample.ServerApp.Hubs.Yo> {
@@ -2843,10 +2836,9 @@ namespace PhotonWire.Client.GeneratedSerializers
     }
 }
 
-namespace PhotonWire.Client.GeneratedSerializers
-{
-
-
+namespace PhotonWire.Client.GeneratedSerializers {
+    
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.6.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     public class System_Nullable_1_PhotonWire_Sample_ServerApp_Hubs_Yo_Serializer : MsgPack.Serialization.MessagePackSerializer<System.Nullable<PhotonWire.Sample.ServerApp.Hubs.Yo>> {

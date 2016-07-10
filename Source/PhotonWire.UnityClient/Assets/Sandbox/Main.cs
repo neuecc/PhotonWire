@@ -39,6 +39,9 @@ public class Main : MonoBehaviour
 
         proxy.Receive.ToClient().Subscribe(_ => { });
 
+
+        
+
     }
 }
 
@@ -48,12 +51,9 @@ public class NugaNuga1 : SimpleHubProxy.DelegatingSimpleHubClientReceiver
     {
     }
 
-    public override IObservable<SimpleHubProxy.SimpleHubClientToClientResponse> ToClient(bool observeOnMainThread = true)
+    public override IObservable<SimpleHubProxy.SimpleHubClientToClientResponse> ToClient(bool observeOnMainThread)
     {
-        return base.ToClient(observeOnMainThread)
-            .Do(_ =>
-            {
-            });
+        return base.ToClient(observeOnMainThread);
     }
 }
 
@@ -63,9 +63,9 @@ public class MogeMoge1 : SimpleHubProxy.DelegatingSimpleHubServerInvoker
     {
     }
 
-    public override IObservable<string> HogeAsync(int x, bool observeOnMainThread = true)
+    public override IObservable<string> HogeAsync(int x, bool observeOnMainThread, bool encrypt)
     {
-        return base.HogeAsync(x, observeOnMainThread);
+        return base.HogeAsync(x, observeOnMainThread, encrypt);
     }
 }
 
@@ -74,9 +74,8 @@ public class MogeMoge2 : SimpleHubProxy.DelegatingSimpleHubServerInvoker
     public MogeMoge2(SimpleHubProxy.ISimpleHubServerInvoker parent) : base(parent)
     {
     }
-
-    public override IObservable<string> HogeAsync(int x, bool observeOnMainThread = true)
+    public override IObservable<string> HogeAsync(int x, bool observeOnMainThread, bool encrypt)
     {
-        return base.HogeAsync(x, observeOnMainThread);
+        return base.HogeAsync(x, observeOnMainThread, encrypt);
     }
 }
