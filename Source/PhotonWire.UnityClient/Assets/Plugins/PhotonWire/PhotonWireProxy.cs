@@ -177,23 +177,20 @@ namespace PhotonWire.Client
         protected abstract TServer CreateDefaultInvoke();
         protected abstract void CreateDefaultReceiveAndPublish(out TClient client, out TClientListener publisher);
 
-        public PhotonWireProxy<TServer, TClient, TClientListener> AttachInvokeFilter(Func<TServer, TServer> serverFilterFactory)
+        public void AttachInvokeFilter(Func<TServer, TServer> serverFilterFactory)
         {
             Invoke = serverFilterFactory(Invoke);
-            return this;
         }
 
-        public PhotonWireProxy<TServer, TClient, TClientListener> AttachReceiveFilter(Func<TClient, TClient> clientFilterFactory)
+        public void AttachReceiveFilter(Func<TClient, TClient> clientFilterFactory)
         {
             Receive = clientFilterFactory(Receive);
-            return this;
         }
 
-        public PhotonWireProxy<TServer, TClient, TClientListener> AttachFilter(Func<TServer, TServer> serverFilterFactory, Func<TClient, TClient> clientFilterFactory)
+        public void AttachFilter(Func<TServer, TServer> serverFilterFactory, Func<TClient, TClient> clientFilterFactory)
         {
             Invoke = serverFilterFactory(Invoke);
             Receive = clientFilterFactory(Receive);
-            return this;
         }
     }
 
