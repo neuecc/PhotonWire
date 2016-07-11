@@ -488,6 +488,30 @@ namespace <#= namespaceName #>
             });                
         }
 
+        public new <#= contract.ContractName #> AttachInvokeFilter(Func<I<#= contract.Server.ClassName #>, I<#= contract.Server.ClassName #>> serverFilterFactory)
+        {
+            base.AttachInvokeFilter(serverFilterFactory);
+            return this;
+        }
+
+        public <#= contract.ContractName #> AttachInvokeFilter(Func<<#= contract.ContractName #>, I<#= contract.Server.ClassName #>, I<#= contract.Server.ClassName #>> serverFilterFactory)
+        {
+            base.AttachInvokeFilter(x => serverFilterFactory(this, x));
+            return this;
+        }
+
+        public new <#= contract.ContractName #> AttachReceiveFilter(Func<I<#= contract.Client.ClassName #>, I<#= contract.Client.ClassName #>> clientFilterFactory)
+        {
+            base.AttachReceiveFilter(clientFilterFactory);
+            return this;
+        }
+
+        public new <#= contract.ContractName #> AttachFilter(Func<I<#= contract.Server.ClassName #>, I<#= contract.Server.ClassName #>> serverFilterFactory, Func<I<#= contract.Client.ClassName #>, I<#= contract.Client.ClassName #>> clientFilterFactory)
+        {
+            base.AttachFilter(serverFilterFactory, clientFilterFactory);
+            return this;
+        }
+
         public interface I<#= contract.Server.ClassName #>
         {
 <# foreach(var method in contract.Server.Methods) { #>

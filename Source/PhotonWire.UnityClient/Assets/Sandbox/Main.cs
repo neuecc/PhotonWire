@@ -31,6 +31,10 @@ public class Main : MonoBehaviour
         var peer = new ObservablePhotonPeer(ExitGames.Client.Photon.ConnectionProtocol.Tcp, "Test", 20);
 
         var proxy = peer.CreateTypedHub<SimpleHubProxy>();
+            
+        
+        
+
         proxy.AttachInvokeFilter(x => new MogeMoge1(x));
         proxy.AttachInvokeFilter(x => new MogeMoge2(x));
         proxy.AttachReceiveFilter(x => new NugaNuga1(x));

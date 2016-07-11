@@ -247,6 +247,30 @@ namespace PhotonWire.Client
             });                
         }
 
+        public new ForUnitTestProxy AttachInvokeFilter(Func<IForUnitTestServerInvoker, IForUnitTestServerInvoker> serverFilterFactory)
+        {
+            base.AttachInvokeFilter(serverFilterFactory);
+            return this;
+        }
+
+        public ForUnitTestProxy AttachInvokeFilter(Func<ForUnitTestProxy, IForUnitTestServerInvoker, IForUnitTestServerInvoker> serverFilterFactory)
+        {
+            base.AttachInvokeFilter(x => serverFilterFactory(this, x));
+            return this;
+        }
+
+        public new ForUnitTestProxy AttachReceiveFilter(Func<IForUnitTestClientReceiver, IForUnitTestClientReceiver> clientFilterFactory)
+        {
+            base.AttachReceiveFilter(clientFilterFactory);
+            return this;
+        }
+
+        public new ForUnitTestProxy AttachFilter(Func<IForUnitTestServerInvoker, IForUnitTestServerInvoker> serverFilterFactory, Func<IForUnitTestClientReceiver, IForUnitTestClientReceiver> clientFilterFactory)
+        {
+            base.AttachFilter(serverFilterFactory, clientFilterFactory);
+            return this;
+        }
+
         public interface IForUnitTestServerInvoker
         {
             IObservable<System.Int32> EchoAsync(System.Int32 x, bool observeOnMainThread = true, bool encrypt = false);
@@ -1341,6 +1365,30 @@ namespace PhotonWire.Client
             });                
         }
 
+        public new ChatHubProxy AttachInvokeFilter(Func<IChatHubServerInvoker, IChatHubServerInvoker> serverFilterFactory)
+        {
+            base.AttachInvokeFilter(serverFilterFactory);
+            return this;
+        }
+
+        public ChatHubProxy AttachInvokeFilter(Func<ChatHubProxy, IChatHubServerInvoker, IChatHubServerInvoker> serverFilterFactory)
+        {
+            base.AttachInvokeFilter(x => serverFilterFactory(this, x));
+            return this;
+        }
+
+        public new ChatHubProxy AttachReceiveFilter(Func<IChatHubClientReceiver, IChatHubClientReceiver> clientFilterFactory)
+        {
+            base.AttachReceiveFilter(clientFilterFactory);
+            return this;
+        }
+
+        public new ChatHubProxy AttachFilter(Func<IChatHubServerInvoker, IChatHubServerInvoker> serverFilterFactory, Func<IChatHubClientReceiver, IChatHubClientReceiver> clientFilterFactory)
+        {
+            base.AttachFilter(serverFilterFactory, clientFilterFactory);
+            return this;
+        }
+
         public interface IChatHubServerInvoker
         {
             IObservable<System.String> CreateRoomAsync(System.String roomName, System.String userName, bool observeOnMainThread = true, bool encrypt = false);
@@ -1748,6 +1796,30 @@ namespace PhotonWire.Client
             });                
         }
 
+        public new SimpleHubProxy AttachInvokeFilter(Func<ISimpleHubServerInvoker, ISimpleHubServerInvoker> serverFilterFactory)
+        {
+            base.AttachInvokeFilter(serverFilterFactory);
+            return this;
+        }
+
+        public SimpleHubProxy AttachInvokeFilter(Func<SimpleHubProxy, ISimpleHubServerInvoker, ISimpleHubServerInvoker> serverFilterFactory)
+        {
+            base.AttachInvokeFilter(x => serverFilterFactory(this, x));
+            return this;
+        }
+
+        public new SimpleHubProxy AttachReceiveFilter(Func<ISimpleHubClientReceiver, ISimpleHubClientReceiver> clientFilterFactory)
+        {
+            base.AttachReceiveFilter(clientFilterFactory);
+            return this;
+        }
+
+        public new SimpleHubProxy AttachFilter(Func<ISimpleHubServerInvoker, ISimpleHubServerInvoker> serverFilterFactory, Func<ISimpleHubClientReceiver, ISimpleHubClientReceiver> clientFilterFactory)
+        {
+            base.AttachFilter(serverFilterFactory, clientFilterFactory);
+            return this;
+        }
+
         public interface ISimpleHubServerInvoker
         {
             IObservable<System.String> HogeAsync(System.Int32 x, bool observeOnMainThread = true, bool encrypt = false);
@@ -2010,6 +2082,30 @@ namespace PhotonWire.Client
                         break;
                 }
             });                
+        }
+
+        public new TutorialProxy AttachInvokeFilter(Func<ITutorialServerInvoker, ITutorialServerInvoker> serverFilterFactory)
+        {
+            base.AttachInvokeFilter(serverFilterFactory);
+            return this;
+        }
+
+        public TutorialProxy AttachInvokeFilter(Func<TutorialProxy, ITutorialServerInvoker, ITutorialServerInvoker> serverFilterFactory)
+        {
+            base.AttachInvokeFilter(x => serverFilterFactory(this, x));
+            return this;
+        }
+
+        public new TutorialProxy AttachReceiveFilter(Func<ITutorialClientReceiver, ITutorialClientReceiver> clientFilterFactory)
+        {
+            base.AttachReceiveFilter(clientFilterFactory);
+            return this;
+        }
+
+        public new TutorialProxy AttachFilter(Func<ITutorialServerInvoker, ITutorialServerInvoker> serverFilterFactory, Func<ITutorialClientReceiver, ITutorialClientReceiver> clientFilterFactory)
+        {
+            base.AttachFilter(serverFilterFactory, clientFilterFactory);
+            return this;
         }
 
         public interface ITutorialServerInvoker
