@@ -218,6 +218,7 @@ namespace PhotonWire.Server
                 {
                     System.Diagnostics.Debug.Fail("PhotonWire Initialize Failed", ex.Message);
                 }
+                throw; // can't run.
             }
             PhotonWireEngine.Instance.RegisterApplication(this);
             SetupCore();
