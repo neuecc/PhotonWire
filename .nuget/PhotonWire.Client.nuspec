@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
         <id>PhotonWire.Client</id>
-        <version>1.0.2</version>
+        <version>1.0.4</version>
         <title>PhotonWire.Client</title>
         <authors>neuecc</authors>
         <owners>neuecc</owners>
@@ -10,7 +10,7 @@
         <description>Typed Asynchronous RPC Layer for Photon Server. This package is for .NET client implementation.</description>
         <releaseNotes>
             <![CDATA[
-Initial Release.
+Support Publisher mock.
             ]]>
         </releaseNotes>
         <language>en-US</language>
@@ -18,9 +18,9 @@ Initial Release.
         <projectUrl>https://github.com/neuecc/PhotonWire</projectUrl>
         <tags>Photon MultiPlayer Distributed websockets streaming realtime unity</tags>
         <dependencies>
-            <dependency id="MsgPack.Cli" version="0.6.5" />
-            <dependency id="Newtonsoft.Json" version="7.0.1" />
-            <dependency id="Rx-Main" version="2.2.5" />
+            <dependency id="MsgPack.Cli" version="0.8.0" />
+            <dependency id="Newtonsoft.Json" version="9.0.1" />
+            <dependency id="System.Reactive" version="3.0.0" />
         </dependencies>
     </metadata>
     <files>

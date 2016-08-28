@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
         <id>PhotonWire.Server</id>
-        <version>1.0.3</version>
+        <version>1.0.4</version>
         <title>PhotonWire.Server</title>
         <authors>neuecc</authors>
         <owners>neuecc</owners>
@@ -10,7 +10,7 @@
         <description>Typed Asynchronous RPC Layer for Photon Server. This package is for realtime server implementation.</description>
         <releaseNotes>
             <![CDATA[
-Fix:Server to Server allows nullable.
+Fix:OthersInGroups
             ]]>
         </releaseNotes>
         <language>en-US</language>
@@ -18,9 +18,9 @@ Fix:Server to Server allows nullable.
         <projectUrl>https://github.com/neuecc/PhotonWire</projectUrl>
         <tags>Photon MultiPlayer Distributed websockets streaming realtime unity</tags>
         <dependencies>
-            <dependency id="MsgPack.Cli" version="0.6.5" />
-            <dependency id="Newtonsoft.Json" version="7.0.1" />
-            <dependency id="System.Collections.Immutable" version="1.1.37" />
+            <dependency id="MsgPack.Cli" version="0.8.0" />
+            <dependency id="Newtonsoft.Json" version="9.0.1" />
+            <dependency id="System.Collections.Immutable" version="1.2.0" />
         </dependencies>
     </metadata>
     <files>

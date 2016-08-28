@@ -2,6 +2,7 @@
 #pragma warning disable 612
 #pragma warning disable 414
 #pragma warning disable 168
+#pragma warning disable 162
 
 using System;
 #if (UNITY || UNITY_10 || UNITY_9 || UNITY_8 || UNITY_7 || UNITY_6 || UNITY_5 || UNITY_5_0 || UNITY_4_6 || UNITY_4_5 || UNITY_4_4 || UNITY_4_3 || UNITY_4_2 || UNITY_4_1 || UNITY_4_0_1 || UNITY_4_0 || UNITY_3_5 || UNITY_3_4 || UNITY_3_3 || UNITY_3_2 || UNITY_3_1 || UNITY_3_0_0 || UNITY_3_0 || UNITY_2_6_1 || UNITY_2_6)
@@ -241,6 +242,8 @@ namespace PhotonWire.Client
                         default:
                             return NullTuple;
                     }
+
+                    return NullTuple;
                 })
                 .Where(x => x.Item2 != null)
                 .Multicast(rawPublisher)
@@ -1329,6 +1332,8 @@ namespace PhotonWire.Client
                         default:
                             return NullTuple;
                     }
+
+                    return NullTuple;
                 })
                 .Where(x => x.Item2 != null)
                 .Multicast(rawPublisher)
@@ -1771,6 +1776,8 @@ namespace PhotonWire.Client
                         default:
                             return NullTuple;
                     }
+
+                    return NullTuple;
                 })
                 .Where(x => x.Item2 != null)
                 .Multicast(rawPublisher)
@@ -2083,6 +2090,8 @@ namespace PhotonWire.Client
                         default:
                             return NullTuple;
                     }
+
+                    return NullTuple;
                 })
                 .Where(x => x.Item2 != null)
                 .Multicast(rawPublisher)
@@ -2383,7 +2392,7 @@ namespace PhotonWire.Client.GeneratedSerializers
 namespace PhotonWire.Client.GeneratedSerializers {
     
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.6.0.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.8.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     public class System_Nullable_1_System_Int32_Serializer : MsgPack.Serialization.MessagePackSerializer<System.Nullable<int>> {
         
@@ -2403,23 +2412,13 @@ namespace PhotonWire.Client.GeneratedSerializers {
         protected override System.Nullable<int> UnpackFromCore(MsgPack.Unpacker unpacker) {
             return new System.Nullable<int>(this._serializer0.UnpackFrom(unpacker));
         }
-        
-        private static T @__Conditional<T>(bool condition, T whenTrue, T whenFalse)
-         {
-            if (condition) {
-                return whenTrue;
-            }
-            else {
-                return whenFalse;
-            }
-        }
     }
 }
 
 namespace PhotonWire.Client.GeneratedSerializers {
     
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.6.0.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.8.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     public class System_Nullable_1_System_Byte_Serializer : MsgPack.Serialization.MessagePackSerializer<System.Nullable<byte>> {
         
@@ -2439,23 +2438,13 @@ namespace PhotonWire.Client.GeneratedSerializers {
         protected override System.Nullable<byte> UnpackFromCore(MsgPack.Unpacker unpacker) {
             return new System.Nullable<byte>(this._serializer0.UnpackFrom(unpacker));
         }
-        
-        private static T @__Conditional<T>(bool condition, T whenTrue, T whenFalse)
-         {
-            if (condition) {
-                return whenTrue;
-            }
-            else {
-                return whenFalse;
-            }
-        }
     }
 }
 
 namespace PhotonWire.Client.GeneratedSerializers {
     
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.6.0.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.8.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     public class System_Nullable_1_System_Boolean_Serializer : MsgPack.Serialization.MessagePackSerializer<System.Nullable<bool>> {
         
@@ -2475,23 +2464,13 @@ namespace PhotonWire.Client.GeneratedSerializers {
         protected override System.Nullable<bool> UnpackFromCore(MsgPack.Unpacker unpacker) {
             return new System.Nullable<bool>(this._serializer0.UnpackFrom(unpacker));
         }
-        
-        private static T @__Conditional<T>(bool condition, T whenTrue, T whenFalse)
-         {
-            if (condition) {
-                return whenTrue;
-            }
-            else {
-                return whenFalse;
-            }
-        }
     }
 }
 
 namespace PhotonWire.Client.GeneratedSerializers {
     
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.6.0.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.8.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     public class System_Nullable_1_System_Int16_Serializer : MsgPack.Serialization.MessagePackSerializer<System.Nullable<short>> {
         
@@ -2511,23 +2490,13 @@ namespace PhotonWire.Client.GeneratedSerializers {
         protected override System.Nullable<short> UnpackFromCore(MsgPack.Unpacker unpacker) {
             return new System.Nullable<short>(this._serializer0.UnpackFrom(unpacker));
         }
-        
-        private static T @__Conditional<T>(bool condition, T whenTrue, T whenFalse)
-         {
-            if (condition) {
-                return whenTrue;
-            }
-            else {
-                return whenFalse;
-            }
-        }
     }
 }
 
 namespace PhotonWire.Client.GeneratedSerializers {
     
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.6.0.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.8.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     public class System_Nullable_1_System_Int64_Serializer : MsgPack.Serialization.MessagePackSerializer<System.Nullable<long>> {
         
@@ -2547,23 +2516,13 @@ namespace PhotonWire.Client.GeneratedSerializers {
         protected override System.Nullable<long> UnpackFromCore(MsgPack.Unpacker unpacker) {
             return new System.Nullable<long>(this._serializer0.UnpackFrom(unpacker));
         }
-        
-        private static T @__Conditional<T>(bool condition, T whenTrue, T whenFalse)
-         {
-            if (condition) {
-                return whenTrue;
-            }
-            else {
-                return whenFalse;
-            }
-        }
     }
 }
 
 namespace PhotonWire.Client.GeneratedSerializers {
     
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.6.0.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.8.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     public class System_Nullable_1_System_Single_Serializer : MsgPack.Serialization.MessagePackSerializer<System.Nullable<float>> {
         
@@ -2583,23 +2542,13 @@ namespace PhotonWire.Client.GeneratedSerializers {
         protected override System.Nullable<float> UnpackFromCore(MsgPack.Unpacker unpacker) {
             return new System.Nullable<float>(this._serializer0.UnpackFrom(unpacker));
         }
-        
-        private static T @__Conditional<T>(bool condition, T whenTrue, T whenFalse)
-         {
-            if (condition) {
-                return whenTrue;
-            }
-            else {
-                return whenFalse;
-            }
-        }
     }
 }
 
 namespace PhotonWire.Client.GeneratedSerializers {
     
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.6.0.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.8.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     public class System_Nullable_1_System_Double_Serializer : MsgPack.Serialization.MessagePackSerializer<System.Nullable<double>> {
         
@@ -2619,23 +2568,13 @@ namespace PhotonWire.Client.GeneratedSerializers {
         protected override System.Nullable<double> UnpackFromCore(MsgPack.Unpacker unpacker) {
             return new System.Nullable<double>(this._serializer0.UnpackFrom(unpacker));
         }
-        
-        private static T @__Conditional<T>(bool condition, T whenTrue, T whenFalse)
-         {
-            if (condition) {
-                return whenTrue;
-            }
-            else {
-                return whenFalse;
-            }
-        }
     }
 }
 
 namespace PhotonWire.Client.GeneratedSerializers {
     
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.6.0.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.8.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     public class System_Nullable_1_System_DateTime_Serializer : MsgPack.Serialization.MessagePackSerializer<System.Nullable<System.DateTime>> {
         
@@ -2653,23 +2592,13 @@ namespace PhotonWire.Client.GeneratedSerializers {
         protected override System.Nullable<System.DateTime> UnpackFromCore(MsgPack.Unpacker unpacker) {
             return new System.Nullable<System.DateTime>(this._serializer0.UnpackFrom(unpacker));
         }
-        
-        private static T @__Conditional<T>(bool condition, T whenTrue, T whenFalse)
-         {
-            if (condition) {
-                return whenTrue;
-            }
-            else {
-                return whenFalse;
-            }
-        }
     }
 }
 
 namespace PhotonWire.Client.GeneratedSerializers {
     
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.6.0.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.8.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     public class PhotonWire_Sample_ServerApp_Hubs_MyClassSerializer : MsgPack.Serialization.MessagePackSerializer<PhotonWire.Sample.ServerApp.Hubs.MyClass> {
         
@@ -2678,6 +2607,28 @@ namespace PhotonWire.Client.GeneratedSerializers {
         private MsgPack.Serialization.MessagePackSerializer<string> _serializer1;
         
         private MsgPack.Serialization.MessagePackSerializer<PhotonWire.Sample.ServerApp.Hubs.MyClass2> _serializer2;
+        
+        private System.Collections.Generic.IList<System.Action<MsgPack.Packer, PhotonWire.Sample.ServerApp.Hubs.MyClass>> _packOperationList;
+        
+        private System.Collections.Generic.IDictionary<string, System.Action<MsgPack.Packer, PhotonWire.Sample.ServerApp.Hubs.MyClass>> _packOperationTable;
+        
+        private System.Collections.Generic.IDictionary<string, System.Func<PhotonWire.Sample.ServerApp.Hubs.MyClass, bool>> _nullCheckersTable;
+        
+        private System.Action<PhotonWire.Sample.ServerApp.Hubs.MyClass, int> this_SetUnpackedValueOfMyPropertyADelegate;
+        
+        private System.Func<MsgPack.Unpacker, System.Type, string, int> MsgPack_Serialization_UnpackHelpers_UnpackInt32ValueDelegate;
+        
+        private System.Action<PhotonWire.Sample.ServerApp.Hubs.MyClass, string> this_SetUnpackedValueOfMyPropertyBDelegate;
+        
+        private System.Func<MsgPack.Unpacker, System.Type, string, string> MsgPack_Serialization_UnpackHelpers_UnpackStringValueDelegate;
+        
+        private System.Action<PhotonWire.Sample.ServerApp.Hubs.MyClass, PhotonWire.Sample.ServerApp.Hubs.MyClass2> this_SetUnpackedValueOfMyPropertyCDelegate;
+        
+        private System.Collections.Generic.IList<string> _memberNames;
+        
+        private System.Collections.Generic.IList<System.Action<MsgPack.Unpacker, PhotonWire.Sample.ServerApp.Hubs.MyClass, int, int>> _unpackOperationList;
+        
+        private System.Collections.Generic.IDictionary<string, System.Action<MsgPack.Unpacker, PhotonWire.Sample.ServerApp.Hubs.MyClass, int, int>> _unpackOperationTable;
         
         public PhotonWire_Sample_ServerApp_Hubs_MyClassSerializer(MsgPack.Serialization.SerializationContext context) : 
                 base(context) {
@@ -2690,143 +2641,149 @@ namespace PhotonWire.Client.GeneratedSerializers {
             MsgPack.Serialization.PolymorphismSchema schema2 = default(MsgPack.Serialization.PolymorphismSchema);
             schema2 = null;
             this._serializer2 = context.GetSerializer<PhotonWire.Sample.ServerApp.Hubs.MyClass2>(schema2);
+            System.Action<MsgPack.Packer, PhotonWire.Sample.ServerApp.Hubs.MyClass>[] packOperationList = default(System.Action<MsgPack.Packer, PhotonWire.Sample.ServerApp.Hubs.MyClass>[]);
+            packOperationList = new System.Action<MsgPack.Packer, PhotonWire.Sample.ServerApp.Hubs.MyClass>[3];
+            packOperationList[0] = new System.Action<MsgPack.Packer, PhotonWire.Sample.ServerApp.Hubs.MyClass>(this.PackValueOfMyPropertyA);
+            packOperationList[1] = new System.Action<MsgPack.Packer, PhotonWire.Sample.ServerApp.Hubs.MyClass>(this.PackValueOfMyPropertyB);
+            packOperationList[2] = new System.Action<MsgPack.Packer, PhotonWire.Sample.ServerApp.Hubs.MyClass>(this.PackValueOfMyPropertyC);
+            this._packOperationList = packOperationList;
+            System.Collections.Generic.Dictionary<string, System.Action<MsgPack.Packer, PhotonWire.Sample.ServerApp.Hubs.MyClass>> packOperationTable = default(System.Collections.Generic.Dictionary<string, System.Action<MsgPack.Packer, PhotonWire.Sample.ServerApp.Hubs.MyClass>>);
+            packOperationTable = new System.Collections.Generic.Dictionary<string, System.Action<MsgPack.Packer, PhotonWire.Sample.ServerApp.Hubs.MyClass>>(3);
+            packOperationTable["MyPropertyA"] = new System.Action<MsgPack.Packer, PhotonWire.Sample.ServerApp.Hubs.MyClass>(this.PackValueOfMyPropertyA);
+            packOperationTable["MyPropertyB"] = new System.Action<MsgPack.Packer, PhotonWire.Sample.ServerApp.Hubs.MyClass>(this.PackValueOfMyPropertyB);
+            packOperationTable["MyPropertyC"] = new System.Action<MsgPack.Packer, PhotonWire.Sample.ServerApp.Hubs.MyClass>(this.PackValueOfMyPropertyC);
+            this._packOperationTable = packOperationTable;
+            System.Collections.Generic.Dictionary<string, System.Func<PhotonWire.Sample.ServerApp.Hubs.MyClass, bool>> nullCheckerTable = default(System.Collections.Generic.Dictionary<string, System.Func<PhotonWire.Sample.ServerApp.Hubs.MyClass, bool>>);
+            nullCheckerTable = new System.Collections.Generic.Dictionary<string, System.Func<PhotonWire.Sample.ServerApp.Hubs.MyClass, bool>>(2);
+            nullCheckerTable["MyPropertyB"] = new System.Func<PhotonWire.Sample.ServerApp.Hubs.MyClass, bool>(this.IsMyPropertyBNull);
+            nullCheckerTable["MyPropertyC"] = new System.Func<PhotonWire.Sample.ServerApp.Hubs.MyClass, bool>(this.IsMyPropertyCNull);
+            this._nullCheckersTable = nullCheckerTable;
+            System.Action<MsgPack.Unpacker, PhotonWire.Sample.ServerApp.Hubs.MyClass, int, int>[] unpackOperationList = default(System.Action<MsgPack.Unpacker, PhotonWire.Sample.ServerApp.Hubs.MyClass, int, int>[]);
+            unpackOperationList = new System.Action<MsgPack.Unpacker, PhotonWire.Sample.ServerApp.Hubs.MyClass, int, int>[3];
+            unpackOperationList[0] = new System.Action<MsgPack.Unpacker, PhotonWire.Sample.ServerApp.Hubs.MyClass, int, int>(this.UnpackValueOfMyPropertyA);
+            unpackOperationList[1] = new System.Action<MsgPack.Unpacker, PhotonWire.Sample.ServerApp.Hubs.MyClass, int, int>(this.UnpackValueOfMyPropertyB);
+            unpackOperationList[2] = new System.Action<MsgPack.Unpacker, PhotonWire.Sample.ServerApp.Hubs.MyClass, int, int>(this.UnpackValueOfMyPropertyC);
+            this._unpackOperationList = unpackOperationList;
+            System.Collections.Generic.Dictionary<string, System.Action<MsgPack.Unpacker, PhotonWire.Sample.ServerApp.Hubs.MyClass, int, int>> unpackOperationTable = default(System.Collections.Generic.Dictionary<string, System.Action<MsgPack.Unpacker, PhotonWire.Sample.ServerApp.Hubs.MyClass, int, int>>);
+            unpackOperationTable = new System.Collections.Generic.Dictionary<string, System.Action<MsgPack.Unpacker, PhotonWire.Sample.ServerApp.Hubs.MyClass, int, int>>(3);
+            unpackOperationTable["MyPropertyA"] = new System.Action<MsgPack.Unpacker, PhotonWire.Sample.ServerApp.Hubs.MyClass, int, int>(this.UnpackValueOfMyPropertyA);
+            unpackOperationTable["MyPropertyB"] = new System.Action<MsgPack.Unpacker, PhotonWire.Sample.ServerApp.Hubs.MyClass, int, int>(this.UnpackValueOfMyPropertyB);
+            unpackOperationTable["MyPropertyC"] = new System.Action<MsgPack.Unpacker, PhotonWire.Sample.ServerApp.Hubs.MyClass, int, int>(this.UnpackValueOfMyPropertyC);
+            this._unpackOperationTable = unpackOperationTable;
+            this._memberNames = new string[] {
+                    "MyPropertyA",
+                    "MyPropertyB",
+                    "MyPropertyC"};
+            this.this_SetUnpackedValueOfMyPropertyADelegate = new System.Action<PhotonWire.Sample.ServerApp.Hubs.MyClass, int>(this.SetUnpackedValueOfMyPropertyA);
+            this.MsgPack_Serialization_UnpackHelpers_UnpackInt32ValueDelegate = new System.Func<MsgPack.Unpacker, System.Type, string, int>(MsgPack.Serialization.UnpackHelpers.UnpackInt32Value);
+            this.this_SetUnpackedValueOfMyPropertyBDelegate = new System.Action<PhotonWire.Sample.ServerApp.Hubs.MyClass, string>(this.SetUnpackedValueOfMyPropertyB);
+            this.MsgPack_Serialization_UnpackHelpers_UnpackStringValueDelegate = new System.Func<MsgPack.Unpacker, System.Type, string, string>(MsgPack.Serialization.UnpackHelpers.UnpackStringValue);
+            this.this_SetUnpackedValueOfMyPropertyCDelegate = new System.Action<PhotonWire.Sample.ServerApp.Hubs.MyClass, PhotonWire.Sample.ServerApp.Hubs.MyClass2>(this.SetUnpackedValueOfMyPropertyC);
+        }
+        
+        private void PackValueOfMyPropertyA(MsgPack.Packer packer, PhotonWire.Sample.ServerApp.Hubs.MyClass objectTree) {
+            this._serializer0.PackTo(packer, objectTree.MyPropertyA);
+        }
+        
+        private void PackValueOfMyPropertyB(MsgPack.Packer packer, PhotonWire.Sample.ServerApp.Hubs.MyClass objectTree) {
+            this._serializer1.PackTo(packer, objectTree.MyPropertyB);
+        }
+        
+        private bool IsMyPropertyBNull(PhotonWire.Sample.ServerApp.Hubs.MyClass objectTree) {
+            return (objectTree.MyPropertyB == null);
+        }
+        
+        private void PackValueOfMyPropertyC(MsgPack.Packer packer, PhotonWire.Sample.ServerApp.Hubs.MyClass objectTree) {
+            this._serializer2.PackTo(packer, objectTree.MyPropertyC);
+        }
+        
+        private bool IsMyPropertyCNull(PhotonWire.Sample.ServerApp.Hubs.MyClass objectTree) {
+            return (objectTree.MyPropertyC == null);
         }
         
         protected override void PackToCore(MsgPack.Packer packer, PhotonWire.Sample.ServerApp.Hubs.MyClass objectTree) {
-            packer.PackArrayHeader(3);
-            this._serializer0.PackTo(packer, objectTree.MyPropertyA);
-            this._serializer1.PackTo(packer, objectTree.MyPropertyB);
-            this._serializer2.PackTo(packer, objectTree.MyPropertyC);
+            MsgPack.Serialization.PackToArrayParameters<PhotonWire.Sample.ServerApp.Hubs.MyClass> packHelperParameters = default(MsgPack.Serialization.PackToArrayParameters<PhotonWire.Sample.ServerApp.Hubs.MyClass>);
+            packHelperParameters.Packer = packer;
+            packHelperParameters.Target = objectTree;
+            packHelperParameters.Operations = this._packOperationList;
+            MsgPack.Serialization.PackToMapParameters<PhotonWire.Sample.ServerApp.Hubs.MyClass> packHelperParameters0 = default(MsgPack.Serialization.PackToMapParameters<PhotonWire.Sample.ServerApp.Hubs.MyClass>);
+            packHelperParameters0.Packer = packer;
+            packHelperParameters0.Target = objectTree;
+            packHelperParameters0.Operations = this._packOperationTable;
+            packHelperParameters0.SerializationContext = this.OwnerContext;
+            packHelperParameters0.NullCheckers = this._nullCheckersTable;
+            if ((this.OwnerContext.SerializationMethod == MsgPack.Serialization.SerializationMethod.Array)) {
+                MsgPack.Serialization.PackHelpers.PackToArray(ref packHelperParameters);
+            }
+            else {
+                MsgPack.Serialization.PackHelpers.PackToMap(ref packHelperParameters0);
+            }
+        }
+        
+        private void SetUnpackedValueOfMyPropertyA(PhotonWire.Sample.ServerApp.Hubs.MyClass unpackingContext, int unpackedValue) {
+            unpackingContext.MyPropertyA = unpackedValue;
+        }
+        
+        private void UnpackValueOfMyPropertyA(MsgPack.Unpacker unpacker, PhotonWire.Sample.ServerApp.Hubs.MyClass unpackingContext, int indexOfItem, int itemsCount) {
+            MsgPack.Serialization.UnpackValueTypeValueParameters<PhotonWire.Sample.ServerApp.Hubs.MyClass, int> unpackHelperParameters = default(MsgPack.Serialization.UnpackValueTypeValueParameters<PhotonWire.Sample.ServerApp.Hubs.MyClass, int>);
+            unpackHelperParameters.Unpacker = unpacker;
+            unpackHelperParameters.UnpackingContext = unpackingContext;
+            unpackHelperParameters.Serializer = this._serializer0;
+            unpackHelperParameters.ItemsCount = itemsCount;
+            unpackHelperParameters.Unpacked = indexOfItem;
+            unpackHelperParameters.TargetObjectType = typeof(int);
+            unpackHelperParameters.MemberName = "MyPropertyA";
+            unpackHelperParameters.DirectRead = this.MsgPack_Serialization_UnpackHelpers_UnpackInt32ValueDelegate;
+            unpackHelperParameters.Setter = this.this_SetUnpackedValueOfMyPropertyADelegate;
+            MsgPack.Serialization.UnpackHelpers.UnpackValueTypeValue(ref unpackHelperParameters);
+        }
+        
+        private void SetUnpackedValueOfMyPropertyB(PhotonWire.Sample.ServerApp.Hubs.MyClass unpackingContext, string unpackedValue) {
+            unpackingContext.MyPropertyB = unpackedValue;
+        }
+        
+        private void UnpackValueOfMyPropertyB(MsgPack.Unpacker unpacker, PhotonWire.Sample.ServerApp.Hubs.MyClass unpackingContext, int indexOfItem, int itemsCount) {
+            MsgPack.Serialization.UnpackReferenceTypeValueParameters<PhotonWire.Sample.ServerApp.Hubs.MyClass, string> unpackHelperParameters0 = default(MsgPack.Serialization.UnpackReferenceTypeValueParameters<PhotonWire.Sample.ServerApp.Hubs.MyClass, string>);
+            unpackHelperParameters0.Unpacker = unpacker;
+            unpackHelperParameters0.UnpackingContext = unpackingContext;
+            unpackHelperParameters0.Serializer = this._serializer1;
+            unpackHelperParameters0.ItemsCount = itemsCount;
+            unpackHelperParameters0.Unpacked = indexOfItem;
+            unpackHelperParameters0.TargetObjectType = typeof(string);
+            unpackHelperParameters0.MemberName = "MyPropertyB";
+            unpackHelperParameters0.NilImplication = MsgPack.Serialization.NilImplication.MemberDefault;
+            unpackHelperParameters0.DirectRead = this.MsgPack_Serialization_UnpackHelpers_UnpackStringValueDelegate;
+            unpackHelperParameters0.Setter = this.this_SetUnpackedValueOfMyPropertyBDelegate;
+            MsgPack.Serialization.UnpackHelpers.UnpackReferenceTypeValue(ref unpackHelperParameters0);
+        }
+        
+        private void SetUnpackedValueOfMyPropertyC(PhotonWire.Sample.ServerApp.Hubs.MyClass unpackingContext, PhotonWire.Sample.ServerApp.Hubs.MyClass2 unpackedValue) {
+            unpackingContext.MyPropertyC = unpackedValue;
+        }
+        
+        private void UnpackValueOfMyPropertyC(MsgPack.Unpacker unpacker, PhotonWire.Sample.ServerApp.Hubs.MyClass unpackingContext, int indexOfItem, int itemsCount) {
+            MsgPack.Serialization.UnpackReferenceTypeValueParameters<PhotonWire.Sample.ServerApp.Hubs.MyClass, PhotonWire.Sample.ServerApp.Hubs.MyClass2> unpackHelperParameters1 = default(MsgPack.Serialization.UnpackReferenceTypeValueParameters<PhotonWire.Sample.ServerApp.Hubs.MyClass, PhotonWire.Sample.ServerApp.Hubs.MyClass2>);
+            unpackHelperParameters1.Unpacker = unpacker;
+            unpackHelperParameters1.UnpackingContext = unpackingContext;
+            unpackHelperParameters1.Serializer = this._serializer2;
+            unpackHelperParameters1.ItemsCount = itemsCount;
+            unpackHelperParameters1.Unpacked = indexOfItem;
+            unpackHelperParameters1.TargetObjectType = typeof(PhotonWire.Sample.ServerApp.Hubs.MyClass2);
+            unpackHelperParameters1.MemberName = "MyPropertyC";
+            unpackHelperParameters1.NilImplication = MsgPack.Serialization.NilImplication.MemberDefault;
+            unpackHelperParameters1.DirectRead = null;
+            unpackHelperParameters1.Setter = this.this_SetUnpackedValueOfMyPropertyCDelegate;
+            MsgPack.Serialization.UnpackHelpers.UnpackReferenceTypeValue(ref unpackHelperParameters1);
         }
         
         protected override PhotonWire.Sample.ServerApp.Hubs.MyClass UnpackFromCore(MsgPack.Unpacker unpacker) {
             PhotonWire.Sample.ServerApp.Hubs.MyClass result = default(PhotonWire.Sample.ServerApp.Hubs.MyClass);
             result = new PhotonWire.Sample.ServerApp.Hubs.MyClass();
             if (unpacker.IsArrayHeader) {
-                int unpacked = default(int);
-                int itemsCount = default(int);
-                itemsCount = MsgPack.Serialization.UnpackHelpers.GetItemsCount(unpacker);
-                System.Nullable<int> nullable = default(System.Nullable<int>);
-                if ((unpacked < itemsCount)) {
-                    nullable = MsgPack.Serialization.UnpackHelpers.UnpackNullableInt32Value(unpacker, typeof(PhotonWire.Sample.ServerApp.Hubs.MyClass), "Int32 MyPropertyA");
-                }
-                if (nullable.HasValue) {
-                    result.MyPropertyA = nullable.Value;
-                }
-                unpacked = (unpacked + 1);
-                string nullable0 = default(string);
-                if ((unpacked < itemsCount)) {
-                    nullable0 = MsgPack.Serialization.UnpackHelpers.UnpackStringValue(unpacker, typeof(PhotonWire.Sample.ServerApp.Hubs.MyClass), "System.String MyPropertyB");
-                }
-                if (((nullable0 == null) 
-                            == false)) {
-                    result.MyPropertyB = nullable0;
-                }
-                unpacked = (unpacked + 1);
-                PhotonWire.Sample.ServerApp.Hubs.MyClass2 nullable1 = default(PhotonWire.Sample.ServerApp.Hubs.MyClass2);
-                if ((unpacked < itemsCount)) {
-                    if ((unpacker.Read() == false)) {
-                        throw MsgPack.Serialization.SerializationExceptions.NewMissingItem(2);
-                    }
-                    if (((unpacker.IsArrayHeader == false) 
-                                && (unpacker.IsMapHeader == false))) {
-                        nullable1 = this._serializer2.UnpackFrom(unpacker);
-                    }
-                    else {
-                        MsgPack.Unpacker disposable = default(MsgPack.Unpacker);
-                        disposable = unpacker.ReadSubtree();
-                        try {
-                            nullable1 = this._serializer2.UnpackFrom(disposable);
-                        }
-                        finally {
-                            if (((disposable == null) 
-                                        == false)) {
-                                disposable.Dispose();
-                            }
-                        }
-                    }
-                }
-                if (((nullable1 == null) 
-                            == false)) {
-                    result.MyPropertyC = nullable1;
-                }
-                unpacked = (unpacked + 1);
+                return MsgPack.Serialization.UnpackHelpers.UnpackFromArray(unpacker, result, MsgPack.Serialization.UnpackHelpers.GetIdentity<PhotonWire.Sample.ServerApp.Hubs.MyClass>(), this._memberNames, this._unpackOperationList);
             }
             else {
-                int itemsCount0 = default(int);
-                itemsCount0 = MsgPack.Serialization.UnpackHelpers.GetItemsCount(unpacker);
-                for (int i = 0; (i < itemsCount0); i = (i + 1)) {
-                    string key = default(string);
-                    string nullable2 = default(string);
-                    nullable2 = MsgPack.Serialization.UnpackHelpers.UnpackStringValue(unpacker, typeof(PhotonWire.Sample.ServerApp.Hubs.MyClass), "MemberName");
-                    if (((nullable2 == null) 
-                                == false)) {
-                        key = nullable2;
-                    }
-                    else {
-                        throw MsgPack.Serialization.SerializationExceptions.NewNullIsProhibited("MemberName");
-                    }
-                    if ((key == "MyPropertyC")) {
-                        PhotonWire.Sample.ServerApp.Hubs.MyClass2 nullable5 = default(PhotonWire.Sample.ServerApp.Hubs.MyClass2);
-                        if ((unpacker.Read() == false)) {
-                            throw MsgPack.Serialization.SerializationExceptions.NewMissingItem(i);
-                        }
-                        if (((unpacker.IsArrayHeader == false) 
-                                    && (unpacker.IsMapHeader == false))) {
-                            nullable5 = this._serializer2.UnpackFrom(unpacker);
-                        }
-                        else {
-                            MsgPack.Unpacker disposable0 = default(MsgPack.Unpacker);
-                            disposable0 = unpacker.ReadSubtree();
-                            try {
-                                nullable5 = this._serializer2.UnpackFrom(disposable0);
-                            }
-                            finally {
-                                if (((disposable0 == null) 
-                                            == false)) {
-                                    disposable0.Dispose();
-                                }
-                            }
-                        }
-                        if (((nullable5 == null) 
-                                    == false)) {
-                            result.MyPropertyC = nullable5;
-                        }
-                    }
-                    else {
-                        if ((key == "MyPropertyB")) {
-                            string nullable4 = default(string);
-                            nullable4 = MsgPack.Serialization.UnpackHelpers.UnpackStringValue(unpacker, typeof(PhotonWire.Sample.ServerApp.Hubs.MyClass), "System.String MyPropertyB");
-                            if (((nullable4 == null) 
-                                        == false)) {
-                                result.MyPropertyB = nullable4;
-                            }
-                        }
-                        else {
-                            if ((key == "MyPropertyA")) {
-                                System.Nullable<int> nullable3 = default(System.Nullable<int>);
-                                nullable3 = MsgPack.Serialization.UnpackHelpers.UnpackNullableInt32Value(unpacker, typeof(PhotonWire.Sample.ServerApp.Hubs.MyClass), "Int32 MyPropertyA");
-                                if (nullable3.HasValue) {
-                                    result.MyPropertyA = nullable3.Value;
-                                }
-                            }
-                            else {
-                                unpacker.Skip();
-                            }
-                        }
-                    }
-                }
-            }
-            return result;
-        }
-        
-        private static T @__Conditional<T>(bool condition, T whenTrue, T whenFalse)
-         {
-            if (condition) {
-                return whenTrue;
-            }
-            else {
-                return whenFalse;
+                return MsgPack.Serialization.UnpackHelpers.UnpackFromMap(unpacker, result, MsgPack.Serialization.UnpackHelpers.GetIdentity<PhotonWire.Sample.ServerApp.Hubs.MyClass>(), this._unpackOperationTable);
             }
         }
     }
@@ -2835,76 +2792,107 @@ namespace PhotonWire.Client.GeneratedSerializers {
 namespace PhotonWire.Client.GeneratedSerializers {
     
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.6.0.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.8.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     public class PhotonWire_Sample_ServerApp_Hubs_MyClass2Serializer : MsgPack.Serialization.MessagePackSerializer<PhotonWire.Sample.ServerApp.Hubs.MyClass2> {
         
         private MsgPack.Serialization.MessagePackSerializer<int> _serializer0;
+        
+        private System.Collections.Generic.IList<System.Action<MsgPack.Packer, PhotonWire.Sample.ServerApp.Hubs.MyClass2>> _packOperationList;
+        
+        private System.Collections.Generic.IDictionary<string, System.Action<MsgPack.Packer, PhotonWire.Sample.ServerApp.Hubs.MyClass2>> _packOperationTable;
+        
+        private System.Collections.Generic.IDictionary<string, System.Func<PhotonWire.Sample.ServerApp.Hubs.MyClass2, bool>> _nullCheckersTable;
+        
+        private System.Action<PhotonWire.Sample.ServerApp.Hubs.MyClass2, int> this_SetUnpackedValueOfMyPropertyDelegate;
+        
+        private System.Func<MsgPack.Unpacker, System.Type, string, int> MsgPack_Serialization_UnpackHelpers_UnpackInt32ValueDelegate;
+        
+        private System.Collections.Generic.IList<string> _memberNames;
+        
+        private System.Collections.Generic.IList<System.Action<MsgPack.Unpacker, PhotonWire.Sample.ServerApp.Hubs.MyClass2, int, int>> _unpackOperationList;
+        
+        private System.Collections.Generic.IDictionary<string, System.Action<MsgPack.Unpacker, PhotonWire.Sample.ServerApp.Hubs.MyClass2, int, int>> _unpackOperationTable;
         
         public PhotonWire_Sample_ServerApp_Hubs_MyClass2Serializer(MsgPack.Serialization.SerializationContext context) : 
                 base(context) {
             MsgPack.Serialization.PolymorphismSchema schema0 = default(MsgPack.Serialization.PolymorphismSchema);
             schema0 = null;
             this._serializer0 = context.GetSerializer<int>(schema0);
+            System.Action<MsgPack.Packer, PhotonWire.Sample.ServerApp.Hubs.MyClass2>[] packOperationList = default(System.Action<MsgPack.Packer, PhotonWire.Sample.ServerApp.Hubs.MyClass2>[]);
+            packOperationList = new System.Action<MsgPack.Packer, PhotonWire.Sample.ServerApp.Hubs.MyClass2>[1];
+            packOperationList[0] = new System.Action<MsgPack.Packer, PhotonWire.Sample.ServerApp.Hubs.MyClass2>(this.PackValueOfMyProperty);
+            this._packOperationList = packOperationList;
+            System.Collections.Generic.Dictionary<string, System.Action<MsgPack.Packer, PhotonWire.Sample.ServerApp.Hubs.MyClass2>> packOperationTable = default(System.Collections.Generic.Dictionary<string, System.Action<MsgPack.Packer, PhotonWire.Sample.ServerApp.Hubs.MyClass2>>);
+            packOperationTable = new System.Collections.Generic.Dictionary<string, System.Action<MsgPack.Packer, PhotonWire.Sample.ServerApp.Hubs.MyClass2>>(1);
+            packOperationTable["MyProperty"] = new System.Action<MsgPack.Packer, PhotonWire.Sample.ServerApp.Hubs.MyClass2>(this.PackValueOfMyProperty);
+            this._packOperationTable = packOperationTable;
+            System.Collections.Generic.Dictionary<string, System.Func<PhotonWire.Sample.ServerApp.Hubs.MyClass2, bool>> nullCheckerTable = default(System.Collections.Generic.Dictionary<string, System.Func<PhotonWire.Sample.ServerApp.Hubs.MyClass2, bool>>);
+            nullCheckerTable = new System.Collections.Generic.Dictionary<string, System.Func<PhotonWire.Sample.ServerApp.Hubs.MyClass2, bool>>(0);
+            this._nullCheckersTable = nullCheckerTable;
+            System.Action<MsgPack.Unpacker, PhotonWire.Sample.ServerApp.Hubs.MyClass2, int, int>[] unpackOperationList = default(System.Action<MsgPack.Unpacker, PhotonWire.Sample.ServerApp.Hubs.MyClass2, int, int>[]);
+            unpackOperationList = new System.Action<MsgPack.Unpacker, PhotonWire.Sample.ServerApp.Hubs.MyClass2, int, int>[1];
+            unpackOperationList[0] = new System.Action<MsgPack.Unpacker, PhotonWire.Sample.ServerApp.Hubs.MyClass2, int, int>(this.UnpackValueOfMyProperty);
+            this._unpackOperationList = unpackOperationList;
+            System.Collections.Generic.Dictionary<string, System.Action<MsgPack.Unpacker, PhotonWire.Sample.ServerApp.Hubs.MyClass2, int, int>> unpackOperationTable = default(System.Collections.Generic.Dictionary<string, System.Action<MsgPack.Unpacker, PhotonWire.Sample.ServerApp.Hubs.MyClass2, int, int>>);
+            unpackOperationTable = new System.Collections.Generic.Dictionary<string, System.Action<MsgPack.Unpacker, PhotonWire.Sample.ServerApp.Hubs.MyClass2, int, int>>(1);
+            unpackOperationTable["MyProperty"] = new System.Action<MsgPack.Unpacker, PhotonWire.Sample.ServerApp.Hubs.MyClass2, int, int>(this.UnpackValueOfMyProperty);
+            this._unpackOperationTable = unpackOperationTable;
+            this._memberNames = new string[] {
+                    "MyProperty"};
+            this.this_SetUnpackedValueOfMyPropertyDelegate = new System.Action<PhotonWire.Sample.ServerApp.Hubs.MyClass2, int>(this.SetUnpackedValueOfMyProperty);
+            this.MsgPack_Serialization_UnpackHelpers_UnpackInt32ValueDelegate = new System.Func<MsgPack.Unpacker, System.Type, string, int>(MsgPack.Serialization.UnpackHelpers.UnpackInt32Value);
+        }
+        
+        private void PackValueOfMyProperty(MsgPack.Packer packer, PhotonWire.Sample.ServerApp.Hubs.MyClass2 objectTree) {
+            this._serializer0.PackTo(packer, objectTree.MyProperty);
         }
         
         protected override void PackToCore(MsgPack.Packer packer, PhotonWire.Sample.ServerApp.Hubs.MyClass2 objectTree) {
-            packer.PackArrayHeader(1);
-            this._serializer0.PackTo(packer, objectTree.MyProperty);
+            MsgPack.Serialization.PackToArrayParameters<PhotonWire.Sample.ServerApp.Hubs.MyClass2> packHelperParameters = default(MsgPack.Serialization.PackToArrayParameters<PhotonWire.Sample.ServerApp.Hubs.MyClass2>);
+            packHelperParameters.Packer = packer;
+            packHelperParameters.Target = objectTree;
+            packHelperParameters.Operations = this._packOperationList;
+            MsgPack.Serialization.PackToMapParameters<PhotonWire.Sample.ServerApp.Hubs.MyClass2> packHelperParameters0 = default(MsgPack.Serialization.PackToMapParameters<PhotonWire.Sample.ServerApp.Hubs.MyClass2>);
+            packHelperParameters0.Packer = packer;
+            packHelperParameters0.Target = objectTree;
+            packHelperParameters0.Operations = this._packOperationTable;
+            packHelperParameters0.SerializationContext = this.OwnerContext;
+            packHelperParameters0.NullCheckers = this._nullCheckersTable;
+            if ((this.OwnerContext.SerializationMethod == MsgPack.Serialization.SerializationMethod.Array)) {
+                MsgPack.Serialization.PackHelpers.PackToArray(ref packHelperParameters);
+            }
+            else {
+                MsgPack.Serialization.PackHelpers.PackToMap(ref packHelperParameters0);
+            }
+        }
+        
+        private void SetUnpackedValueOfMyProperty(PhotonWire.Sample.ServerApp.Hubs.MyClass2 unpackingContext, int unpackedValue) {
+            unpackingContext.MyProperty = unpackedValue;
+        }
+        
+        private void UnpackValueOfMyProperty(MsgPack.Unpacker unpacker, PhotonWire.Sample.ServerApp.Hubs.MyClass2 unpackingContext, int indexOfItem, int itemsCount) {
+            MsgPack.Serialization.UnpackValueTypeValueParameters<PhotonWire.Sample.ServerApp.Hubs.MyClass2, int> unpackHelperParameters = default(MsgPack.Serialization.UnpackValueTypeValueParameters<PhotonWire.Sample.ServerApp.Hubs.MyClass2, int>);
+            unpackHelperParameters.Unpacker = unpacker;
+            unpackHelperParameters.UnpackingContext = unpackingContext;
+            unpackHelperParameters.Serializer = this._serializer0;
+            unpackHelperParameters.ItemsCount = itemsCount;
+            unpackHelperParameters.Unpacked = indexOfItem;
+            unpackHelperParameters.TargetObjectType = typeof(int);
+            unpackHelperParameters.MemberName = "MyProperty";
+            unpackHelperParameters.DirectRead = this.MsgPack_Serialization_UnpackHelpers_UnpackInt32ValueDelegate;
+            unpackHelperParameters.Setter = this.this_SetUnpackedValueOfMyPropertyDelegate;
+            MsgPack.Serialization.UnpackHelpers.UnpackValueTypeValue(ref unpackHelperParameters);
         }
         
         protected override PhotonWire.Sample.ServerApp.Hubs.MyClass2 UnpackFromCore(MsgPack.Unpacker unpacker) {
             PhotonWire.Sample.ServerApp.Hubs.MyClass2 result = default(PhotonWire.Sample.ServerApp.Hubs.MyClass2);
             result = new PhotonWire.Sample.ServerApp.Hubs.MyClass2();
             if (unpacker.IsArrayHeader) {
-                int unpacked = default(int);
-                int itemsCount = default(int);
-                itemsCount = MsgPack.Serialization.UnpackHelpers.GetItemsCount(unpacker);
-                System.Nullable<int> nullable = default(System.Nullable<int>);
-                if ((unpacked < itemsCount)) {
-                    nullable = MsgPack.Serialization.UnpackHelpers.UnpackNullableInt32Value(unpacker, typeof(PhotonWire.Sample.ServerApp.Hubs.MyClass2), "Int32 MyProperty");
-                }
-                if (nullable.HasValue) {
-                    result.MyProperty = nullable.Value;
-                }
-                unpacked = (unpacked + 1);
+                return MsgPack.Serialization.UnpackHelpers.UnpackFromArray(unpacker, result, MsgPack.Serialization.UnpackHelpers.GetIdentity<PhotonWire.Sample.ServerApp.Hubs.MyClass2>(), this._memberNames, this._unpackOperationList);
             }
             else {
-                int itemsCount0 = default(int);
-                itemsCount0 = MsgPack.Serialization.UnpackHelpers.GetItemsCount(unpacker);
-                for (int i = 0; (i < itemsCount0); i = (i + 1)) {
-                    string key = default(string);
-                    string nullable0 = default(string);
-                    nullable0 = MsgPack.Serialization.UnpackHelpers.UnpackStringValue(unpacker, typeof(PhotonWire.Sample.ServerApp.Hubs.MyClass2), "MemberName");
-                    if (((nullable0 == null) 
-                                == false)) {
-                        key = nullable0;
-                    }
-                    else {
-                        throw MsgPack.Serialization.SerializationExceptions.NewNullIsProhibited("MemberName");
-                    }
-                    if ((key == "MyProperty")) {
-                        System.Nullable<int> nullable1 = default(System.Nullable<int>);
-                        nullable1 = MsgPack.Serialization.UnpackHelpers.UnpackNullableInt32Value(unpacker, typeof(PhotonWire.Sample.ServerApp.Hubs.MyClass2), "Int32 MyProperty");
-                        if (nullable1.HasValue) {
-                            result.MyProperty = nullable1.Value;
-                        }
-                    }
-                    else {
-                        unpacker.Skip();
-                    }
-                }
-            }
-            return result;
-        }
-        
-        private static T @__Conditional<T>(bool condition, T whenTrue, T whenFalse)
-         {
-            if (condition) {
-                return whenTrue;
-            }
-            else {
-                return whenFalse;
+                return MsgPack.Serialization.UnpackHelpers.UnpackFromMap(unpacker, result, MsgPack.Serialization.UnpackHelpers.GetIdentity<PhotonWire.Sample.ServerApp.Hubs.MyClass2>(), this._unpackOperationTable);
             }
         }
     }
@@ -2913,7 +2901,7 @@ namespace PhotonWire.Client.GeneratedSerializers {
 namespace PhotonWire.Client.GeneratedSerializers {
     
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.6.0.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.8.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     public class PhotonWire_Sample_ServerApp_Hubs_YoSerializer : MsgPack.Serialization.EnumMessagePackSerializer<PhotonWire.Sample.ServerApp.Hubs.Yo> {
         
@@ -2932,23 +2920,13 @@ namespace PhotonWire.Client.GeneratedSerializers {
         protected override PhotonWire.Sample.ServerApp.Hubs.Yo UnpackFromUnderlyingValue(MsgPack.MessagePackObject messagePackObject) {
             return ((PhotonWire.Sample.ServerApp.Hubs.Yo)(messagePackObject.AsInt32()));
         }
-        
-        private static T @__Conditional<T>(bool condition, T whenTrue, T whenFalse)
-         {
-            if (condition) {
-                return whenTrue;
-            }
-            else {
-                return whenFalse;
-            }
-        }
     }
 }
 
 namespace PhotonWire.Client.GeneratedSerializers {
     
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.6.0.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("MsgPack.Serialization.CodeDomSerializers.CodeDomSerializerBuilder", "0.8.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     public class System_Nullable_1_PhotonWire_Sample_ServerApp_Hubs_Yo_Serializer : MsgPack.Serialization.MessagePackSerializer<System.Nullable<PhotonWire.Sample.ServerApp.Hubs.Yo>> {
         
@@ -2966,20 +2944,11 @@ namespace PhotonWire.Client.GeneratedSerializers {
         protected override System.Nullable<PhotonWire.Sample.ServerApp.Hubs.Yo> UnpackFromCore(MsgPack.Unpacker unpacker) {
             return new System.Nullable<PhotonWire.Sample.ServerApp.Hubs.Yo>(this._serializer0.UnpackFrom(unpacker));
         }
-        
-        private static T @__Conditional<T>(bool condition, T whenTrue, T whenFalse)
-         {
-            if (condition) {
-                return whenTrue;
-            }
-            else {
-                return whenFalse;
-            }
-        }
     }
 }
 
-#pragma warning disable 168
+#pragma warning restore 162
+#pragma warning restore 168
 #pragma warning restore 414
 #pragma warning restore 618
 #pragma warning restore 612

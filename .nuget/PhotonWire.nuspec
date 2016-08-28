@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
         <id>PhotonWire</id>
-        <version>1.0.3</version>
+        <version>1.0.4</version>
         <title>PhotonWire</title>
         <authors>neuecc</authors>
         <owners>neuecc</owners>
@@ -10,7 +10,7 @@
         <description>Typed Asynchronous RPC Layer for Photon Server. This package includes Server libs + Analyzer + HubInvoker</description>
         <releaseNotes>
             <![CDATA[
-Fix:Server to Server allows nullable.
+Fix:OthersInGroups
             ]]>
         </releaseNotes>
         <language>en-US</language>
@@ -18,7 +18,7 @@ Fix:Server to Server allows nullable.
         <projectUrl>https://github.com/neuecc/PhotonWire</projectUrl>
         <tags>Photon MultiPlayer Distributed websockets streaming realtime unity</tags>
         <dependencies>
-            <dependency id="PhotonWire.Server" version="1.0.3" />
+            <dependency id="PhotonWire.Server" version="1.0.4" />
             <dependency id="PhotonWire.Analyzer" version="1.0.2" />
         </dependencies>
     </metadata>
