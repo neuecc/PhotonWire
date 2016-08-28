@@ -199,24 +199,6 @@ namespace PhotonWire.Server.ServerToServer
         }
 
         /// <summary>
-        /// Broadcast to all(in current gameserver) except exclude group.
-        /// </summary>
-        public GroupInvoker<T> OthersInGroup(string groupName)
-        {
-            var group = GetPeerManager().GetGroup(groupName);
-            return new GroupInvoker<T>(context, GetPeerManager().GetAll().Except(group));
-        }
-
-        /// <summary>
-        /// Broadcast to all(in current gameserver) except exclude groups.
-        /// </summary>
-        public GroupInvoker<T> OthersInGroups(IEnumerable<string> groupNames)
-        {
-            var group = groupNames.SelectMany(x => GetPeerManager().GetGroup(x));
-            return new GroupInvoker<T>(context, GetPeerManager().GetAll().Except(group));
-        }
-
-        /// <summary>
         /// Broadcast to all(in current gameserver) client.
         /// </summary>
         public GroupInvoker<T> All
@@ -309,6 +291,22 @@ namespace PhotonWire.Server.ServerToServer
             {
                 return new GroupInvoker<T>(context, GetPeerManager().GetExceptOne(operationContext.Peer));
             }
+        }
+
+        /// <summary>
+        /// Broadcast to target group(in current gameserver) except the calling client.
+        /// </summary>
+        public GroupInvoker<T> OthersInGroup(string groupName)
+        {
+            return Group(groupName, operationContext.Peer);
+        }
+
+        /// <summary>
+        /// Broadcast to target groups(in current gameserver) except the calling client.
+        /// </summary>
+        public GroupInvoker<T> OthersInGroups(IList<string> groupNames)
+        {
+            return Groups(groupNames, operationContext.Peer);
         }
     }
 }

@@ -109,24 +109,6 @@ namespace PhotonWire.Server
         }
 
         /// <summary>
-        /// Broadcast to all(in current gameserver) except exclude group.
-        /// </summary>
-        public T OthersInGroup(string groupName)
-        {
-            var group = PeerManager.ClientConnections.GetGroup(groupName);
-            return TypedClientBuilder<T>.Build(context, PeerManager.ClientConnections.GetAll().Except(group));
-        }
-
-        /// <summary>
-        /// Broadcast to all(in current gameserver) except exclude groups.
-        /// </summary>
-        public T OthersInGroups(IEnumerable<string> groupNames)
-        {
-            var group = groupNames.SelectMany(x => PeerManager.ClientConnections.GetGroup(x));
-            return TypedClientBuilder<T>.Build(context, PeerManager.ClientConnections.GetAll().Except(group));
-        }
-
-        /// <summary>
         /// Broadcast to all(in current gameserver) client.
         /// </summary>
         public T All
@@ -193,6 +175,22 @@ namespace PhotonWire.Server
             {
                 return TypedClientBuilder<T>.Build(context, PeerManager.ClientConnections.GetExceptOne(peer));
             }
+        }
+
+        /// <summary>
+        /// Broadcast to target group(in current gameserver) except the calling client.
+        /// </summary>
+        public T OthersInGroup(string groupName)
+        {
+            return Group(groupName, peer);
+        }
+
+        /// <summary>
+        /// Broadcast to target groups(in current gameserver) except the calling client.
+        /// </summary>
+        public T OthersInGroups(IList<string> groupNames)
+        {
+            return Groups(groupNames, peer);
         }
     }
 }
