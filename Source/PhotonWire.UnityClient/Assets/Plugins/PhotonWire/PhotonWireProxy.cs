@@ -165,17 +165,21 @@ namespace PhotonWire.Client
         public void Initialize(ObservablePhotonPeer peer)
         {
             this.Peer = peer;
-            Invoke = CreateDefaultInvoke();
+            
+            TServer invoke;
             TClient client;
             TClientListener publish; 
-            CreateDefaultReceiveAndPublish(out client, out publish);
+            Initialize(out invoke, out client, out publish);
+
+            Invoke = invoke;
             Receive = client;
             Publish = publish;
         }
 
+        protected abstract void Initialize(out TServer invoke, out TClient client, out TClientListener publisher);
+
+        /// <summary>Register broadcast event listener.(Note:can not attach filter)</summary>
         public abstract IDisposable RegisterListener(TClientListener clientListener, bool runOnMainThread = true);
-        protected abstract TServer CreateDefaultInvoke();
-        protected abstract void CreateDefaultReceiveAndPublish(out TClient client, out TClientListener publisher);
 
         public void AttachInvokeFilter(Func<TServer, TServer> serverFilterFactory)
         {
@@ -197,6 +201,10 @@ namespace PhotonWire.Client
     // Auto generated proxy code
     public class ForUnitTestProxy : PhotonWireProxy<ForUnitTestProxy.IForUnitTestServerInvoker, ForUnitTestProxy.IForUnitTestClientReceiver, ForUnitTestProxy.INoClient>
     {
+        static object[] EmptyArray = new object[0];
+        static Tuple<byte, object[]> NullTuple = Tuple.Create((byte)0, (object[])null);
+        IObservable<Tuple<byte, object[]>> receiver = null;
+
         public override short HubId
         {
             get
@@ -213,33 +221,42 @@ namespace PhotonWire.Client
             }
         }
 
-        protected override IForUnitTestServerInvoker CreateDefaultInvoke()
+        protected override void Initialize(out IForUnitTestServerInvoker invoke, out IForUnitTestClientReceiver client, out INoClient publisher)
         {
-            return new ForUnitTestServerInvoker(Peer, HubId);
-        }
+            invoke = new ForUnitTestServerInvoker(Peer, HubId);
 
-        protected override void CreateDefaultReceiveAndPublish(out IForUnitTestClientReceiver client, out INoClient publisher)
-        {
-            var r = new ForUnitTestClientReceiver(Peer, HubId);
+            var rawPublisher = new Subject<Tuple<byte, object[]>>();
+            receiver = Peer.ObserveReceiveEventData()
+                .Select(eventData =>
+                {
+                    object hubIdObj;
+                    if (!eventData.Parameters.TryGetValue(ReservedParameterNo.RequestHubId, out hubIdObj) || Convert.GetTypeCode(hubIdObj) != TypeCode.Int16)
+                    {
+                        return NullTuple;
+                    }
+                    if ((short)hubIdObj != HubId) return NullTuple;
+
+                    switch (eventData.Code)
+                    {
+                        default:
+                            return NullTuple;
+                    }
+                })
+                .Where(x => x.Item2 != null)
+                .Multicast(rawPublisher)
+                .RefCount();
+
+
+            var r = new ForUnitTestClientReceiver(receiver, rawPublisher);
             client = r;
             publisher = r;
         }
         
         public override IDisposable RegisterListener(INoClient clientListener, bool runOnMainThread = true)
         {
-            return Peer.ObserveReceiveEventData().Subscribe(__args =>
+            return receiver.Subscribe(__args =>
             {
-                {
-                    object hubIdObj;
-                    if (!__args.Parameters.TryGetValue(ReservedParameterNo.RequestHubId, out hubIdObj) || Convert.GetTypeCode(hubIdObj) != TypeCode.Int16)
-                    {
-                        return;
-                    }
-                    if ((short)hubIdObj != HubId) return;
-                }
-
-                var __parameters = __args.Parameters;
-                switch (__args.Code)
+                switch (__args.Item1)
                 {
                     default:
                         break;
@@ -1237,33 +1254,14 @@ namespace PhotonWire.Client
 
         public class ForUnitTestClientReceiver : IForUnitTestClientReceiver, INoClient
         {
-            readonly ObservablePhotonPeer peer;
-            readonly short hubId;
-            readonly Subject<Tuple<byte, object>> toClientPublisher;
+            readonly IObservable<Tuple<byte, object[]>> receiver;
+            readonly IObserver<Tuple<byte, object[]>> __publisher;
+            static readonly object[] EmptyArray = new object[0];
 
-            public ForUnitTestClientReceiver(ObservablePhotonPeer peer, short hubId)
+            public ForUnitTestClientReceiver(IObservable<Tuple<byte, object[]>> receiver, IObserver<Tuple<byte, object[]>> publisher)
             {
-                this.peer = peer;
-                this.hubId = hubId;
-                this.toClientPublisher = new Subject<Tuple<Byte, object>>();
-            }
-
-            IObservable<EventData> ReceiveEventData(byte eventCode)
-            {
-                return peer.ObserveReceiveEventData()
-                    .Where(x =>
-                    {
-                        object hubIdObj;
-                        if (!x.Parameters.TryGetValue(ReservedParameterNo.RequestHubId, out hubIdObj) || Convert.GetTypeCode(hubIdObj) != TypeCode.Int16)
-                        {
-                            return false;
-                        }
-
-                        if (x.Code != eventCode) return false;
-                        if ((short)hubIdObj != hubId) return false;
-
-                        return true;
-                    });
+                this.receiver = receiver;
+                this.__publisher = publisher;
             }
 
         }
@@ -1275,6 +1273,10 @@ namespace PhotonWire.Client
     }
     public class ChatHubProxy : PhotonWireProxy<ChatHubProxy.IChatHubServerInvoker, ChatHubProxy.IChatHubClientReceiver, ChatHubProxy.IChatClient>
     {
+        static object[] EmptyArray = new object[0];
+        static Tuple<byte, object[]> NullTuple = Tuple.Create((byte)0, (object[])null);
+        IObservable<Tuple<byte, object[]>> receiver = null;
+
         public override short HubId
         {
             get
@@ -1291,38 +1293,63 @@ namespace PhotonWire.Client
             }
         }
 
-        protected override IChatHubServerInvoker CreateDefaultInvoke()
+        protected override void Initialize(out IChatHubServerInvoker invoke, out IChatHubClientReceiver client, out IChatClient publisher)
         {
-            return new ChatHubServerInvoker(Peer, HubId);
-        }
+            invoke = new ChatHubServerInvoker(Peer, HubId);
 
-        protected override void CreateDefaultReceiveAndPublish(out IChatHubClientReceiver client, out IChatClient publisher)
-        {
-            var r = new ChatHubClientReceiver(Peer, HubId);
+            var rawPublisher = new Subject<Tuple<byte, object[]>>();
+            receiver = Peer.ObserveReceiveEventData()
+                .Select(eventData =>
+                {
+                    object hubIdObj;
+                    if (!eventData.Parameters.TryGetValue(ReservedParameterNo.RequestHubId, out hubIdObj) || Convert.GetTypeCode(hubIdObj) != TypeCode.Int16)
+                    {
+                        return NullTuple;
+                    }
+                    if ((short)hubIdObj != HubId) return NullTuple;
+
+                    switch (eventData.Code)
+                    {
+                        case 0:
+                            return Tuple.Create((byte)0, 
+                                new object[]
+                                {
+                                    (object)PhotonSerializer.Deserialize<System.String>(eventData.Parameters[0]),
+                                    (object)PhotonSerializer.Deserialize<System.String>(eventData.Parameters[1]),
+                                }
+                            );
+                        case 1:
+                            return Tuple.Create((byte)1, 
+                                new object[] { (object)PhotonSerializer.Deserialize<System.String>(eventData.Parameters[0]) }
+                            );
+                        case 2:
+                            return Tuple.Create((byte)2, 
+                                new object[] { (object)PhotonSerializer.Deserialize<System.String>(eventData.Parameters[0]) }
+                            );
+                        default:
+                            return NullTuple;
+                    }
+                })
+                .Where(x => x.Item2 != null)
+                .Multicast(rawPublisher)
+                .RefCount();
+
+
+            var r = new ChatHubClientReceiver(receiver, rawPublisher);
             client = r;
             publisher = r;
         }
         
         public override IDisposable RegisterListener(IChatClient clientListener, bool runOnMainThread = true)
         {
-            return Peer.ObserveReceiveEventData().Subscribe(__args =>
+            return receiver.Subscribe(__args =>
             {
-                {
-                    object hubIdObj;
-                    if (!__args.Parameters.TryGetValue(ReservedParameterNo.RequestHubId, out hubIdObj) || Convert.GetTypeCode(hubIdObj) != TypeCode.Int16)
-                    {
-                        return;
-                    }
-                    if ((short)hubIdObj != HubId) return;
-                }
-
-                var __parameters = __args.Parameters;
-                switch (__args.Code)
+                switch (__args.Item1)
                 {
                     case 0:
                         {
-                            var userName = PhotonSerializer.Deserialize<System.String>(__parameters[0]);
-                            var message = PhotonSerializer.Deserialize<System.String>(__parameters[1]);
+                            var userName = (System.String)(__args.Item2[0]);
+                            var message = (System.String)(__args.Item2[1]);
                             if(runOnMainThread)
                             {
                                 Scheduler.MainThread.Schedule(() => clientListener.ReceiveMessage(userName, message));
@@ -1335,7 +1362,7 @@ namespace PhotonWire.Client
                         break;
                     case 1:
                         {
-                            var userName = PhotonSerializer.Deserialize<System.String>(__parameters[0]);
+                            var userName = (System.String)(__args.Item2[0]);
                             if(runOnMainThread)
                             {
                                 Scheduler.MainThread.Schedule(() => clientListener.JoinUser(userName));
@@ -1348,7 +1375,7 @@ namespace PhotonWire.Client
                         break;
                     case 2:
                         {
-                            var userName = PhotonSerializer.Deserialize<System.String>(__parameters[0]);
+                            var userName = (System.String)(__args.Item2[0]);
                             if(runOnMainThread)
                             {
                                 Scheduler.MainThread.Schedule(() => clientListener.LeaveUser(userName));
@@ -1593,98 +1620,79 @@ namespace PhotonWire.Client
 
         public class ChatHubClientReceiver : IChatHubClientReceiver, IChatClient
         {
-            readonly ObservablePhotonPeer peer;
-            readonly short hubId;
-            readonly Subject<Tuple<byte, object>> toClientPublisher;
+            readonly IObservable<Tuple<byte, object[]>> receiver;
+            readonly IObserver<Tuple<byte, object[]>> __publisher;
+            static readonly object[] EmptyArray = new object[0];
 
-            public ChatHubClientReceiver(ObservablePhotonPeer peer, short hubId)
+            public ChatHubClientReceiver(IObservable<Tuple<byte, object[]>> receiver, IObserver<Tuple<byte, object[]>> publisher)
             {
-                this.peer = peer;
-                this.hubId = hubId;
-                this.toClientPublisher = new Subject<Tuple<Byte, object>>();
-            }
-
-            IObservable<EventData> ReceiveEventData(byte eventCode)
-            {
-                return peer.ObserveReceiveEventData()
-                    .Where(x =>
-                    {
-                        object hubIdObj;
-                        if (!x.Parameters.TryGetValue(ReservedParameterNo.RequestHubId, out hubIdObj) || Convert.GetTypeCode(hubIdObj) != TypeCode.Int16)
-                        {
-                            return false;
-                        }
-
-                        if (x.Code != eventCode) return false;
-                        if ((short)hubIdObj != hubId) return false;
-
-                        return true;
-                    });
+                this.receiver = receiver;
+                this.__publisher = publisher;
             }
 
             public IObservable<ChatClientReceiveMessageResponse> ReceiveMessage(bool observeOnMainThread)
             {
-                var __result = ReceiveEventData(0)
+                var __result = receiver
+                    .Where(__args => __args.Item1 == 0)
                     .Select(__args =>
                     {
                         var ____result = new ChatClientReceiveMessageResponse
                         {
-                            userName = PhotonSerializer.Deserialize<System.String>(__args.Parameters[0]),
-                            message = PhotonSerializer.Deserialize<System.String>(__args.Parameters[1]),
+                            userName = (System.String)(__args.Item2[0]),
+                            message = (System.String)(__args.Item2[1]),
                         };
                         return ____result;
-                    })
-                    .Merge(toClientPublisher.Where(__tuple => __tuple.Item1 == 0).Select(__tuple => (ChatClientReceiveMessageResponse)__tuple.Item2));
+                    });
 
                 return (observeOnMainThread) ? __result.ObserveOn(Scheduler.MainThread) : __result;
             }
 
             void IChatClient.ReceiveMessage(System.String userName, System.String message)
             {
-                toClientPublisher.OnNext(Tuple.Create((byte)0, 
-                (object)new ChatClientReceiveMessageResponse
-                {
-                    userName = userName,
-                    message = message,
-                }
+                __publisher.OnNext(Tuple.Create((byte)0, 
+                    new object[]
+                    {
+                        (object)userName,
+                        (object)message,
+                    }
                 ));
             }
 
             public IObservable<System.String> JoinUser(bool observeOnMainThread)
             {
-                var __result = ReceiveEventData(1)
+                var __result = receiver
+                    .Where(__args => __args.Item1 == 1)
                     .Select(__args =>
                     {
-                        return PhotonSerializer.Deserialize<System.String>(__args.Parameters[0]);
-                    })
-                    .Merge(toClientPublisher.Where(__tuple => __tuple.Item1 == 1).Select(__tuple => (System.String)__tuple.Item2));
+                        return (System.String)(__args.Item2[0]);
+                    });
 
                 return (observeOnMainThread) ? __result.ObserveOn(Scheduler.MainThread) : __result;
             }
 
             void IChatClient.JoinUser(System.String userName)
             {
-                toClientPublisher.OnNext(Tuple.Create((byte)1, 
-                    (object)userName
+                __publisher.OnNext(Tuple.Create((byte)1, 
+                    new object[] { (object)userName }
                 ));
             }
 
             public IObservable<System.String> LeaveUser(bool observeOnMainThread)
             {
-                var __result = ReceiveEventData(2)
+                var __result = receiver
+                    .Where(__args => __args.Item1 == 2)
                     .Select(__args =>
                     {
-                        return PhotonSerializer.Deserialize<System.String>(__args.Parameters[0]);
-                    })
-                    .Merge(toClientPublisher.Where(__tuple => __tuple.Item1 == 2).Select(__tuple => (System.String)__tuple.Item2));
+                        return (System.String)(__args.Item2[0]);
+                    });
 
                 return (observeOnMainThread) ? __result.ObserveOn(Scheduler.MainThread) : __result;
             }
 
             void IChatClient.LeaveUser(System.String userName)
             {
-                toClientPublisher.OnNext(Tuple.Create((byte)2, 
-                    (object)userName
+                __publisher.OnNext(Tuple.Create((byte)2, 
+                    new object[] { (object)userName }
                 ));
             }
 
@@ -1707,6 +1715,10 @@ namespace PhotonWire.Client
     }
     public class SimpleHubProxy : PhotonWireProxy<SimpleHubProxy.ISimpleHubServerInvoker, SimpleHubProxy.ISimpleHubClientReceiver, SimpleHubProxy.ISimpleHubClient>
     {
+        static object[] EmptyArray = new object[0];
+        static Tuple<byte, object[]> NullTuple = Tuple.Create((byte)0, (object[])null);
+        IObservable<Tuple<byte, object[]>> receiver = null;
+
         public override short HubId
         {
             get
@@ -1723,38 +1735,63 @@ namespace PhotonWire.Client
             }
         }
 
-        protected override ISimpleHubServerInvoker CreateDefaultInvoke()
+        protected override void Initialize(out ISimpleHubServerInvoker invoke, out ISimpleHubClientReceiver client, out ISimpleHubClient publisher)
         {
-            return new SimpleHubServerInvoker(Peer, HubId);
-        }
+            invoke = new SimpleHubServerInvoker(Peer, HubId);
 
-        protected override void CreateDefaultReceiveAndPublish(out ISimpleHubClientReceiver client, out ISimpleHubClient publisher)
-        {
-            var r = new SimpleHubClientReceiver(Peer, HubId);
+            var rawPublisher = new Subject<Tuple<byte, object[]>>();
+            receiver = Peer.ObserveReceiveEventData()
+                .Select(eventData =>
+                {
+                    object hubIdObj;
+                    if (!eventData.Parameters.TryGetValue(ReservedParameterNo.RequestHubId, out hubIdObj) || Convert.GetTypeCode(hubIdObj) != TypeCode.Int16)
+                    {
+                        return NullTuple;
+                    }
+                    if ((short)hubIdObj != HubId) return NullTuple;
+
+                    switch (eventData.Code)
+                    {
+                        case 0:
+                            return Tuple.Create((byte)0, 
+                                new object[]
+                                {
+                                    (object)PhotonSerializer.Deserialize<System.Int32>(eventData.Parameters[0]),
+                                    (object)PhotonSerializer.Deserialize<System.Int32>(eventData.Parameters[1]),
+                                }
+                            );
+                        case 1:
+                            return Tuple.Create((byte)1, 
+                                EmptyArray
+                            );
+                        case 2:
+                            return Tuple.Create((byte)2, 
+                                new object[] { (object)PhotonSerializer.Deserialize<System.Int32>(eventData.Parameters[0]) }
+                            );
+                        default:
+                            return NullTuple;
+                    }
+                })
+                .Where(x => x.Item2 != null)
+                .Multicast(rawPublisher)
+                .RefCount();
+
+
+            var r = new SimpleHubClientReceiver(receiver, rawPublisher);
             client = r;
             publisher = r;
         }
         
         public override IDisposable RegisterListener(ISimpleHubClient clientListener, bool runOnMainThread = true)
         {
-            return Peer.ObserveReceiveEventData().Subscribe(__args =>
+            return receiver.Subscribe(__args =>
             {
-                {
-                    object hubIdObj;
-                    if (!__args.Parameters.TryGetValue(ReservedParameterNo.RequestHubId, out hubIdObj) || Convert.GetTypeCode(hubIdObj) != TypeCode.Int16)
-                    {
-                        return;
-                    }
-                    if ((short)hubIdObj != HubId) return;
-                }
-
-                var __parameters = __args.Parameters;
-                switch (__args.Code)
+                switch (__args.Item1)
                 {
                     case 0:
                         {
-                            var x = PhotonSerializer.Deserialize<System.Int32>(__parameters[0]);
-                            var y = PhotonSerializer.Deserialize<System.Int32>(__parameters[1]);
+                            var x = (System.Int32)(__args.Item2[0]);
+                            var y = (System.Int32)(__args.Item2[1]);
                             if(runOnMainThread)
                             {
                                 Scheduler.MainThread.Schedule(() => clientListener.ToClient(x, y));
@@ -1779,7 +1816,7 @@ namespace PhotonWire.Client
                         break;
                     case 2:
                         {
-                            var z = PhotonSerializer.Deserialize<System.Int32>(__parameters[0]);
+                            var z = (System.Int32)(__args.Item2[0]);
                             if(runOnMainThread)
                             {
                                 Scheduler.MainThread.Schedule(() => clientListener.Single(z));
@@ -1907,98 +1944,79 @@ namespace PhotonWire.Client
 
         public class SimpleHubClientReceiver : ISimpleHubClientReceiver, ISimpleHubClient
         {
-            readonly ObservablePhotonPeer peer;
-            readonly short hubId;
-            readonly Subject<Tuple<byte, object>> toClientPublisher;
+            readonly IObservable<Tuple<byte, object[]>> receiver;
+            readonly IObserver<Tuple<byte, object[]>> __publisher;
+            static readonly object[] EmptyArray = new object[0];
 
-            public SimpleHubClientReceiver(ObservablePhotonPeer peer, short hubId)
+            public SimpleHubClientReceiver(IObservable<Tuple<byte, object[]>> receiver, IObserver<Tuple<byte, object[]>> publisher)
             {
-                this.peer = peer;
-                this.hubId = hubId;
-                this.toClientPublisher = new Subject<Tuple<Byte, object>>();
-            }
-
-            IObservable<EventData> ReceiveEventData(byte eventCode)
-            {
-                return peer.ObserveReceiveEventData()
-                    .Where(x =>
-                    {
-                        object hubIdObj;
-                        if (!x.Parameters.TryGetValue(ReservedParameterNo.RequestHubId, out hubIdObj) || Convert.GetTypeCode(hubIdObj) != TypeCode.Int16)
-                        {
-                            return false;
-                        }
-
-                        if (x.Code != eventCode) return false;
-                        if ((short)hubIdObj != hubId) return false;
-
-                        return true;
-                    });
+                this.receiver = receiver;
+                this.__publisher = publisher;
             }
 
             public IObservable<SimpleHubClientToClientResponse> ToClient(bool observeOnMainThread)
             {
-                var __result = ReceiveEventData(0)
+                var __result = receiver
+                    .Where(__args => __args.Item1 == 0)
                     .Select(__args =>
                     {
                         var ____result = new SimpleHubClientToClientResponse
                         {
-                            x = PhotonSerializer.Deserialize<System.Int32>(__args.Parameters[0]),
-                            y = PhotonSerializer.Deserialize<System.Int32>(__args.Parameters[1]),
+                            x = (System.Int32)(__args.Item2[0]),
+                            y = (System.Int32)(__args.Item2[1]),
                         };
                         return ____result;
-                    })
-                    .Merge(toClientPublisher.Where(__tuple => __tuple.Item1 == 0).Select(__tuple => (SimpleHubClientToClientResponse)__tuple.Item2));
+                    });
 
                 return (observeOnMainThread) ? __result.ObserveOn(Scheduler.MainThread) : __result;
             }
 
             void ISimpleHubClient.ToClient(System.Int32 x, System.Int32 y)
             {
-                toClientPublisher.OnNext(Tuple.Create((byte)0, 
-                (object)new SimpleHubClientToClientResponse
-                {
-                    x = x,
-                    y = y,
-                }
+                __publisher.OnNext(Tuple.Create((byte)0, 
+                    new object[]
+                    {
+                        (object)x,
+                        (object)y,
+                    }
                 ));
             }
 
             public IObservable<Unit> Blank(bool observeOnMainThread)
             {
-                var __result = ReceiveEventData(1)
+                var __result = receiver
+                    .Where(__args => __args.Item1 == 1)
                     .Select(__args =>
                     {
                         return Unit.Default;
-                    })
-                    .Merge(toClientPublisher.Where(__tuple => __tuple.Item1 == 1).Select(__tuple => (Unit)__tuple.Item2));
+                    });
 
                 return (observeOnMainThread) ? __result.ObserveOn(Scheduler.MainThread) : __result;
             }
 
             void ISimpleHubClient.Blank()
             {
-                toClientPublisher.OnNext(Tuple.Create((byte)1, 
-                    (object)Unit.Default
+                __publisher.OnNext(Tuple.Create((byte)1, 
+                    EmptyArray
                 ));
             }
 
             public IObservable<System.Int32> Single(bool observeOnMainThread)
             {
-                var __result = ReceiveEventData(2)
+                var __result = receiver
+                    .Where(__args => __args.Item1 == 2)
                     .Select(__args =>
                     {
-                        return PhotonSerializer.Deserialize<System.Int32>(__args.Parameters[0]);
-                    })
-                    .Merge(toClientPublisher.Where(__tuple => __tuple.Item1 == 2).Select(__tuple => (System.Int32)__tuple.Item2));
+                        return (System.Int32)(__args.Item2[0]);
+                    });
 
                 return (observeOnMainThread) ? __result.ObserveOn(Scheduler.MainThread) : __result;
             }
 
             void ISimpleHubClient.Single(System.Int32 z)
             {
-                toClientPublisher.OnNext(Tuple.Create((byte)2, 
-                    (object)z
+                __publisher.OnNext(Tuple.Create((byte)2, 
+                    new object[] { (object)z }
                 ));
             }
 
@@ -2021,6 +2039,10 @@ namespace PhotonWire.Client
     }
     public class TutorialProxy : PhotonWireProxy<TutorialProxy.ITutorialServerInvoker, TutorialProxy.ITutorialClientReceiver, TutorialProxy.ITutorialClient>
     {
+        static object[] EmptyArray = new object[0];
+        static Tuple<byte, object[]> NullTuple = Tuple.Create((byte)0, (object[])null);
+        IObservable<Tuple<byte, object[]>> receiver = null;
+
         public override short HubId
         {
             get
@@ -2037,37 +2059,50 @@ namespace PhotonWire.Client
             }
         }
 
-        protected override ITutorialServerInvoker CreateDefaultInvoke()
+        protected override void Initialize(out ITutorialServerInvoker invoke, out ITutorialClientReceiver client, out ITutorialClient publisher)
         {
-            return new TutorialServerInvoker(Peer, HubId);
-        }
+            invoke = new TutorialServerInvoker(Peer, HubId);
 
-        protected override void CreateDefaultReceiveAndPublish(out ITutorialClientReceiver client, out ITutorialClient publisher)
-        {
-            var r = new TutorialClientReceiver(Peer, HubId);
+            var rawPublisher = new Subject<Tuple<byte, object[]>>();
+            receiver = Peer.ObserveReceiveEventData()
+                .Select(eventData =>
+                {
+                    object hubIdObj;
+                    if (!eventData.Parameters.TryGetValue(ReservedParameterNo.RequestHubId, out hubIdObj) || Convert.GetTypeCode(hubIdObj) != TypeCode.Int16)
+                    {
+                        return NullTuple;
+                    }
+                    if ((short)hubIdObj != HubId) return NullTuple;
+
+                    switch (eventData.Code)
+                    {
+                        case 0:
+                            return Tuple.Create((byte)0, 
+                                new object[] { (object)PhotonSerializer.Deserialize<System.String>(eventData.Parameters[0]) }
+                            );
+                        default:
+                            return NullTuple;
+                    }
+                })
+                .Where(x => x.Item2 != null)
+                .Multicast(rawPublisher)
+                .RefCount();
+
+
+            var r = new TutorialClientReceiver(receiver, rawPublisher);
             client = r;
             publisher = r;
         }
         
         public override IDisposable RegisterListener(ITutorialClient clientListener, bool runOnMainThread = true)
         {
-            return Peer.ObserveReceiveEventData().Subscribe(__args =>
+            return receiver.Subscribe(__args =>
             {
-                {
-                    object hubIdObj;
-                    if (!__args.Parameters.TryGetValue(ReservedParameterNo.RequestHubId, out hubIdObj) || Convert.GetTypeCode(hubIdObj) != TypeCode.Int16)
-                    {
-                        return;
-                    }
-                    if ((short)hubIdObj != HubId) return;
-                }
-
-                var __parameters = __args.Parameters;
-                switch (__args.Code)
+                switch (__args.Item1)
                 {
                     case 0:
                         {
-                            var message = PhotonSerializer.Deserialize<System.String>(__parameters[0]);
+                            var message = (System.String)(__args.Item2[0]);
                             if(runOnMainThread)
                             {
                                 Scheduler.MainThread.Schedule(() => clientListener.GroupBroadcastMessage(message));
@@ -2301,51 +2336,32 @@ namespace PhotonWire.Client
 
         public class TutorialClientReceiver : ITutorialClientReceiver, ITutorialClient
         {
-            readonly ObservablePhotonPeer peer;
-            readonly short hubId;
-            readonly Subject<Tuple<byte, object>> toClientPublisher;
+            readonly IObservable<Tuple<byte, object[]>> receiver;
+            readonly IObserver<Tuple<byte, object[]>> __publisher;
+            static readonly object[] EmptyArray = new object[0];
 
-            public TutorialClientReceiver(ObservablePhotonPeer peer, short hubId)
+            public TutorialClientReceiver(IObservable<Tuple<byte, object[]>> receiver, IObserver<Tuple<byte, object[]>> publisher)
             {
-                this.peer = peer;
-                this.hubId = hubId;
-                this.toClientPublisher = new Subject<Tuple<Byte, object>>();
-            }
-
-            IObservable<EventData> ReceiveEventData(byte eventCode)
-            {
-                return peer.ObserveReceiveEventData()
-                    .Where(x =>
-                    {
-                        object hubIdObj;
-                        if (!x.Parameters.TryGetValue(ReservedParameterNo.RequestHubId, out hubIdObj) || Convert.GetTypeCode(hubIdObj) != TypeCode.Int16)
-                        {
-                            return false;
-                        }
-
-                        if (x.Code != eventCode) return false;
-                        if ((short)hubIdObj != hubId) return false;
-
-                        return true;
-                    });
+                this.receiver = receiver;
+                this.__publisher = publisher;
             }
 
             public IObservable<System.String> GroupBroadcastMessage(bool observeOnMainThread)
             {
-                var __result = ReceiveEventData(0)
+                var __result = receiver
+                    .Where(__args => __args.Item1 == 0)
                     .Select(__args =>
                     {
-                        return PhotonSerializer.Deserialize<System.String>(__args.Parameters[0]);
-                    })
-                    .Merge(toClientPublisher.Where(__tuple => __tuple.Item1 == 0).Select(__tuple => (System.String)__tuple.Item2));
+                        return (System.String)(__args.Item2[0]);
+                    });
 
                 return (observeOnMainThread) ? __result.ObserveOn(Scheduler.MainThread) : __result;
             }
 
             void ITutorialClient.GroupBroadcastMessage(System.String message)
             {
-                toClientPublisher.OnNext(Tuple.Create((byte)0, 
-                    (object)message
+                __publisher.OnNext(Tuple.Create((byte)0, 
+                    new object[] { (object)message }
                 ));
             }
 

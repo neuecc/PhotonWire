@@ -28,6 +28,7 @@ namespace PhotonWire.Sample.ConsoleApp
             var observablePeer = new ObservablePhotonPeer(ConnectionProtocol.Tcp);
             observablePeer.Timeout = TimeSpan.FromMinutes(15); // toooooo long
 
+
             observablePeer.DebugOut = DebugLevel.ALL;
             observablePeer.Connect("127.0.0.1:4530", "ServerApp");
 
@@ -50,17 +51,38 @@ namespace PhotonWire.Sample.ConsoleApp
 
 
             // Create Typed Proxy
-            var hub = observablePeer.CreateTypedHub<ForUnitTestProxy>();
-            // hub.RegisterListener(new Program()/* this */);
+            var hub = observablePeer.CreateTypedHub<SimpleHubProxy>();
+            hub.RegisterListener(new Listener());
+
+            
+
+
+            hub.Publish.Blank();
+            hub.Publish.Single(100);
+            hub.Publish.ToClient(10, 20);
 
             while (true)
             {
-                var message = Console.ReadLine();
-
-                hub.Invoke.Echo2Async(100)
-                    .Subscribe();
-
+                Console.ReadLine();
             }
+        }
+    }
+
+    public class Listener : SimpleHubProxy.ISimpleHubClient
+    {
+        public void Blank()
+        {
+            Console.WriteLine("Blank");
+        }
+
+        public void Single(int z)
+        {
+            Console.WriteLine("Single:" + z);
+        }
+
+        public void ToClient(int x, int y)
+        {
+            Console.WriteLine("ToClient(" + x + ", " + y + ")");
         }
     }
 }

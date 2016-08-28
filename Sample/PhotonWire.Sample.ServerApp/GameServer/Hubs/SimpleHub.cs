@@ -20,11 +20,15 @@ namespace PhotonWire.Sample.ServerApp.GameServer.Hubs
     }
 
     [Hub(9932)]
-    public class SimpleHub :Hub<ISimpleHubClient>
+    public class SimpleHub : Hub<ISimpleHubClient>
     {
         [Operation(0)]
         public string Hoge(int x)
         {
+            Clients.All.Blank();
+            Clients.All.Single(x);
+            Clients.All.ToClient(x, x * x);
+
             return x.ToString();
         }
     }

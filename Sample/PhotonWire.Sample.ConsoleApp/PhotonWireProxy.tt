@@ -388,35 +388,36 @@ namespace <#= namespaceName #>
         public void Initialize(ObservablePhotonPeer peer)
         {
             this.Peer = peer;
-            Invoke = CreateDefaultInvoke();
+            
+            TServer invoke;
             TClient client;
             TClientListener publish; 
-            CreateDefaultReceiveAndPublish(out client, out publish);
+            Initialize(out invoke, out client, out publish);
+
+            Invoke = invoke;
             Receive = client;
             Publish = publish;
         }
 
+        protected abstract void Initialize(out TServer invoke, out TClient client, out TClientListener publisher);
+
+        /// <summary>Register broadcast event listener.(Note:can not attach filter)</summary>
         public abstract IDisposable RegisterListener(TClientListener clientListener, bool runOnMainThread = true);
-        protected abstract TServer CreateDefaultInvoke();
-        protected abstract void CreateDefaultReceiveAndPublish(out TClient client, out TClientListener publisher);
 
-        public PhotonWireProxy<TServer, TClient, TClientListener> AttachInvokeFilter(Func<TServer, TServer> serverFilterFactory)
+        public void AttachInvokeFilter(Func<TServer, TServer> serverFilterFactory)
         {
             Invoke = serverFilterFactory(Invoke);
-            return this;
         }
 
-        public PhotonWireProxy<TServer, TClient, TClientListener> AttachReceiveFilter(Func<TClient, TClient> clientFilterFactory)
+        public void AttachReceiveFilter(Func<TClient, TClient> clientFilterFactory)
         {
             Receive = clientFilterFactory(Receive);
-            return this;
         }
 
-        public PhotonWireProxy<TServer, TClient, TClientListener> AttachFilter(Func<TServer, TServer> serverFilterFactory, Func<TClient, TClient> clientFilterFactory)
+        public void AttachFilter(Func<TServer, TServer> serverFilterFactory, Func<TClient, TClient> clientFilterFactory)
         {
             Invoke = serverFilterFactory(Invoke);
             Receive = clientFilterFactory(Receive);
-            return this;
         }
     }
 
@@ -424,6 +425,10 @@ namespace <#= namespaceName #>
 <# foreach(var contract in contracts) { #>
     public class <#= contract.ContractName #> : PhotonWireProxy<<#= contract.ContractName #>.I<#= contract.Server.ClassName #>, <#= contract.ContractName #>.I<#= contract.Client.ClassName #>, <#= contract.ContractName #>.<#= contract.Client.OriginalType.Name #>>
     {
+        static object[] EmptyArray = new object[0];
+        static Tuple<byte, object[]> NullTuple = Tuple.Create((byte)0, (object[])null);
+        IObservable<Tuple<byte, object[]>> receiver = null;
+
         public override short HubId
         {
             get
@@ -440,39 +445,67 @@ namespace <#= namespaceName #>
             }
         }
 
-        protected override I<#= contract.Server.ClassName #> CreateDefaultInvoke()
+        protected override void Initialize(out I<#= contract.Server.ClassName #> invoke, out I<#= contract.Client.ClassName #> client, out <#= contract.Client.OriginalType.Name #> publisher)
         {
-            return new <#= contract.Server.ClassName #>(Peer, HubId);
-        }
+            invoke = new <#= contract.Server.ClassName #>(Peer, HubId);
 
-        protected override void CreateDefaultReceiveAndPublish(out I<#= contract.Client.ClassName #> client, out <#= contract.Client.OriginalType.Name #> publisher)
-        {
-            var r = new <#= contract.Client.ClassName #>(Peer, HubId);
+            var rawPublisher = new Subject<Tuple<byte, object[]>>();
+            receiver = Peer.ObserveReceiveEventData()
+                .Select(eventData =>
+                {
+                    object hubIdObj;
+                    if (!eventData.Parameters.TryGetValue(ReservedParameterNo.RequestHubId, out hubIdObj) || Convert.GetTypeCode(hubIdObj) != TypeCode.Int16)
+                    {
+                        return NullTuple;
+                    }
+                    if ((short)hubIdObj != HubId) return NullTuple;
+
+                    switch (eventData.Code)
+                    {
+<# foreach(var method in contract.Client.Methods) { #>
+                        case <#= method.OperationCode #>:
+                            return Tuple.Create((byte)<#= method.OperationCode #>, 
+<# if (method.ExternalTypeParameters.Length == 0 ) { #>
+<# if (method.OriginalParameters.Length == 0 ) { #>
+                                EmptyArray
+<# } else {  #>
+                                new object[] { (object)PhotonSerializer.Deserialize<<#= method.ReturnTypeName #>>(eventData.Parameters[0]) }
+<# } #>
+<# } else { #>
+                                new object[]
+                                {
+<# for(var i = 0; i < method.ExternalTypeParameters.Length; i++) { #>
+                                    (object)PhotonSerializer.Deserialize<<#= method.ExternalTypeParameters[i].TypeName #>>(eventData.Parameters[<#= i #>]),
+<# } #>
+                                }
+<# } #>
+                            );
+<# } #>
+                        default:
+                            return NullTuple;
+                    }
+                })
+                .Where(x => x.Item2 != null)
+                .Multicast(rawPublisher)
+                .RefCount();
+
+
+            var r = new <#= contract.Client.ClassName #>(receiver, rawPublisher);
             client = r;
             publisher = r;
         }
         
         public override IDisposable RegisterListener(<#= contract.Client.OriginalType.Name #> clientListener, bool runOnMainThread = true)
         {
-            return Peer.ObserveReceiveEventData().Subscribe(__args =>
+            return receiver.Subscribe(__args =>
             {
-                {
-                    object hubIdObj;
-                    if (!__args.Parameters.TryGetValue(ReservedParameterNo.RequestHubId, out hubIdObj) || Convert.GetTypeCode(hubIdObj) != TypeCode.Int16)
-                    {
-                        return;
-                    }
-                    if ((short)hubIdObj != HubId) return;
-                }
-
-                var __parameters = __args.Parameters;
-                switch (__args.Code)
+                switch (__args.Item1)
                 {
 <# foreach(var method in contract.Client.Methods) { #>
                     case <#= method.OperationCode #>:
                         {
 <# for(var i = 0; i < method.OriginalParameters.Length; i++) { #>
-                            var <#= method.OriginalParameters[i].Name #> = PhotonSerializer.Deserialize<<#= method.OriginalParameters[i].TypeName #>>(__parameters[<#= i #>]);
+                            var <#= method.OriginalParameters[i].Name #> = (<#= method.OriginalParameters[i].TypeName #>)(__args.Item2[<#= i #>]);
 <# } #>
                             if(runOnMainThread)
                             {
@@ -489,6 +522,30 @@ namespace <#= namespaceName #>
                         break;
                 }
             });                
+        }
+
+        public new <#= contract.ContractName #> AttachInvokeFilter(Func<I<#= contract.Server.ClassName #>, I<#= contract.Server.ClassName #>> serverFilterFactory)
+        {
+            base.AttachInvokeFilter(serverFilterFactory);
+            return this;
+        }
+
+        public <#= contract.ContractName #> AttachInvokeFilter(Func<<#= contract.ContractName #>, I<#= contract.Server.ClassName #>, I<#= contract.Server.ClassName #>> serverFilterFactory)
+        {
+            base.AttachInvokeFilter(x => serverFilterFactory(this, x));
+            return this;
+        }
+
+        public new <#= contract.ContractName #> AttachReceiveFilter(Func<I<#= contract.Client.ClassName #>, I<#= contract.Client.ClassName #>> clientFilterFactory)
+        {
+            base.AttachReceiveFilter(clientFilterFactory);
+            return this;
+        }
+
+        public new <#= contract.ContractName #> AttachFilter(Func<I<#= contract.Server.ClassName #>, I<#= contract.Server.ClassName #>> serverFilterFactory, Func<I<#= contract.Client.ClassName #>, I<#= contract.Client.ClassName #>> clientFilterFactory)
+        {
+            base.AttachFilter(serverFilterFactory, clientFilterFactory);
+            return this;
         }
 
         public interface I<#= contract.Server.ClassName #>
@@ -578,76 +635,57 @@ namespace <#= namespaceName #>
 
         public class <#= contract.Client.ClassName #> : I<#= contract.Client.ClassName #>, <#= contract.Client.OriginalType.Name #>
         {
-            readonly ObservablePhotonPeer peer;
-            readonly short hubId;
-            readonly Subject<Tuple<byte, object>> toClientPublisher;
+            readonly IObservable<Tuple<byte, object[]>> receiver;
+            readonly IObserver<Tuple<byte, object[]>> __publisher;
+            static readonly object[] EmptyArray = new object[0];
 
-            public <#= contract.Client.ClassName #>(ObservablePhotonPeer peer, short hubId)
+            public <#= contract.Client.ClassName #>(IObservable<Tuple<byte, object[]>> receiver, IObserver<Tuple<byte, object[]>> publisher)
             {
-                this.peer = peer;
-                this.hubId = hubId;
-                this.toClientPublisher = new Subject<Tuple<Byte, object>>();
-            }
-
-            IObservable<EventData> ReceiveEventData(byte eventCode)
-            {
-                return peer.ObserveReceiveEventData()
-                    .Where(x =>
-                    {
-                        object hubIdObj;
-                        if (!x.Parameters.TryGetValue(ReservedParameterNo.RequestHubId, out hubIdObj) || Convert.GetTypeCode(hubIdObj) != TypeCode.Int16)
-                        {
-                            return false;
-                        }
-
-                        if (x.Code != eventCode) return false;
-                        if ((short)hubIdObj != hubId) return false;
-
-                        return true;
-                    });
+                this.receiver = receiver;
+                this.__publisher = publisher;
             }
 
 <# foreach(var method in contract.Client.Methods) { #>
             public <#= WithIObservable(method.ReturnTypeName) #> <#= method.MethodName #>(bool observeOnMainThread)
             {
-                var __result = ReceiveEventData(<#= method.OperationCode #>)
+                var __result = receiver
+                    .Where(__args => __args.Item1 == <#= method.OperationCode #>)
                     .Select(__args =>
                     {
 <# if(method.ReturnTypeName == "Unit" || method.ReturnTypeName == "UniRx.Unit" || method.ReturnTypeName == "System.Reactive.Unit") { #>
                         return Unit.Default;
 <# } else if(method.ExternalTypeParameters.Length == 0) { #>
-                        return PhotonSerializer.Deserialize<<#= method.ReturnTypeName #>>(__args.Parameters[0]);
+                        return (<#= method.ReturnTypeName #>)(__args.Item2[0]);
 <# } else { #>
                         var ____result = new <#= method.ReturnTypeName #>
                         {
 <# for(var i = 0; i < method.ExternalTypeParameters.Length; i++) { #>
-                            <#= method.ExternalTypeParameters[i].Name #> = PhotonSerializer.Deserialize<<#= method.ExternalTypeParameters[i].TypeName #>>(__args.Parameters[<#= i #>]),
+                            <#= method.ExternalTypeParameters[i].Name #> = (<#= method.ExternalTypeParameters[i].TypeName #>)(__args.Item2[<#= i #>]),
 <# } #>
                         };
                         return ____result;
 <# } #>
-                    })
-                    .Merge(toClientPublisher.Where(__tuple => __tuple.Item1 == <#= method.OperationCode #>).Select(__tuple => (<#= method.ReturnTypeName #>)__tuple.Item2));
+                    });
 
                 return (observeOnMainThread) ? __result.ObserveOn(<#= mainthreadSchedulerInstance #>) : __result;
             }
 
             void <#= contract.Client.OriginalType.Name #>.<#= method.MethodName #>(<#= string.Join(", ", method.OriginalParameters.Select(x => x.TypeName + " " + x.Name)) #>)
             {
-                toClientPublisher.OnNext(Tuple.Create((byte)<#= method.OperationCode #>, 
+                __publisher.OnNext(Tuple.Create((byte)<#= method.OperationCode #>, 
 <# if (method.ExternalTypeParameters.Length == 0 ) { #>
 <# if (method.OriginalParameters.Length == 0 ) { #>
-                    (object)Unit.Default
+                    EmptyArray
 <# } else {  #>
-                    (object)<#= method.OriginalParameters[0].Name #>
+                    new object[] { (object)<#= method.OriginalParameters[0].Name #> }
 <# } #>
 <# } else { #>
-                (object)new <#= method.ReturnTypeName #>
-                {
+                    new object[]
+                    {
 <# for(var i = 0; i < method.ExternalTypeParameters.Length; i++) { #>
-                    <#= method.ExternalTypeParameters[i].Name #> = <#= method.ExternalTypeParameters[i].Name #>,
+                        (object)<#= method.ExternalTypeParameters[i].Name #>,
 <# } #>
-                }
+                    }
 <# } #>
                 ));
             }
