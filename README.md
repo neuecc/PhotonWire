@@ -793,3 +793,5 @@ Twitter: https://twitter.com/neuecc (Japanese)
 License
 ---
 This library is under the MIT License.
+
+Proxy's API surface is inspired by [SignalR](https://github.com/SignalR/SignalR/) and `PhotonWire.Server.TypedClientBuilder<T>` is based on SignalR's TypedClientBuilder<T>.

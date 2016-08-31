@@ -1,4 +1,11 @@
-﻿using System;
+﻿// This code is based on Microsoft.AspNet.SignalR.Hubs.TypedClientBuilder<T>
+// Original code's copyright
+// ---
+// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0.
+// ---
+
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
