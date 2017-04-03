@@ -285,7 +285,7 @@ namespace PhotonWire.Editor
                 var sendReceive = peer.ObserveOperationResponse().Select(x => GetSize(x.OperationResponse.Parameters)).Buffer(interval, Scheduler.ThreadPool);
                 var receive = peer.ObserveReceiveEventData().Select(x => GetSize(x.Parameters)).Buffer(interval, Scheduler.ThreadPool);
 
-                subscription = Observable.Zip(send, sendReceive, receive, (x, y, z) => Tuple.Create(x.Sum(), y.Sum() + z.Sum()))
+                subscription = Observable.Zip(send, sendReceive, receive, (x, y, z) => UniRx.Tuple.Create(x.Sum(), y.Sum() + z.Sum()))
                     .Subscribe(x =>
                     {
                         lock (GraphListLock)
