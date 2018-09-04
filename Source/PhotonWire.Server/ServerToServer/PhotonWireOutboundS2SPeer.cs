@@ -50,7 +50,7 @@ namespace PhotonWire.Server.ServerToServer
                 var success = operationResponseFuture.TryGetValue(messageId, out future);
                 if (success)
                 {
-                    operationResponseFuture.Remove(ReservedParameterNo.MessageId);
+                    operationResponseFuture.Remove(messageId);
                 }
                 return success;
             }
